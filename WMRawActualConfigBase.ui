@@ -1,0 +1,272 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WMRawActualConfigBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>WMRawActualConfigBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>454</width>
+            <height>141</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Vektoren Formatsteuerung</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>AmplitudebuttonGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Amplitude</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>Amplx1radioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>x 1</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>Amplx1_sqrt2radioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>x 1/SQRT(2)</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>primsekbuttonGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>prim/sek</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>PrimradioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>primär</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>SekradioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>sekundär</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>WinkelbuttonGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Winkel</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>MathradioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>math. positiv</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>TechradioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>techn. positiv</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>SendData2AppSlot()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>Amplx1radioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>amplx1checkedSlot()</slot>
+    </connection>
+    <connection>
+        <sender>Amplx1_sqrt2radioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>amplx1_sq2checkedSlot()</slot>
+    </connection>
+    <connection>
+        <sender>MathradioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>winkelmathcheckedSlot()</slot>
+    </connection>
+    <connection>
+        <sender>TechradioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>winkeltechcheckedSlot()</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>PrimradioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>primCheckedSlot()</slot>
+    </connection>
+    <connection>
+        <sender>SekradioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>WMRawActualConfigBase</receiver>
+        <slot>sekCheckedSlot()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">wmglobal.h</include>
+    <include location="local" impldecl="in implementation">wmrawactualconfigbase.ui.h</include>
+</includes>
+<variables>
+    <variable access="private">int AmplDisplayMode;</variable>
+    <variable access="private">int WinkelDisplayMode;</variable>
+    <variable access="private">int AmplPrimSekMode;</variable>
+</variables>
+<signals>
+    <signal>SendVektorDisplayFormat(int,int,int);</signal>
+</signals>
+<slots>
+    <slot>ReceiveDisplayConfSlot( int m, int m2, int m3 )</slot>
+    <slot access="private">amplx1checkedSlot()</slot>
+    <slot access="private">amplx1_sq2checkedSlot()</slot>
+    <slot access="private">winkelmathcheckedSlot()</slot>
+    <slot access="private">winkeltechcheckedSlot()</slot>
+    <slot access="private">SendData2AppSlot()</slot>
+    <slot access="private">primCheckedSlot()</slot>
+    <slot access="private">sekCheckedSlot()</slot>
+</slots>
+<functions>
+    <function access="private">init()</function>
+    <function access="private">ActualizeDisplay()</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,242 @@
+/****************************************************************************
+** ui.h extension file, included from the uic-generated form implementation.
+**
+** If you want to add, delete, or rename functions or slots, use
+** Qt Designer to update this file, preserving your code.
+**
+** You should not define a constructor or destructor in this file.
+** Instead, write your code in functions called init() and destroy().
+** These will automatically be called by the form's constructor and
+** destructor.
+*****************************************************************************/
+
+extern eUnit LoadpointUnit[];
+extern eUnit ErrorUnit[];
+extern eUnit AngleUnit[];
+
+void WMMeasValuesBase::init()
+{
+    m_nDisplayMode = IEC; // wmglobal
+    m_nLPDisplayMode = totalRms; 
+    m_pContextMenu = new WMMeasConfigBase(this);
+    m_Format[0] = cFormatInfo(7,3,LoadpointUnit[LPProzent]); // defaults
+    m_Format[1] = cFormatInfo(7,3,ErrorUnit[ErrProzent]);
+    m_Format[2] = cFormatInfo(7,4,AngleUnit[Anglegrad]);
+    connect(this,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    connect(m_pContextMenu,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),this,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    LoadSession(".ses");
+}
+
+
+void WMMeasValuesBase::destroy()
+{
+    SaveSession(".ses");
+}
+
+
+void WMMeasValuesBase::closeEvent( QCloseEvent * ce)
+{
+    m_widGeometry.SetGeometry(pos(),size());
+    m_widGeometry.SetVisible(0);
+    emit isVisibleSignal(false);
+    ce->accept();
+}
+
+
+void WMMeasValuesBase::ShowHideMVSlot(bool b)
+{
+    if (b) show();else close();
+}
+
+
+void WMMeasValuesBase::resizeEvent(QResizeEvent * e)
+{
+    if (QLayout *lay=layout()) { 
+	QLayoutIterator it = lay->iterator();
+	QLayoutItem *child;
+	int  w;
+	bool test;
+	while ( (child = it.current()) != 0 ) {
+	    QBoxLayout *l = (QBoxLayout*) child->layout();
+	    w = l->minimumSize().width();
+	    test =((QBoxLayout*) lay)->setStretchFactor(l,w);
+	    ++it;
+	}
+    }
+    this->QDialog::resizeEvent(e);
+}
+
+ 
+void WMMeasValuesBase::SetActualValuesSlot( cwmActValues * av)
+{
+    m_ActValues = *av;
+    ActualizeDisplay(); // anzeige aktualisieren
+}
+
+
+void WMMeasValuesBase::ActualizeLPSlot( cwmActValues * av )
+{
+    m_ActValues = *av;
+    ActualizeLoadPoint();
+}
+
+
+
+void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
+{
+    m_ConfData = *cd;
+}
+
+
+void WMMeasValuesBase::ActualizeLoadPoint()
+{
+      double AnzeigeWertN, AnzeigeWertX;
+ 
+      if (m_nLPDisplayMode == totalRms)
+      {
+	  if (m_Format[0].UnitInfo.Name == "%")
+	  {
+	      AnzeigeWertN = m_ActValues.LoadPoint;
+	      AnzeigeWertX = m_ActValues.LoadPointX;
+	  }
+	  else
+	  {
+	      AnzeigeWertN = m_ActValues.RMSN / m_Format[0].UnitInfo.fak;
+	      AnzeigeWertX = m_ActValues.RMSX / m_Format[0].UnitInfo.fak;
+	  }
+      }
+      else
+      {
+	  if (m_Format[0].UnitInfo.Name == "%")
+	  {
+	      AnzeigeWertN = m_ActValues.LoadPoint1;
+	      AnzeigeWertX = m_ActValues.LoadPoint1X;
+	  }
+	  else
+	  {
+	      AnzeigeWertN = m_ActValues.RMSN1 / m_Format[0].UnitInfo.fak;
+	      AnzeigeWertX = m_ActValues.RMSX1 / m_Format[0].UnitInfo.fak;
+	  }
+      }
+   
+      mBigLoadpointN->display(QString("%1").arg(AnzeigeWertN,m_Format[0].FieldWidth,'f',m_Format[0].Resolution));
+      mBigLPNUnit->display(m_Format[0].UnitInfo.Name);
+      mBigLoadpointX->display(QString("%1").arg(AnzeigeWertX,m_Format[0].FieldWidth,'f',m_Format[0].Resolution));
+      mBigLPXUnit->display(m_Format[0].UnitInfo.Name);
+}
+
+
+void WMMeasValuesBase::ActualizeDisplay()
+{
+   double AnzeigeWert;
+   double normphi = 57.295779; // 360/(2*PI) winkel sind im bogenmass (rad)
+   
+   if (m_nDisplayMode == IEC)
+       AnzeigeWert = m_ActValues.AmplErrorIEC;
+   else
+       AnzeigeWert = m_ActValues.AmplErrorANSI;
+   
+   AnzeigeWert = AnzeigeWert / ( 100.0 * m_Format[1].UnitInfo.fak );
+   mBigAmplError->display(QString("%1").arg(AnzeigeWert,m_Format[1].FieldWidth,'f',m_Format[1].Resolution));
+   mBigErrorUnit->display(m_Format[1].UnitInfo.Name);
+   
+   AnzeigeWert = m_ActValues.AngleError * normphi; // jetzt is et in °
+   AnzeigeWert /= m_Format[2].UnitInfo.fak;
+   mBigAngleError->display(QString("%1").arg(AnzeigeWert,m_Format[2].FieldWidth,'f',m_Format[2].Resolution));
+   mBigAngleUnit->display(m_Format[2].UnitInfo.Name);
+   
+   if (m_nDisplayMode == ANSI)
+   {
+       mBigAngleName->setEnabled(false);
+       mBigAngleError->setEnabled(false);
+       mBigAngleUnit->setEnabled(false);
+   }
+   else
+   {
+       mBigAngleName->setEnabled(true);
+       mBigAngleError->setEnabled(true);
+       mBigAngleUnit->setEnabled(true);
+   }   
+}
+
+
+bool WMMeasValuesBase::LoadSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+    if ( file.open( IO_ReadOnly ) ) {
+	QDataStream stream( &file );
+	stream >> m_widGeometry;
+
+	for (int i = 0; i< 3; i++) 
+	    stream >> m_Format[i];
+
+	stream >> m_nDisplayMode;
+	stream >> m_nLPDisplayMode;
+	
+	file.close();
+	hide();
+	resize(m_widGeometry.m_Size);
+	move(m_widGeometry.m_Point);
+	if (m_widGeometry.vi)
+	{
+	    show();
+	    emit isVisibleSignal(true);
+	}
+// FVWM und Gnome verhalten sich anders
+#ifndef FVWM 
+	move(m_widGeometry.m_Point);
+#endif   
+    	return true;
+    }
+    return false;
+}
+
+
+void WMMeasValuesBase::SaveSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+//    file.remove();
+    if ( file.open( IO_Raw | IO_WriteOnly ) ) {
+	file.at(0);
+	int vi;
+	vi = (isVisible()) ? 1 : 0;
+	if (vi) 
+	    m_widGeometry.SetGeometry(pos(),size());
+	m_widGeometry.SetVisible(vi);
+	
+	QDataStream stream( &file );
+	stream << m_widGeometry;
+
+	for (int i = 0; i < 3; i++) 
+	    stream << m_Format[i];
+
+	stream << m_nDisplayMode;
+	stream << m_nLPDisplayMode;
+	
+	file.close();
+    }
+}
+
+
+void WMMeasValuesBase::contextMenuEvent( QContextMenuEvent * )
+{
+    emit SendFormatInfoSignal( m_nDisplayMode,m_nLPDisplayMode, 3, m_Format);
+    m_pContextMenu->show();
+}
+
+
+void WMMeasValuesBase::ReceiveFormatInfoSlot(int m, int m2, int n, cFormatInfo* fi)
+{
+    int i;
+    for(i = 0; i < n; i++, fi++)
+	m_Format[i] = *fi;
+    
+    m_nDisplayMode = m;
+    m_nLPDisplayMode = m2;
+}
+
+

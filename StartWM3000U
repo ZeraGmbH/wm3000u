@@ -1,0 +1,9 @@
+cd /home/peter/C++/WM3000U
+EXIT=10
+while [ $EXIT = 10 ]
+do
+	./WM3000U
+	EXIT=$?
+	sync
+done
+
