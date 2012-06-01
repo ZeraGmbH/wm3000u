@@ -7,7 +7,7 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qdialog.h>
 #include <qwidget.h>
 #include <qevent.h>

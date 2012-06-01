@@ -1,96 +1,27 @@
-/****************************************************************************
-** Form interface generated from reading ui file 'wmviewbase.ui'
-**
-** Created: Mi Feb 15 08:22:05 2012
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
 #ifndef WMVIEWBASE_H
 #define WMVIEWBASE_H
 
 #include <qvariant.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qlabel.h>
 #include "wmglobal.h"
 #include "wmeditor.h"
 #include "widgeom.h"
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QSpacerItem;
-class QAction;
-class QActionGroup;
-class QToolBar;
-class QPopupMenu;
+namespace Ui {
+    class WMViewBase;
+}
 
-class WMViewBase : public QMainWindow
+class WMViewBase : public Q3MainWindow
 {
     Q_OBJECT
 
 public:
-    WMViewBase( QWidget* parent = 0, const char* name = 0, WFlags fl = WType_TopLevel );
+    explicit WMViewBase( QWidget* parent = 0);
     ~WMViewBase();
-
-    QMenuBar *MenuBarEditor;
-    QPopupMenu *Datei;
-    QPopupMenu *popupMenu;
-    QPopupMenu *popupMenu_6;
-    QPopupMenu *Messung;
-    QPopupMenu *Ansicht;
-    QPopupMenu *Einstellungen;
-    QPopupMenu *Hilfe;
-    QPopupMenu *Sprache;
-    QPopupMenu *Justage;
-    QAction* dateiEigenfehlertabelleAction;
-    QAction* dateiBeendenAction;
-    QAction* messungBereichAction;
-    QAction* messungSpeichernSitzungAction;
-    QAction* messungLaden_SitzungAction;
-    QAction* messungStartAction;
-    QAction* messungSimulationAction;
-    QAction* ansichtFehlerMessungAction;
-    QAction* ansichtEigenfehlerAction;
-    QAction* ansichtDialogAction;
-    QAction* einstellungenConfAction;
-    QAction* hilfeInfoAction;
-    QAction* hilfeInfo_ber_ZeraAction;
-    QAction* hilfeManualAction;
-    QAction* hilfeInfo_ber_QtAction;
-    QAction* dateiErgebnisdateiAction;
-    QAction* ansichtIstwerteAction;
-    QAction* eigenfehlertabelleoeffnenAction;
-    QAction* eigenfehlertabelleSchliessenAction;
-    QAction* eigenfehlertabelleBearbeitenAction;
-    QAction* ergebnisSchliessenAction;
-    QAction* ergebnisBearbeitenAction;
-    QAction* messungSpeichernMesswerteAction;
-    QAction* ergebnis_ffnenAction;
-    QAction* eigenfehlertabelleNeuAction;
-    QAction* einstellungenBereichAction;
-    QAction* einstellungenTestRAutoAction;
-    QAction* JustageAmplitudeAction;
-    QAction* JustagePhaseAction;
-    QAction* Action;
-    QAction* Action_2;
-    QAction* Action_3;
-    QAction* Action_4;
-    QAction* JustageKoeffBerechnungAction;
-    QAction* ansichtEN61850Action;
-    QAction* spracheDeutschAction;
-    QAction* spracheEnglischAction;
-    QAction* spracheEnglischAction_2;
-    QAction* justageFlashProgAction;
-    QAction* justageFlasExportAction;
-    QAction* justageFlashImportAction;
-    QAction* hilfeVersionAction;
-    QAction* Action_5;
-    QAction* hilfeSelbsttestAction;
-
     virtual QString strippedName( QString s );
     virtual bool LoadSession( QString session );
+    void removeJustageItem();
 
 public slots:
     virtual void SetViewConfDataInfoSlot( cConfData * cd );
@@ -123,15 +54,35 @@ signals:
     void JustFlashProgSignal();
     void JustFlashImportSignal(QString);
     void JustFlashExportSignal(QString);
+    void UIansichtFehlerMessungActionToggled(bool);
+    void UIansichtFehlerMessungActionSet(bool);
+    void UIansichtEigenfehlerActionToggled(bool);
+    void UIansichtEigenfehlerActionSet(bool);
+    void UIansichtIstwerteActionToggled(bool);
+    void UIansichtIstwerteActionSet(bool);
+    void UIansichtDialogActionToggled(bool);
+    void UIansichtDialogActionSet(bool);
+    void UIansichtEN61850ActionToggled(bool);
+    void UIansichtEN61850ActionSet(bool);
+    void UIhilfeManualActionActivated();
+    void UIeinstellungenConfActionActivated();
+    void UIeinstellungenBereichActionActivated();
+    void UIJustageAmplitudeActionActivated();
+    void UIJustagePhaseActionActivated();
+    void UIJustageKoeffBerechnungActionActivated();
+    void UIhilfeInfo_ber_QtActionActivated();
+    void UIhilfeInfo_ber_ZeraActionActivated();
+    void UIhilfeInfoActionActivated();
+    void UIhilfeSelbsttestActionActivated();
+    void UIdateiBeendenActionActivated();
+    void UIhilfeVersionActionActivated();
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
 
 
-protected slots:
-    virtual void languageChange();
-
 private:
+    Ui::WMViewBase *ui;
     int m_nrecentSESFileIds[nmaxRecentSESFiles];
     cWidgetGeometry m_widGeometry;
     QString SessionName;

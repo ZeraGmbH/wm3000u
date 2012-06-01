@@ -1,123 +1,190 @@
-/****************************************************************************
-** Form implementation generated from reading ui file 'wmrawactualvalbase.ui'
-**
-** Created: Mi Feb 15 08:24:58 2012
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QCloseEvent>
+#include <QFileInfo>
 #include "wmrawactualvalbase.h"
+#include "ui_wmrawactualvalbase.h"
 
-#include <qvariant.h>
-#include <math.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qpopupmenu.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
+const double PI2 = 6.283185307;
 
-#include "wmglobal.h"
-#include "complex.h"
-#include "tools.h"
-#include "widgeom.h"
-#include "wmrawactualvalbase.ui.h"
-/*
- *  Constructs a WMRawActualValBase as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
- */
-WMRawActualValBase::WMRawActualValBase( QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl )
+
+WMRawActualValBase::WMRawActualValBase( QWidget* parent):
+    QDialog(parent),
+    ui(new Ui::WMRawActualValBase)
 {
-    if ( !name )
-	setName( "WMRawActualValBase" );
-    setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, sizePolicy().hasHeightForWidth() ) );
-    setMinimumSize( QSize( 0, 0 ) );
-    setMouseTracking( FALSE );
-    WMRawActualValBaseLayout = new QGridLayout( this, 1, 1, 11, 6, "WMRawActualValBaseLayout"); 
-    WMRawActualValBaseLayout->setResizeMode( QLayout::Fixed );
-    spacer20 = new QSpacerItem( 33, 20, QSizePolicy::Minimum, QSizePolicy::Minimum );
-    WMRawActualValBaseLayout->addItem( spacer20, 1, 1 );
-
-    XnLabel = new QLabel( this, "XnLabel" );
-    XnLabel->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( XnLabel, 0, 0 );
-
-    XxLabel = new QLabel( this, "XxLabel" );
-    XxLabel->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( XxLabel, 1, 0 );
-
-    FreqLabel = new QLabel( this, "FreqLabel" );
-    FreqLabel->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( FreqLabel, 2, 0 );
-
-    XnAmplDisp = new QLabel( this, "XnAmplDisp" );
-    XnAmplDisp->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( XnAmplDisp, 0, 2 );
-
-    XxAmplDisp = new QLabel( this, "XxAmplDisp" );
-    XxAmplDisp->setFrameShape( QLabel::NoFrame );
-    XxAmplDisp->setAlignment( int( QLabel::AlignVCenter ) );
-
-    WMRawActualValBaseLayout->addWidget( XxAmplDisp, 1, 2 );
-
-    FreqDisp = new QLabel( this, "FreqDisp" );
-    FreqDisp->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( FreqDisp, 2, 2 );
-
-    XnPhaseDisp = new QLabel( this, "XnPhaseDisp" );
-    XnPhaseDisp->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, XnPhaseDisp->sizePolicy().hasHeightForWidth() ) );
-    XnPhaseDisp->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( XnPhaseDisp, 0, 3 );
-
-    XxPhaseDisp = new QLabel( this, "XxPhaseDisp" );
-    XxPhaseDisp->setFrameShape( QLabel::NoFrame );
-
-    WMRawActualValBaseLayout->addWidget( XxPhaseDisp, 1, 3 );
-    spacer17 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Minimum );
-    WMRawActualValBaseLayout->addItem( spacer17, 2, 3 );
-    languageChange();
-    resize( QSize(180, 90).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
+    ui->setupUi(this);
     init();
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
+
 WMRawActualValBase::~WMRawActualValBase()
 {
     destroy();
-    // no need to delete child widgets, Qt does it all for us
+    delete ui;
 }
 
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void WMRawActualValBase::languageChange()
+void WMRawActualValBase::init()
 {
-    setCaption( tr( "Vektoren" ) );
-    XnLabel->setText( tr( "Un:" ) );
-    XxLabel->setText( tr( "Ux:" ) );
-    FreqLabel->setText( tr( "F:" ) );
-    XnAmplDisp->setText( tr( "---------" ) );
-    XxAmplDisp->setText( tr( "---------" ) );
-    FreqDisp->setText( tr( "--------" ) );
-    XnPhaseDisp->setText( tr( "---------" ) );
-    XxPhaseDisp->setText( tr( "--------- " ) );
+    AmplDispMode = x1;
+    AmplPrimSekMode = prim;
+    WinkelDispMode = mathpos;
+    m_pContextMenu = new WMRawActualConfigBase(this);
+    connect(this,SIGNAL(SendVektorDispFormat(int,int,int)),m_pContextMenu,SLOT(ReceiveDisplayConfSlot(int,int,int)));
+    connect(m_pContextMenu,SIGNAL(SendVektorDisplayFormat(int,int,int)),this,SLOT(ReceiveVektorDispFormat(int,int,int)));
+    LoadSession(".ses");
 }
+
+
+void WMRawActualValBase::destroy()
+{
+    SaveSession(".ses");
+}
+
+
+void WMRawActualValBase::closeEvent(QCloseEvent* ce)
+{
+    m_widGeometry.SetGeometry(pos(),size()); // wir halten visible und geometrie nach
+    m_widGeometry.SetVisible(0);
+    emit isVisibleSignal(false);
+    ce->accept();
+}
+
+
+void WMRawActualValBase::ShowHideAVSlot( bool b)
+{
+    if (b) show();else close();
+}
+
+
+void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
+{
+    m_ActValues = *ActValues;
+    // hier wird später die Anzeige bedient 
+    if (isVisible()) {
+	double phi;
+	double radgrad = 57.295779; // 360/(2*PI) winkel sind im bogenmass
+	
+	// amplitude der grundschwingung
+	// amplitude der grundschwingung
+	double ampl;
+	if (AmplPrimSekMode == prim)
+	    ampl = fabs(m_ActValues.VekN);
+	else
+	    ampl = fabs(m_ActValues.VekNSek);
+	if (AmplDispMode == x1_SQRT2)
+	    ampl/=1.414213562;
+        ui->XnAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
+	
+	/*
+	phi = m_ActValues.PHIN * radgrad;
+	if (WinkelDispMode == techpos)
+	    phi = 360.0-phi;
+	XnPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+	*/
+	
+	phi = m_ActValues.PHIN; // winkel sind zwischen 0 .. 2PI
+	if (WinkelDispMode == techpos)
+	    phi = PI2 - phi;
+	phi = normWinkelrad_PIPI(phi);
+	phi *= radgrad;
+        ui->XnPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+	
+	
+	// amplitude der grundschwingung
+	if (AmplPrimSekMode == prim)
+	    ampl = fabs(m_ActValues.VekX);
+	else
+	    ampl = fabs(m_ActValues.VekXSek);
+	if (AmplDispMode == x1_SQRT2)
+	    ampl/=1.414213562;
+        ui->XxAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
+	
+	/*
+	phi = m_ActValues.PHIX * radgrad;
+	if (WinkelDispMode == techpos)
+	    phi = 360.0-phi;
+	XxPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+	*/
+	
+	phi = m_ActValues.PHIX;
+	if (WinkelDispMode == techpos)
+	    phi = PI2 - phi;
+	phi = normWinkelrad_PIPI(phi);
+	phi *= radgrad;
+        ui->XxPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+	
+        ui->FreqDisp -> setText( QString("%1 Hz").arg(ActValues->Frequenz,9,'f',5) );
+    }
+}
+
+
+bool WMRawActualValBase::LoadSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+    if ( file.open( QIODevice::ReadOnly ) ) {
+	QDataStream stream( &file );
+	stream >> m_widGeometry;
+	stream >> AmplDispMode;
+	stream >> WinkelDispMode,
+	stream >> AmplPrimSekMode;
+	file.close();
+	hide();
+	resize(m_widGeometry.m_Size);
+	move(m_widGeometry.m_Point);
+	if (m_widGeometry.vi)
+	{
+	    show();
+	    emit isVisibleSignal(true);
+	}
+// FVWM und Gnome verhalten sich anders
+#ifndef FVWM 
+    move(m_widGeometry.m_Point);
+#endif   
+	return true;
+    }
+    return false;
+}
+
+
+void WMRawActualValBase::SaveSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+//    file.remove();
+    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
+	file.at(0);
+	
+	int vi;
+	vi = (isVisible()) ? 1 : 0;
+	if (vi)
+	    m_widGeometry.SetGeometry(pos(),size());
+	m_widGeometry.SetVisible(vi);
+ 
+	QDataStream stream( &file );
+	stream << m_widGeometry;
+	stream << AmplDispMode;
+	stream << WinkelDispMode;
+	stream << AmplPrimSekMode;
+	file.close();
+    }
+}
+
+
+void WMRawActualValBase::contextMenuEvent( QContextMenuEvent * )
+{
+    emit SendVektorDispFormat(AmplDispMode, WinkelDispMode, AmplPrimSekMode);
+    m_pContextMenu->show();
+}
+
+
+void WMRawActualValBase::ReceiveVektorDispFormat( int m, int m2, int m3)
+{
+    AmplDispMode = m;
+    WinkelDispMode = m2;
+    AmplPrimSekMode = m3;
+}
+
 

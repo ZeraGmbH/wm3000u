@@ -7,11 +7,11 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qserversocket.h>
-#include <qsocket.h>
-#include <qsocketdevice.h> 
+#include <q3serversocket.h>
+#include <q3socket.h>
+#include <q3socketdevice.h> 
 #include <qsocketnotifier.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "wmglobal.h"
 #include "cbiface.h"
@@ -54,7 +54,7 @@ private slots:
     void CloseConnection();
     
 private:
-    QSocket* m_pSock;
+    Q3Socket* m_pSock;
     QSocketNotifier* m_pZDSWriteNotifyer;
     QString m_sInput;
     QString m_sOutput;
@@ -63,7 +63,7 @@ private:
 
 // class cSCPIFace;
 
-class cDeviceServer:  public QServerSocket // asynchroner device server pure virtual
+class cDeviceServer:  public Q3ServerSocket // asynchroner device server pure virtual
 {
     Q_OBJECT
     
@@ -78,7 +78,7 @@ private slots:
     void CloseConnection(cClientIODevice*); // clients melden sich hierüber ab
    
 protected:    
-    QPtrList<cSCPIFace> m_SCPIFacePtrList; // die liste aller angelegten interfaces
+    Q3PtrList<cSCPIFace> m_SCPIFacePtrList; // die liste aller angelegten interfaces
     void setPriority(); // alle clients werden informiert
 };
 

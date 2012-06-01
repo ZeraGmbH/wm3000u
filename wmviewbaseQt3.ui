@@ -1,0 +1,922 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WMViewBase</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>WMViewBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>540</width>
+            <height>403</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>21</width>
+            <height>230</height>
+        </size>
+    </property>
+    <property name="backgroundOrigin">
+        <enum>WidgetOrigin</enum>
+    </property>
+    <property name="font">
+        <font>
+        </font>
+    </property>
+    <property name="caption">
+        <string>Wandlermesseinrichtung WM3000U</string>
+    </property>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBarEditor</cstring>
+    </property>
+    <property name="font">
+        <font>
+        </font>
+    </property>
+    <property name="frameShape">
+        <enum>MenuBarPanel</enum>
+    </property>
+    <item text="&amp;Datei" name="Datei">
+        <action name="dateiEigenfehlertabelleAction"/>
+        <item text="&amp;Eigenfehlertabelle" name="popupMenu" accel="">
+            <action name="eigenfehlertabelleoeffnenAction"/>
+            <action name="eigenfehlertabelleSchliessenAction"/>
+            <action name="eigenfehlertabelleBearbeitenAction"/>
+        </item>
+        <separator/>
+        <action name="dateiErgebnisdateiAction"/>
+        <item text="E&amp;rgebnisdatei" name="popupMenu_6" accel="">
+            <action name="ergebnis_ffnenAction"/>
+            <action name="ergebnisSchliessenAction"/>
+            <action name="ergebnisBearbeitenAction"/>
+        </item>
+        <separator/>
+        <action name="dateiBeendenAction"/>
+    </item>
+    <item text="&amp;Messung" name="Messung">
+        <separator/>
+        <action name="messungSpeichernSitzungAction"/>
+        <action name="messungLaden_SitzungAction"/>
+        <separator/>
+        <action name="messungStartAction"/>
+        <action name="messungSpeichernMesswerteAction"/>
+        <separator/>
+        <action name="messungSimulationAction"/>
+    </item>
+    <item text="&amp;Ansicht" name="Ansicht">
+        <action name="ansichtFehlerMessungAction"/>
+        <action name="ansichtIstwerteAction"/>
+        <action name="ansichtEigenfehlerAction"/>
+        <action name="ansichtDialogAction"/>
+        <action name="ansichtEN61850Action"/>
+    </item>
+    <item text="&amp;Einstellungen" name="Einstellungen">
+        <action name="einstellungenConfAction"/>
+        <action name="einstellungenBereichAction"/>
+    </item>
+    <item text="&amp;Hilfe" name="Hilfe">
+        <action name="hilfeInfoAction"/>
+        <action name="hilfeInfo_ber_ZeraAction"/>
+        <action name="hilfeInfo_ber_QtAction"/>
+        <separator/>
+        <action name="hilfeVersionAction"/>
+        <separator/>
+        <action name="hilfeSelbsttestAction"/>
+    </item>
+    <item text="&amp;Sprache" name="Sprache">
+        <action name="spracheDeutschAction"/>
+        <action name="spracheEnglischAction_2"/>
+    </item>
+    <item text="&amp;Justage" name="Justage">
+        <action name="JustageAmplitudeAction"/>
+        <action name="JustagePhaseAction"/>
+        <action name="JustageKoeffBerechnungAction"/>
+        <action name="justageFlashProgAction"/>
+        <action name="justageFlasExportAction"/>
+        <action name="justageFlashImportAction"/>
+    </item>
+</menubar>
+<toolbars>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>dateiEigenfehlertabelleAction</cstring>
+        </property>
+        <property name="on">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Eigenfehlertabelle</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Eigenfehlertabelle</string>
+        </property>
+        <property name="toolTip">
+            <string>&amp;Eigenfehlertabelle</string>
+        </property>
+        <property name="statusTip">
+            <string>Menu Eigenfehlertabelle</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>dateiBeendenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Beenden</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Beenden</string>
+        </property>
+        <property name="statusTip">
+            <string>Beendet das laufende Programm</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+X</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungBereichAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Bereich</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Bereich</string>
+        </property>
+        <property name="statusTip">
+            <string>Bereiche auswählen</string>
+        </property>
+        <property name="accel">
+            <string>F4</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungSpeichernSitzungAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Speichern Sitzung</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Speichern Sitzung</string>
+        </property>
+        <property name="statusTip">
+            <string>Speichert alle aktuellen Einstellungen in einer Datei</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungLaden_SitzungAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Laden Sitzung</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Laden Sitzung</string>
+        </property>
+        <property name="statusTip">
+            <string>Liesst alle Einstellungen aus einer Datei</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungStartAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Start</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Start</string>
+        </property>
+        <property name="statusTip">
+            <string>Messung starten</string>
+        </property>
+        <property name="accel">
+            <string>F5</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungSimulationAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Si&amp;mulation</string>
+        </property>
+        <property name="menuText">
+            <string>S&amp;imulation</string>
+        </property>
+        <property name="statusTip">
+            <string>Simulierte Messung durchführen</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ansichtFehlerMessungAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>&amp;FehlerMessung</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Fehlerwerte</string>
+        </property>
+        <property name="statusTip">
+            <string>Fehlermesswerte Fenster</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ansichtEigenfehlerAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Eigenfehler</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Eigenfehler</string>
+        </property>
+        <property name="statusTip">
+            <string>Eigenfehler Fenster</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ansichtDialogAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Dialog</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Dialog</string>
+        </property>
+        <property name="statusTip">
+            <string>Dialog Fenster</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>einstellungenConfAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Konfiguration</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Konfiguration</string>
+        </property>
+        <property name="statusTip">
+            <string>Messeinrichtung konfigurieren</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeInfoAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Info</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Info</string>
+        </property>
+        <property name="statusTip">
+            <string>Informationen zur Messeinrichtung</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeInfo_ber_ZeraAction</cstring>
+        </property>
+        <property name="text">
+            <string>Informationen zu Zera</string>
+        </property>
+        <property name="menuText">
+            <string>Info über &amp;Zera</string>
+        </property>
+        <property name="statusTip">
+            <string>Informationen zu ZERA</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeManualAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Manual</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Manual</string>
+        </property>
+        <property name="statusTip">
+            <string>Lesen Sie hier die Bedienungsanleitung</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeInfo_ber_QtAction</cstring>
+        </property>
+        <property name="text">
+            <string>Informationen zu Qt</string>
+        </property>
+        <property name="menuText">
+            <string>Info über &amp;Qt</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>dateiErgebnisdateiAction</cstring>
+        </property>
+        <property name="text">
+            <string>E&amp;rgebnisdatei</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;rgebnisdatei</string>
+        </property>
+        <property name="statusTip">
+            <string>Schliesst die geladene Eigenfehlertabelle</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ansichtIstwerteAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Istwerte</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Vektoren</string>
+        </property>
+        <property name="statusTip">
+            <string>Istwerte Fenster</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>eigenfehlertabelleoeffnenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Öffnen</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Öffnen</string>
+        </property>
+        <property name="statusTip">
+            <string>Öffnen einer Eigenfehlertabelle</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>eigenfehlertabelleSchliessenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Schliessen</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Schliessen</string>
+        </property>
+        <property name="statusTip">
+            <string>Schliessen der Eigenfehlertabelle</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>eigenfehlertabelleBearbeitenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Bearbeiten</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Bearbeiten</string>
+        </property>
+        <property name="statusTip">
+            <string>Bearbeiten einer Eigenfehlertabelle</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ergebnisSchliessenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Schliessen</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Schliessen</string>
+        </property>
+        <property name="statusTip">
+            <string>Schliessen der Ergebnisdatei</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ergebnisBearbeitenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Bearbeiten</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Bearbeiten</string>
+        </property>
+        <property name="statusTip">
+            <string>Bearbeiten einer Ergebnisdatei</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>messungSpeichernMesswerteAction</cstring>
+        </property>
+        <property name="text">
+            <string>Speichern Messwerte</string>
+        </property>
+        <property name="menuText">
+            <string>Speichern &amp;Messwerte</string>
+        </property>
+        <property name="accel">
+            <string>F6</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ergebnis_ffnenAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Öffnen</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Öffnen</string>
+        </property>
+        <property name="statusTip">
+            <string>Öffnen der Ergebnisdatei</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>eigenfehlertabelleNeuAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Neu</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Neu</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>einstellungenBereichAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Bereich</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Bereiche</string>
+        </property>
+        <property name="statusTip">
+            <string>Bereiche anwählen</string>
+        </property>
+        <property name="accel">
+            <string>F7</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>einstellungenTestRAutoAction</cstring>
+        </property>
+        <property name="text">
+            <string>BAuto</string>
+        </property>
+        <property name="menuText">
+            <string>BereichAuto</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>JustageAmplitudeAction</cstring>
+        </property>
+        <property name="text">
+            <string>Amplitude</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Amplitude</string>
+        </property>
+        <property name="statusTip">
+            <string>Amplitudenabgleich mit externer Steuerung</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>JustagePhaseAction</cstring>
+        </property>
+        <property name="text">
+            <string>Phasen</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Phase</string>
+        </property>
+        <property name="statusTip">
+            <string>Phasenlage Justage automatisch</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action</cstring>
+        </property>
+        <property name="text">
+            <string>Action</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_2</cstring>
+        </property>
+        <property name="text">
+            <string>Action_2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_3</cstring>
+        </property>
+        <property name="text">
+            <string>Action_3</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_4</cstring>
+        </property>
+        <property name="text">
+            <string>Action_4</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>JustageKoeffBerechnungAction</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="menuText">
+            <string>Phasen&amp;berechnung</string>
+        </property>
+        <property name="statusTip">
+            <string>Phasenlage Koeffizientenberechnung</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>ansichtEN61850Action</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>E&amp;N61850</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;N61850</string>
+        </property>
+        <property name="statusTip">
+            <string>EN61850 Statusanzeige</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>spracheDeutschAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>de.png</iconset>
+        </property>
+        <property name="text">
+            <string>Deutsch</string>
+        </property>
+        <property name="menuText">
+            <string>Deutsch</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>spracheEnglischAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>gb.png</iconset>
+        </property>
+        <property name="text">
+            <string>Englisch</string>
+        </property>
+        <property name="menuText">
+            <string>Englisch</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>spracheEnglischAction_2</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>gb.png</iconset>
+        </property>
+        <property name="text">
+            <string>Englisch</string>
+        </property>
+        <property name="menuText">
+            <string>Englisch</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>justageFlashProgAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>F&amp;lash programmieren</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>justageFlasExportAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>Flash data &amp;export</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>justageFlashImportAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>Flash data &amp;import</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeVersionAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Version</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Version</string>
+        </property>
+        <property name="statusTip">
+            <string>Übersicht Versionen</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_5</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hilfeSelbsttestAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Selbsttest</string>
+        </property>
+        <property name="statusTip">
+            <string>Selbsttest starten</string>
+        </property>
+    </action>
+</actions>
+<connections>
+    <connection>
+        <sender>messungSimulationAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>SimulationSlot()</slot>
+    </connection>
+    <connection>
+        <sender>messungStartAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>StartSlot()</slot>
+    </connection>
+    <connection>
+        <sender>eigenfehlertabelleoeffnenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>OpenOETFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>eigenfehlertabelleSchliessenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>CloseOETFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>eigenfehlertabelleBearbeitenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>EditOETFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>ergebnis_ffnenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>OpenResultFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>ergebnisSchliessenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>CloseResultFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>ergebnisBearbeitenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>EditResultFileSlot()</slot>
+    </connection>
+    <connection>
+        <sender>messungSpeichernSitzungAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>StoreSessionSlot()</slot>
+    </connection>
+    <connection>
+        <sender>messungLaden_SitzungAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>LoadSessionSlot()</slot>
+    </connection>
+    <connection>
+        <sender>dateiBeendenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>messungSpeichernMesswerteAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>StoreResultSlot()</slot>
+    </connection>
+    <connection>
+        <sender>dateiBeendenAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>spracheDeutschAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>SetGermanSlot()</slot>
+    </connection>
+    <connection>
+        <sender>spracheEnglischAction_2</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>SetEnglishSlot()</slot>
+    </connection>
+    <connection>
+        <sender>justageFlashProgAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>JustFlashProgSlot()</slot>
+    </connection>
+    <connection>
+        <sender>justageFlashImportAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>JustFlashImportSlot()</slot>
+    </connection>
+    <connection>
+        <sender>justageFlasExportAction</sender>
+        <signal>activated()</signal>
+        <receiver>WMViewBase</receiver>
+        <slot>JustFlashExportSlot()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">qlabel.h</include>
+    <include location="local" impldecl="in declaration">wmglobal.h</include>
+    <include location="local" impldecl="in declaration">wmeditor.h</include>
+    <include location="local" impldecl="in declaration">widgeom.h</include>
+    <include location="global" impldecl="in implementation">qfiledialog.h</include>
+    <include location="global" impldecl="in implementation">qlabel.h</include>
+    <include location="global" impldecl="in implementation">qstatusbar.h</include>
+    <include location="global" impldecl="in implementation">qtextbrowser.h</include>
+    <include location="global" impldecl="in implementation">qmessagebox.h</include>
+    <include location="global" impldecl="in implementation">qevent.h</include>
+    <include location="global" impldecl="in implementation">qstring.h</include>
+    <include location="global" impldecl="in implementation">qtextedit.h</include>
+    <include location="local" impldecl="in implementation">wmeditor.h</include>
+    <include location="local" impldecl="in implementation">wmfiledialog.h</include>
+    <include location="global" impldecl="in implementation">qapplication.h</include>
+    <include location="global" impldecl="in implementation">qfile.h</include>
+    <include location="local" impldecl="in implementation">wmglobal.h</include>
+    <include location="local" impldecl="in implementation">wmviewbase.ui.h</include>
+</includes>
+<variables>
+    <variable access="private">int m_nrecentSESFileIds[nmaxRecentSESFiles];</variable>
+    <variable access="private">cWidgetGeometry m_widGeometry;</variable>
+    <variable access="private">QString SessionName;</variable>
+    <variable access="private">QLabel* m_pResultLabel;</variable>
+    <variable access="private">QStringList recentResultFiles;</variable>
+    <variable access="private">wmEditor* wmEdit;</variable>
+    <variable access="private">QStringList recentMVFiles;</variable>
+    <variable access="private">QLabel* m_pStatusLabel;</variable>
+    <variable access="private">QLabel* m_pSimulationLabel;</variable>
+    <variable access="private">QLabel* m_pRunningLabel;</variable>
+    <variable access="private">QLabel* m_pRangeXLabel;</variable>
+    <variable access="private">QLabel* m_pRangeNLabel;</variable>
+    <variable access="private">cConfData m_ConfData;</variable>
+    <variable access="private">QLabel* m_pDummyLabel;</variable>
+    <variable access="private">QLabel* m_pOETLabel;</variable>
+    <variable access="private">int m_nrecentOEFileIds[nmaxRecentOEFiles];</variable>
+    <variable access="private">QStringList recentOETFiles;</variable>
+    <variable access="private">int m_nrecentMVFileIds[nmaxRecentMVFiles];</variable>
+    <variable access="private">wmEditor* wmEdit2;</variable>
+    <variable access="private">QStringList recentSESFiles;</variable>
+    <variable access="private">bool m_bJustified;</variable>
+</variables>
+<signals>
+    <signal>SendConfDataSignal(cConfData*)</signal>
+    <signal>SaveSessionSignal(QString)</signal>
+    <signal>LoadSessionSignal(QString)</signal>
+    <signal>StoreResultSignal()</signal>
+    <signal>StartRangeObsermatic()</signal>
+    <signal>JustFlashProgSignal()</signal>
+    <signal>JustFlashImportSignal(QString)</signal>
+    <signal>JustFlashExportSignal(QString)</signal>
+</signals>
+<slots>
+    <slot>SetViewConfDataInfoSlot( cConfData * cd )</slot>
+    <slot>ActualizeStates()</slot>
+    <slot>OpenOETFileSlot()</slot>
+    <slot>UpdateRecentFileList( QStringList &amp; sl, QString f )</slot>
+    <slot>OpenRecentOETFileSlot( int index )</slot>
+    <slot>SimulationSlot()</slot>
+    <slot>StartSlot()</slot>
+    <slot>CreateStatusBar()</slot>
+    <slot>CloseOETFileSlot()</slot>
+    <slot>EditOETFileSlot()</slot>
+    <slot>ReceiveOETFileSlot( QString nText )</slot>
+    <slot>OpenResultFileSlot()</slot>
+    <slot>EditResultFileSlot()</slot>
+    <slot>ReceiveResultFileSlot( QString nText )</slot>
+    <slot>CloseResultFileSlot()</slot>
+    <slot>StoreResultSlot()</slot>
+    <slot>OpenRecentResultFileSlot( int index )</slot>
+    <slot specifier="non virtual">SaveSession( QString session )</slot>
+    <slot access="private">StoreSessionSlot()</slot>
+    <slot access="private">LoadSessionSlot()</slot>
+    <slot access="private" specifier="non virtual">OpenRecentSESFileSlot( int index )</slot>
+    <slot access="private">SetGermanSlot()</slot>
+    <slot access="private">SetEnglishSlot()</slot>
+    <slot access="private">JustFlashProgSlot()</slot>
+    <slot access="private">JustFlashExportSlot()</slot>
+    <slot access="private">JustFlashImportSlot()</slot>
+    <slot>RemoteCtrlInfoSlot( bool remote )</slot>
+    <slot>SetJustifiedSlot( bool b )</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
+    <function returnType="QString">strippedName( QString s )</function>
+    <function returnType="bool">LoadSession( QString session )</function>
+    <function access="protected">closeEvent( QCloseEvent * ce )</function>
+    <function access="private" specifier="non virtual">UpdateRecentSESList( QString ses )</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,469 +1,331 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WMMeasValuesBase</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>WMMeasValuesBase</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>638</width>
-            <height>364</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="font">
-        <font>
-        </font>
-    </property>
-    <property name="caption">
-        <string>Fehlermesswerte</string>
-    </property>
-    <property name="focusPolicy">
-        <enum>NoFocus</enum>
-    </property>
-    <property name="sizeGripEnabled">
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WMMeasValuesBase</class>
+ <widget class="QDialog" name="WMMeasValuesBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>638</width>
+    <height>364</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="font">
+   <font/>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Fehlermesswerte</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <layout class="QHBoxLayout">
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="CBigLetter" name="cBigLetter3" native="true">
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>LP(X):</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="cBigLetter1" native="true">
+       <property name="enabled">
         <bool>true</bool>
-    </property>
-    <property name="modal">
-        <bool>false</bool>
-    </property>
-    <hbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>cBigLetter3</cstring>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>LP(X):</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>cBigLetter1</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>true</bool>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>16</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>LP(N):</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>cBigLetter2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>F:</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigAngleName</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>phi:</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigLoadpointX</cstring>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>---.---</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigLoadpointN</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>---.---</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigAmplError</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>-.-</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigAngleError</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>-.-</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout6</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigLPXUnit</cstring>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigLPNUnit</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigErrorUnit</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="CBigLetter">
-                    <property name="name">
-                        <cstring>mBigAngleUnit</cstring>
-                    </property>
-                    <property name="m_nAlign" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nFrame" stdset="0">
-                        <number>0</number>
-                    </property>
-                    <property name="m_nStartSize" stdset="0">
-                        <number>15</number>
-                    </property>
-                    <property name="m_sDisplay" stdset="0">
-                        <string>°</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-    </hbox>
-</widget>
-<customwidgets>
-    <customwidget>
-        <class>CBigLetter</class>
-        <header location="global">/home/peter/C++/WM3000I/bigletter.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>1</hordata>
-            <verdata>1</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
-        <pixmap>image0</pixmap>
-        <property type="String">m_sDisplay</property>
-        <property type="Int">m_nStartSize</property>
-        <property type="Int">m_nAlign</property>
-        <property type="Int">m_nFrame</property>
-    </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
-    </image>
-</images>
-<includes>
-    <include location="local" impldecl="in declaration">bigletter.h</include>
-    <include location="global" impldecl="in declaration">qlabel.h</include>
-    <include location="local" impldecl="in declaration">wmglobal.h</include>
-    <include location="local" impldecl="in declaration">widgeom.h</include>
-    <include location="local" impldecl="in declaration">wmmeasconfigbase.h</include>
-    <include location="local" impldecl="in declaration">formatinfo.h</include>
-    <include location="global" impldecl="in implementation">qobject.h</include>
-    <include location="global" impldecl="in implementation">qlabel.h</include>
-    <include location="local" impldecl="in implementation">eparameter.h</include>
-    <include location="local" impldecl="in implementation">tools.h</include>
-    <include location="local" impldecl="in implementation">complex.h</include>
-    <include location="global" impldecl="in implementation">qfile.h</include>
-    <include location="global" impldecl="in implementation">qfileinfo.h</include>
-    <include location="local" impldecl="in implementation">wmglobal.h</include>
-    <include location="global" impldecl="in implementation">qpopupmenu.h</include>
-    <include location="local" impldecl="in implementation">formatinfo.h</include>
-    <include location="local" impldecl="in implementation">wmmeasconfigbase.h</include>
-    <include location="local" impldecl="in implementation">wmmeasvaluesbase.ui.h</include>
-</includes>
-<variables>
-    <variable access="private">cWidgetGeometry m_widGeometry;</variable>
-    <variable access="private">cwmActValues m_ActValues;</variable>
-    <variable access="private">cConfData m_ConfData;</variable>
-    <variable access="private">WMMeasConfigBase* m_pContextMenu;</variable>
-    <variable access="private">cFormatInfo m_Format[3];</variable>
-    <variable access="private">int m_nDisplayMode;</variable>
-    <variable access="private">int m_nLPDisplayMode;</variable>
-</variables>
-<signals>
-    <signal>isVisibleSignal(bool)</signal>
-    <signal>SendFormatInfoSignal(int, int, int, cFormatInfo*)</signal>
-</signals>
-<slots>
-    <slot>ShowHideMVSlot( bool b )</slot>
-    <slot>SetActualValuesSlot( cwmActValues * av )</slot>
-    <slot>ActualizeLPSlot( cwmActValues * av )</slot>
-    <slot>SetConfInfoSlot( cConfData * cd )</slot>
-    <slot>ActualizeLoadPoint()</slot>
-    <slot specifier="non virtual" returnType="bool">LoadSession( QString session )</slot>
-    <slot specifier="non virtual">SaveSession( QString session )</slot>
-    <slot>ReceiveFormatInfoSlot( int m, int m2, int n, cFormatInfo * fi )</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function access="protected">closeEvent( QCloseEvent * ce )</function>
-    <function access="protected">resizeEvent( QResizeEvent * e )</function>
-    <function access="private">ActualizeDisplay()</function>
-    <function access="protected">contextMenuEvent( QContextMenuEvent * )</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-    <includehint>cbigletter.h</includehint>
-</includehints>
-</UI>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>LP(N):</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="cBigLetter2" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>F:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigAngleName" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>phi:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="CBigLetter" name="mBigLoadpointX" native="true">
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>---.---</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigLoadpointN" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>---.---</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigAmplError" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>-.-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigAngleError" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>-.-</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="CBigLetter" name="mBigLPXUnit" native="true">
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigLPNUnit" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigErrorUnit" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigAngleUnit" native="true">
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>°</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CBigLetter</class>
+   <extends>QWidget</extends>
+   <header location="global">/home/peter/C++/wm3000u/bigletter.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">bigletter.h</include>
+  <include location="global">qlabel.h</include>
+  <include location="local">wmglobal.h</include>
+  <include location="local">widgeom.h</include>
+  <include location="local">wmmeasconfigbase.h</include>
+  <include location="local">formatinfo.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

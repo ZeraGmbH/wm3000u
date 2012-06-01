@@ -4,15 +4,17 @@
 #define WM3000U_H
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qmainwindow.h>
-#include <qtextbrowser.h>
+#include <q3mainwindow.h>
+#include <q3textbrowser.h>
 #include <qtimer.h>
-#include <qprogressdialog.h>
+#include <q3progressdialog.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "zhclientsocket.h"
 #include "wmglobal.h"
@@ -244,7 +246,7 @@ class cWMessageBox: public QMessageBox
     
 public:
     cWMessageBox();
-    cWMessageBox ( const QString & caption, const QString & text, Icon icon, int button0, int button1, int button2, QWidget * parent = 0, const char * name = 0, bool modal = TRUE, WFlags f = WStyle_DialogBorder );
+    cWMessageBox ( const QString & caption, const QString & text, Icon icon, int button0, int button1, int button2, QWidget * parent = 0, const char * name = 0, bool modal = TRUE, Qt::WFlags f = Qt::WStyle_DialogBorder );
     virtual ~cWMessageBox();
     
 protected slots:
@@ -354,7 +356,7 @@ private:
     void ServerIFaceErrorHandling(int, QString, int);
     cSMTimer* m_ActTimer; // für actionhandler ablaufsteuerung
     cSMTimer* m_AsyncTimer; // für actionhandler ablaufsteuerung
-    QValueList<int> AHSFifo;
+    Q3ValueList<int> AHSFifo;
      
     cConfData m_ConfDataCopy; // kopie der konfigurationsdaten 
     cConfData SaveConfData; // retten der konfiguration während des justageablaufes
@@ -396,10 +398,10 @@ private:
     cDspMeasData* ETHStatusResetHandle;
     cwmActValues ActValues;
     cDspMaxValues MaxValues;
-    QProgressDialog *m_pProgressDialog;
+    Q3ProgressDialog *m_pProgressDialog;
     wm3000ActionHandlerState m_PhaseNodeMeasState; // hier merken wir uns wo´s weiter geht
     wm3000ActionHandlerState m_SelftestState; // hier merken wir uns wo´s weiter geht
-    QValueList<float> PhaseJustValueList;
+    Q3ValueList<float> PhaseJustValueList;
     QString m_sPhaseJustText;
     QPushButton* m_pAbortButton;
     QString JDataFile;

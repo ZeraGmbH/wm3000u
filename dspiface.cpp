@@ -1,6 +1,6 @@
 // implementation cDspIFace
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include "tools.h"
 #include "dspiface.h"
@@ -31,7 +31,7 @@ QString& cDspMeasData::MeasVarList()
 {
 //    QString list;
     m_slist="";
-    QTextStream ts( &m_slist, IO_WriteOnly );
+    Q3TextStream ts( &m_slist, QIODevice::WriteOnly );
     cDspVar *DspVar;
     for ( DspVar = DspVarList.first(); DspVar; DspVar = DspVarList.next() ) 
 	if ((DspVar->type() & (vApplication | vMemory)) > 0) ts << QString("%1;").arg(DspVar->Name());
@@ -43,7 +43,7 @@ QString& cDspMeasData::VarList()
 {
 //    QString vlist;
     m_slist="";
-    QTextStream ts( &m_slist, IO_WriteOnly );
+    Q3TextStream ts( &m_slist, QIODevice::WriteOnly );
     cDspVar *DspVar;
     for ( DspVar = DspVarList.first(); DspVar; DspVar = DspVarList.next() ) 
 	ts << QString("%1,%2;").arg(DspVar->Name()).arg(DspVar->size());
@@ -731,7 +731,7 @@ void cDspIFace::SendSamplingSystemCommand()
 void cDspIFace::SendVarListCommand() // die komplette varliste bestehend aus n teillisten
 {
     QString plist;
-    QTextStream ts( &plist, IO_WriteOnly );
+    Q3TextStream ts( &plist, QIODevice::WriteOnly );
     cDspMeasData* pDspMeasData;
     for ( pDspMeasData = DspMeasDataList.first(); pDspMeasData; pDspMeasData = DspMeasDataList.next() ) 
 	ts << pDspMeasData->VarList();
@@ -743,7 +743,7 @@ void cDspIFace::SendVarListCommand() // die komplette varliste bestehend aus n t
 void cDspIFace::SendCmdListCommand() // sendet cycliste an den dsp server
 {
     QString plist;
-    QTextStream ts( &plist, IO_WriteOnly );
+    Q3TextStream ts( &plist, QIODevice::WriteOnly );
     for ( QStringList::Iterator it = CycCmdList.begin(); it != CycCmdList.end(); ++it )
         ts << *it << ";" ;
     QString cmd = QString ("measure:list:cyclist %1\n").arg(plist);
@@ -754,7 +754,7 @@ void cDspIFace::SendCmdListCommand() // sendet cycliste an den dsp server
 void cDspIFace::SendCmdIntListCommand() // sendet intliste an den dsp server 
 {
     QString plist;
-    QTextStream ts( &plist, IO_WriteOnly );
+    Q3TextStream ts( &plist, QIODevice::WriteOnly );
     for ( QStringList::Iterator it = IntCmdList.begin(); it != IntCmdList.end(); ++it )
 	ts << *it << ";" ;
     QString cmd = QString ("measure:list:intlist %1\n").arg(plist);
@@ -765,7 +765,7 @@ void cDspIFace::SendCmdIntListCommand() // sendet intliste an den dsp server
 void cDspIFace::SendSignalRoutingCommand()
 {
     QString cmds;
-    QTextStream ts(&cmds,IO_WriteOnly);
+    Q3TextStream ts(&cmds,QIODevice::WriteOnly);
     ts << "mem:write ETHROUTINGTAB";
     for (int i = 0; i < 8; i++) 
 	ts << "," << m_lP1[i];
@@ -787,7 +787,7 @@ void cDspIFace::SendResetMaximumCommand()
 void cDspIFace::SendSetDsp61850SourceAdrCommand()
 {
     QString cmds;
-    QTextStream ts(&cmds,IO_WriteOnly);
+    Q3TextStream ts(&cmds,QIODevice::WriteOnly);
     
     ts << "syst:dsp:en61:mac:sadr ";
     int i;	    
@@ -804,7 +804,7 @@ void cDspIFace::SendSetDsp61850SourceAdrCommand()
 void cDspIFace::SendSetDsp61850DestAdrCommand()
 {
     QString cmds;
-    QTextStream ts(&cmds,IO_WriteOnly);
+    Q3TextStream ts(&cmds,QIODevice::WriteOnly);
     
     ts << "syst:dsp:en61:mac:dadr ";
     int i;	    
@@ -877,7 +877,7 @@ void cDspIFace::SendDspMemoryWriteCommand()
     QString list;
     QStringList DataEntryList; 
     QString s, Cmd;
-    QTextStream ts( &Cmd, IO_WriteOnly );
+    Q3TextStream ts( &Cmd, QIODevice::WriteOnly );
     
     ts << "mem:writ ";
     

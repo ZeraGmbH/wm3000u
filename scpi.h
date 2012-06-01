@@ -6,7 +6,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include "cbiface.h"
 #include "cmdinterpret.h"
 #include "parse.h"

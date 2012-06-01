@@ -4,8 +4,8 @@
 #include <qeventloop.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qsocket.h>
-#include <qtextstream.h>
+#include <q3socket.h>
+#include <q3textstream.h>
 #include <qmessagebox.h>
 #include <qtimer.h>
 
@@ -13,7 +13,7 @@
 
 
 cZHClientSocket::cZHClientSocket(int t, QObject *parent, const char *name)
-    :QSocket(parent,name)
+    :Q3Socket(parent,name)
 {
     m_nTime = t; 
     m_nError = 0;
@@ -31,7 +31,7 @@ cZHClientSocket::cZHClientSocket(int t, QObject *parent, const char *name)
 
 QString cZHClientSocket::readLine()
 {
-    QString s = QSocket::readLine();
+    QString s = Q3Socket::readLine();
     QString l = QString ("Inp[%1:%2] : %3").arg(peerName())
 		                                 .arg(peerPort())
 				     .arg(s);
@@ -91,7 +91,7 @@ void cZHClientSocket::connectToHost (const QString& host,Q_UINT16 port)
  
     QString l = QString ("Connect to %1:%2") .arg(host) .arg(port);
     emit SendLogData(l); // fürs logfile
-    QSocket::connectToHost(host,port);  
+    Q3Socket::connectToHost(host,port);  
     ToConnTimer.start(m_nTime,true);
 }
 
@@ -131,19 +131,19 @@ void cZHClientSocket::TCPErrorHandling(int e)
     QString l;
     switch (e)
     {
-	case ErrConnectionRefused:
+	case Q3Socket::ErrConnectionRefused:
 	m_nError |= myErrConnectionRefused;
 	l = "Connection refused !";
 	emit SendLogData (l);   
 	ToConnTimer.stop(); // fehler schon diagn.
 	break;
-    case ErrHostNotFound:
+    case Q3Socket::ErrHostNotFound:
 	m_nError |= myErrHostNotFound;
 	l = "Host not found !";
 	emit SendLogData (l);   
 	ToConnTimer.stop(); // fehler schon diagn.
 	break;
-    case ErrSocketRead :
+    case Q3Socket::ErrSocketRead :
 	m_nError |= myErrSocketRead;
 	l = "Socket Data read error !";
 	emit SendLogData (l);   

@@ -1,0 +1,324 @@
+Log for qt3to4 on Mi. Mai 30 13:15:47 2012. Number of log entries: 227
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 12 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 13 column 19: qtextedit.h -> q3textedit.h
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 24 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 26 column 19: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 42 column 32: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 43 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 75 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/Logfile.cpp at line 75 column 36: IO_WriteOnly -> QIODevice::WriteOnly
+No changes made to file /home/peter/C++/wm3000u/main.cpp
+No changes made to file /home/peter/C++/wm3000u/Range.cpp
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 11 column 78: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 12 column 11: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 21 column 62: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 22 column 11: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 28 column 27: AlignVCenter -> Qt::AlignVCenter
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 30 column 17: AlignLeft -> Qt::AlignLeft
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 32 column 19: AlignRight -> Qt::AlignRight
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 79 column 21: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 79 column 35: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 81 column 48: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 95 column 16: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 104 column 30: SingleLine -> Qt::TextSingleLine
+In file /home/peter/C++/wm3000u/BigLetter.cpp at line 113 column 30: SingleLine -> Qt::TextSingleLine
+In file /home/peter/C++/wm3000u/BigLetter.cpp: Added the following include directives:
+	#include <QResizeEvent> 	#include <Q3Frame> 
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 5 column 21: qmainwindow.h -> q3mainwindow.h
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 6 column 18: qtoolbar.h -> q3toolbar.h
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 8 column 16: qframe.h -> q3frame.h
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 10 column 18: qiconset.h -> qicon.h
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 11 column 22: qtextbrowser.h -> q3textbrowser.h
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 15 column 123: QMainWindow -> Q3MainWindow
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 18 column 33: QTextBrowser -> Q3TextBrowser
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 20 column 37: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 20 column 53: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 26 column 12: QToolBar -> Q3ToolBar
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 26 column 36: QToolBar -> Q3ToolBar
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 30 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 34 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 37 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 39 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 40 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 41 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 42 column 37: QIconSet -> QIcon
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 46 column 28: DockLeft -> Qt::DockLeft
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 47 column 29: DockRight -> Qt::DockRight
+In file /home/peter/C++/wm3000u/lbrowser.cpp at line 54 column 15: QMainWindow -> Q3MainWindow
+In file /home/peter/C++/wm3000u/ownerror.cpp at line 65 column 12: QValueList -> Q3ValueList
+In file /home/peter/C++/wm3000u/ownerror.cpp at line 161 column 59: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/ownerror.cpp at line 162 column 16: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/ownerror.cpp at line 186 column 27: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/ownerror.cpp at line 187 column 27: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/ownerror.cpp: Added the following include directives:
+	#include <Q3TextStream> 	#include <Q3ValueList> 
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 7 column 19: qtextedit.h -> q3textedit.h
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 11 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 20 column 25: QTextEdit -> Q3TextEdit
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 21 column 34: LogText -> Qt::LogText
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 51 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 51 column 33: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 68 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 68 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/logfileview.cpp at line 90 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/logfileview.cpp: Added the following include directives:
+	#include <QResizeEvent> 	#include <QCloseEvent> 
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 18 column 22: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 19 column 22: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 20 column 22: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 34 column 21: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 35 column 21: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/zerainfo.cpp at line 36 column 21: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/wmeditor.cpp at line 7 column 20: qpopupmenu.h -> q3popupmenu.h
+In file /home/peter/C++/wm3000u/wmeditor.cpp at line 11 column 15: QTextEdit -> Q3TextEdit
+In file /home/peter/C++/wm3000u/wmeditor.cpp: Added the following include directives:
+	#include <QCloseEvent> 
+No changes made to file /home/peter/C++/wm3000u/eparameter.cpp
+No changes made to file /home/peter/C++/wm3000u/complex.cpp
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 3 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 34 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 34 column 42: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 46 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 46 column 42: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 734 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 734 column 40: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 746 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 746 column 40: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 757 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 757 column 40: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 768 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 768 column 37: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 790 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 790 column 37: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 807 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 807 column 37: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 880 column 15: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/dspiface.cpp at line 880 column 38: IO_WriteOnly -> QIODevice::WriteOnly
+No changes made to file /home/peter/C++/wm3000u/tools.cpp
+No changes made to file /home/peter/C++/wm3000u/confdata.cpp
+No changes made to file /home/peter/C++/wm3000u/widgeom.cpp
+No changes made to file /home/peter/C++/wm3000u/ethadress.cpp
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 4 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 9 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 13 column 21: qmainwindow.h -> q3mainwindow.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 16 column 22: qtextbrowser.h -> q3textbrowser.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 17 column 21: qdockwindow.h -> q3dockwindow.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 19 column 17: qsocket.h -> q3socket.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 25 column 20: qvaluelist.h -> q3valuelist.h
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 45 column 182: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 179 column 227: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 179 column 250: QMessageBox -> Qt
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1588 column 40: QProgressDialog -> Q3ProgressDialog
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1647 column 40: QProgressDialog -> Q3ProgressDialog
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1741 column 42: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1741 column 55: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1743 column 17: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1929 column 47: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1929 column 60: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1931 column 14: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1954 column 47: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1954 column 60: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 1956 column 14: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2042 column 40: QProgressDialog -> Q3ProgressDialog
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2128 column 45: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2128 column 58: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2130 column 13: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2145 column 45: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2145 column 58: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2147 column 13: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2180 column 45: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2180 column 57: IO_Append -> QIODevice::Append
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2182 column 13: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2659 column 36: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2675 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2675 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2690 column 28: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2829 column 29: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2831 column 16: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2868 column 20: QPtrListIterator -> Q3PtrListIterator
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2883 column 20: QPtrListIterator -> Q3PtrListIterator
+In file /home/peter/C++/wm3000u/wm3000u.cpp at line 2898 column 20: QPtrListIterator -> Q3PtrListIterator
+In file /home/peter/C++/wm3000u/pcbiface.cpp at line 3 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 7 column 17: qsocket.h -> q3socket.h
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 8 column 21: qtextstream.h -> q3textstream.h
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 16 column 12: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 34 column 23: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 94 column 11: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 134 column 26: ErrConnectionRefused -> Q3Socket::ErrConnectionRefused
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 140 column 24: ErrHostNotFound -> Q3Socket::ErrHostNotFound
+In file /home/peter/C++/wm3000u/zhclientsocket.cpp at line 146 column 22: ErrSocketRead -> Q3Socket::ErrSocketRead
+In file /home/peter/C++/wm3000u/zhserveriface.cpp at line 3 column 21: qtextstream.h -> q3textstream.h
+No changes made to file /home/peter/C++/wm3000u/parse.cpp
+No changes made to file /home/peter/C++/wm3000u/scpi.cpp
+No changes made to file /home/peter/C++/wm3000u/scpiface.cpp
+In file /home/peter/C++/wm3000u/wm3000scpiface.cpp at line 235 column 20: QPtrListIterator -> Q3PtrListIterator
+In file /home/peter/C++/wm3000u/devserver.cpp at line 10 column 25: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/devserver.cpp at line 59 column 18: QServerSocket -> Q3ServerSocket
+No changes made to file /home/peter/C++/wm3000u/cmdinterpret.cpp
+No changes made to file /home/peter/C++/wm3000u/formatinfo.cpp
+In file /home/peter/C++/wm3000u/logfile.h at line 10 column 19: qtextedit.h -> q3textedit.h
+No changes made to file /home/peter/C++/wm3000u/range.h
+In file /home/peter/C++/wm3000u/wmglobal.h at line 8 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/wmglobal.h at line 83 column 17: QMemArray -> Q3MemArray
+In file /home/peter/C++/wm3000u/wmglobal.h at line 84 column 16: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/wmglobal.h at line 161 column 16: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/wmglobal.h at line 162 column 16: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/wmglobal.h at line 163 column 16: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/wmglobal.h: Added the following include directives:
+	#include <Q3MemArray> 
+In file /home/peter/C++/wm3000u/bigletter.h at line 12 column 16: qframe.h -> q3frame.h
+In file /home/peter/C++/wm3000u/bigletter.h at line 23 column 30: QFrame -> Q3Frame
+In file /home/peter/C++/wm3000u/bigletter.h at line 34 column 70: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/bigletter.h at line 35 column 58: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/bigletter.h: Added the following include directives:
+	#include <QResizeEvent> 
+In file /home/peter/C++/wm3000u/lbrowser.h at line 9 column 22: qtextbrowser.h -> q3textbrowser.h
+In file /home/peter/C++/wm3000u/lbrowser.h at line 10 column 21: qmainwindow.h -> q3mainwindow.h
+In file /home/peter/C++/wm3000u/lbrowser.h at line 14 column 41: QMainWindow -> Q3MainWindow
+In file /home/peter/C++/wm3000u/lbrowser.h at line 23 column 16: QTextBrowser -> Q3TextBrowser
+No changes made to file /home/peter/C++/wm3000u/ownerror.h
+In file /home/peter/C++/wm3000u/logfileview.h at line 13 column 19: qtextedit.h -> q3textedit.h
+In file /home/peter/C++/wm3000u/logfileview.h at line 25 column 13: QTextEdit -> Q3TextEdit
+In file /home/peter/C++/wm3000u/logfileview.h: Added the following include directives:
+	#include <QResizeEvent> 	#include <QCloseEvent> 
+No changes made to file /home/peter/C++/wm3000u/zerainfo.h
+In file /home/peter/C++/wm3000u/wmeditor.h at line 8 column 19: qtextedit.h -> q3textedit.h
+In file /home/peter/C++/wm3000u/wmeditor.h at line 13 column 32: QTextEdit -> Q3TextEdit
+In file /home/peter/C++/wm3000u/wmeditor.h: Added the following include directives:
+	#include <QCloseEvent> 
+No changes made to file /home/peter/C++/wm3000u/eparameter.h
+In file /home/peter/C++/wm3000u/wm3000u.h at line 9 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/wm3000u.h at line 12 column 21: qmainwindow.h -> q3mainwindow.h
+In file /home/peter/C++/wm3000u/wm3000u.h at line 13 column 22: qtextbrowser.h -> q3textbrowser.h
+In file /home/peter/C++/wm3000u/wm3000u.h at line 15 column 25: qprogressdialog.h -> q3progressdialog.h
+In file /home/peter/C++/wm3000u/wm3000u.h at line 249 column 186: WFlags -> Qt::WFlags
+In file /home/peter/C++/wm3000u/wm3000u.h at line 249 column 210: WStyle_DialogBorder -> Qt::WStyle_DialogBorder
+In file /home/peter/C++/wm3000u/wm3000u.h at line 359 column 14: QValueList -> Q3ValueList
+In file /home/peter/C++/wm3000u/wm3000u.h at line 401 column 19: QProgressDialog -> Q3ProgressDialog
+In file /home/peter/C++/wm3000u/wm3000u.h at line 404 column 14: QValueList -> Q3ValueList
+In file /home/peter/C++/wm3000u/wm3000u.h: Added the following include directives:
+	#include <Q3ValueList> 
+No changes made to file /home/peter/C++/wm3000u/complex.h
+In file /home/peter/C++/wm3000u/dspiface.h at line 12 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/dspiface.h at line 50 column 12: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/dspiface.h at line 51 column 13: QMemArray -> Q3MemArray
+In file /home/peter/C++/wm3000u/dspiface.h at line 192 column 12: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/dspiface.h at line 193 column 12: QPtrList -> Q3PtrList
+In file /home/peter/C++/wm3000u/dspiface.h: Added the following include directives:
+	#include <Q3MemArray> 
+In file /home/peter/C++/wm3000u/tools.h at line 8 column 20: qvaluelist.h -> q3valuelist.h
+In file /home/peter/C++/wm3000u/tools.h at line 40 column 14: QValueList -> Q3ValueList
+In file /home/peter/C++/wm3000u/tools.h at line 41 column 14: QValueList -> Q3ValueList
+No changes made to file /home/peter/C++/wm3000u/widgeom.h
+In file /home/peter/C++/wm3000u/confdata.h at line 8 column 18: qptrlist.h -> q3ptrlist.h
+No changes made to file /home/peter/C++/wm3000u/ethadress.h
+In file /home/peter/C++/wm3000u/pcbiface.h at line 10 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/zhclientsocket.h at line 8 column 17: qsocket.h -> q3socket.h
+In file /home/peter/C++/wm3000u/zhclientsocket.h at line 15 column 37: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/zhserveriface.h at line 10 column 18: qptrlist.h -> q3ptrlist.h
+No changes made to file /home/peter/C++/wm3000u/parse.h
+No changes made to file /home/peter/C++/wm3000u/en61850.h
+No changes made to file /home/peter/C++/wm3000u/cbiface.h
+In file /home/peter/C++/wm3000u/scpi.h at line 9 column 20: qvaluelist.h -> q3valuelist.h
+No changes made to file /home/peter/C++/wm3000u/cmdinterpret.h
+In file /home/peter/C++/wm3000u/scpiface.h at line 239 column 14: QValueList -> Q3ValueList
+In file /home/peter/C++/wm3000u/scpiface.h: Added the following include directives:
+	#include <Q3ValueList> 
+No changes made to file /home/peter/C++/wm3000u/wm3000scpiface.h
+In file /home/peter/C++/wm3000u/devserver.h at line 10 column 23: qserversocket.h -> q3serversocket.h
+In file /home/peter/C++/wm3000u/devserver.h at line 11 column 17: qsocket.h -> q3socket.h
+In file /home/peter/C++/wm3000u/devserver.h at line 12 column 23: qsocketdevice.h -> q3socketdevice.h
+In file /home/peter/C++/wm3000u/devserver.h at line 14 column 18: qptrlist.h -> q3ptrlist.h
+In file /home/peter/C++/wm3000u/devserver.h at line 57 column 11: QSocket -> Q3Socket
+In file /home/peter/C++/wm3000u/devserver.h at line 66 column 42: QServerSocket -> Q3ServerSocket
+In file /home/peter/C++/wm3000u/devserver.h at line 81 column 12: QPtrList -> Q3PtrList
+No changes made to file /home/peter/C++/wm3000u/zeraglobal.h
+No changes made to file /home/peter/C++/wm3000u/formatinfo.h
+In file wm3000u.pro: Added entry QT += xml  qt3support 
+In file wm3000u.pro: Added entry CONFIG += uic3
+
+In file wm3000u.pro: Renamed FORMS to FORMS3
+
+Log for qt3to4 on Do. Mai 31 07:39:14 2012. Number of log entries: 29
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 99 column 14: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 99 column 45: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 101 column 38: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 228 column 32: IO_ReadWrite -> QIODevice::ReadWrite
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 229 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 230 column 32: PlainText -> Qt::PlainText
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 245 column 36: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 255 column 32: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 256 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 266 column 15: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 266 column 49: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 269 column 42: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 290 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 291 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 292 column 33: PlainText -> Qt::PlainText
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 305 column 32: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 306 column 12: QTextStream -> Q3TextStream
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 323 column 24: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 351 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 384 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 384 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 406 column 29: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 413 column 32: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 423 column 15: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 423 column 50: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 425 column 43: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 505 column 30: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h at line 518 column 30: QFileDialog -> Q3FileDialog
+In file /home/peter/C++/wm3000u/wmviewbase.ui.h: Added the following include directives:
+	#include <Q3TextStream> 	#include <QCloseEvent> 	#include <QLabel> 
+
+Log for qt3to4 on Do. Mai 31 08:21:20 2012. Number of log entries: 7
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 65 column 15: QBoxLayout -> Q3BoxLayout
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 65 column 32: QBoxLayout -> Q3BoxLayout
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 67 column 23: QBoxLayout -> Q3BoxLayout
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 173 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 208 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h at line 208 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmmeasvaluesbase.ui.h: Added the following include directives:
+	#include <QContextMenuEvent> 	#include <QCloseEvent> 	#include <Q3BoxLayout> 	#include <QResizeEvent> 
+
+Log for qt3to4 on Do. Mai 31 09:48:37 2012. Number of log entries: 4
+In file /home/peter/C++/wm3000u/wmoeviewbase.ui.h at line 69 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/wmoeviewbase.ui.h at line 69 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmoeviewbase.ui.h at line 90 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wmoeviewbase.ui.h: Added the following include directives:
+	#include <QCloseEvent> 
+
+Log for qt3to4 on Do. Mai 31 09:58:56 2012. Number of log entries: 4
+In file /home/peter/C++/wm3000u/wmrawactualvalbase.ui.h at line 108 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/wmrawactualvalbase.ui.h at line 139 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/wmrawactualvalbase.ui.h at line 139 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/wmrawactualvalbase.ui.h: Added the following include directives:
+	#include <QContextMenuEvent> 	#include <QCloseEvent> 
+
+Log for qt3to4 on Do. Mai 31 10:08:02 2012. Number of log entries: 4
+In file /home/peter/C++/wm3000u/en61850monitor.ui.h at line 124 column 31: IO_ReadOnly -> QIODevice::ReadOnly
+In file /home/peter/C++/wm3000u/en61850monitor.ui.h at line 148 column 26: IO_Raw -> QIODevice::Unbuffered
+In file /home/peter/C++/wm3000u/en61850monitor.ui.h at line 148 column 41: IO_WriteOnly -> QIODevice::WriteOnly
+In file /home/peter/C++/wm3000u/en61850monitor.ui.h: Added the following include directives:
+	#include <QCloseEvent> 
+
+Log for qt3to4 on Do. Mai 31 10:29:26 2012. Number of log entries: 1
+No changes made to file /home/peter/C++/wm3000u/confdialogbase.ui.h
+
+Log for qt3to4 on Do. Mai 31 10:30:39 2012. Number of log entries: 1
+No changes made to file /home/peter/C++/wm3000u/confdialogbase.ui.h
+
+Log for qt3to4 on Do. Mai 31 10:49:43 2012. Number of log entries: 2
+In file /home/peter/C++/wm3000u/rangedialogbase.ui.h at line 50 column 20: QPtrListIterator -> Q3PtrListIterator
+In file /home/peter/C++/wm3000u/rangedialogbase.ui.h: Added the following include directives:
+	#include <QShowEvent> 
+
+Log for qt3to4 on Do. Mai 31 10:55:29 2012. Number of log entries: 1
+No changes made to file /home/peter/C++/wm3000u/versionviewbase.ui.h
+
+Log for qt3to4 on Do. Mai 31 11:34:47 2012. Number of log entries: 1
+No changes made to file /home/peter/C++/wm3000u/wmmeasconfigbase.cpp
+
+Log for qt3to4 on Do. Mai 31 11:46:09 2012. Number of log entries: 1
+No changes made to file /home/peter/C++/wm3000u/wmrawactualconfigbase.cpp
+

@@ -9,8 +9,8 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qfile.h>
-#include <qtextstream.h>
-#include <qtextedit.h>
+#include <q3textstream.h>
+#include <q3textedit.h>
 #include <qdialog.h>
 #include <qwidget.h>
 #include <qevent.h>
@@ -21,9 +21,9 @@ CLogFile::CLogFile(const QString FileName,const long flen)
     m_sFileName=FileName;
     QFile file( FileName );
     m_nActFileLen = 0;
-    if ( file.open( IO_ReadOnly ) ) // beim öffnen stringliste lesen und aktuelle länge bestimmen
+    if ( file.open( QIODevice::ReadOnly ) ) // beim öffnen stringliste lesen und aktuelle länge bestimmen
     {
-        QTextStream stream( &file );
+        Q3TextStream stream( &file );
         QString line;
 	while ( !stream.atEnd() ) {
 	    line = stream.readLine(); // line of text excluding '\n'
@@ -39,8 +39,8 @@ CLogFile::~CLogFile()
 {
     QFile file(m_sFileName );	
     file.remove();
-    if ( file.open( IO_WriteOnly ) ) {
-	QTextStream stream( &file );
+    if ( file.open( QIODevice::WriteOnly ) ) {
+	Q3TextStream stream( &file );
 	for ( QStringList::Iterator it = m_sLogLinesList.begin(); it != m_sLogLinesList.end(); ++it ) 
 	    stream << *it << "\n";
 	file.close();
@@ -72,7 +72,7 @@ void CLogFile::AddLogTextSlot(const QString& logtext) // neuer input für logfil
 void CLogFile::SendLogSlot() // zu initialisierungs zwecken
 {
     QString s;
-    QTextStream ts( &s, IO_WriteOnly );
+    Q3TextStream ts( &s, QIODevice::WriteOnly );
     int n;
     if ( (n = m_sLogLinesList.count()) > 0 ) {
 	int i;

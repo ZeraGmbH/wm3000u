@@ -1,6 +1,6 @@
 // implementation cZHServerIFace
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include "zhserveriface.h"
 

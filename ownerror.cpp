@@ -3,6 +3,9 @@
 #include <qfile.h>
 #include <qmessagebox.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3TextStream>
+#include <Q3ValueList>
 #include <math.h>
 
 #include "ownerror.h"
@@ -49,17 +52,17 @@ complex cOwnError::GetOECorrVector()
 complex cOwnError::CmpOECorrVector()
 {
     complex k(1.0,0.0); // keine drehung
-    if (m_pViewData->m_bValid = m_ConfData.m_bOECorrection) {
+    if ((m_pViewData->m_bValid = m_ConfData.m_bOECorrection)) {
 	double betrag, winkel;
 	QStringList relEntriesList;
-	if (m_pViewData->m_bValid = !m_sOEEntriesList.empty()) { // es gibt gültige einträge in der verwendeten datei
+        if ((m_pViewData->m_bValid = !m_sOEEntriesList.empty())) { // es gibt gültige einträge in der verwendeten datei
 	    QString searchEntry = m_ConfData.m_NPrimary+";"+m_ConfData.m_NSecondary+";";
 	    for ( QStringList::Iterator it = m_sOEEntriesList.begin(); it != m_sOEEntriesList.end(); ++it ) {
 		QString s = *it;
 		if (s.contains(searchEntry)) relEntriesList.push_back(s);
 	    }
-	    if (m_pViewData->m_bValid = (relEntriesList.count() > 0)) { // gab es einträge für das gewählte ü-verhältnis ?
-		QValueList<tOEKoefficient> OEKoefficientList; // eine liste für koeffizienten
+            if ((m_pViewData->m_bValid = (relEntriesList.count() > 0))) { // gab es einträge für das gewählte ü-verhältnis ?
+		Q3ValueList<tOEKoefficient> OEKoefficientList; // eine liste für koeffizienten
 		tOEKoefficient OEKoefficient; 
 		tepOEEntry epEntries;
 		for ( QStringList::Iterator it = relEntriesList.begin(); it != relEntriesList.end(); ++it ) {
@@ -155,8 +158,8 @@ void cOwnError::SetConfInfoSlot(cConfData *cd)
 	m_sNPrimList.clear();
 	m_sNSekList.clear();
 	QFile file(m_ConfData.m_sOETFile);
-	if ((m_ConfData.m_sOETFile != "") && file.open(IO_ReadOnly)) {
-	    QTextStream stream(&file);
+	if ((m_ConfData.m_sOETFile != "") && file.open(QIODevice::ReadOnly)) {
+	    Q3TextStream stream(&file);
 	    QString line;
 	    while (!stream.atEnd()) {
 		line=stream.readLine(); // liesst eine zeile
@@ -180,8 +183,8 @@ void cOwnError::SetConfInfoSlot(cConfData *cd)
 					            tr("Fehler in %1\n"
 					            "Zeile : %2\n").arg(strippedName(m_ConfData.m_sOETFile)).arg(line),
 					           QMessageBox::Ok,
-					           QMessageBox::NoButton,
-					           QMessageBox::NoButton);
+					           Qt::NoButton,
+					           Qt::NoButton);
 			break;
 		    }
 		}

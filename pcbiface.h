@@ -7,7 +7,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "tools.h"
 #include "zhserveriface.h"

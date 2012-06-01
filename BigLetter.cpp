@@ -4,9 +4,12 @@
 #include <qpainter.h>
 #include <qsize.h>
 #include <qfontmetrics.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
 
-CBigLetter::CBigLetter(int s,QString d,QWidget *parent,const char* name,WFlags f)
-    :QFrame(parent,name,f)
+CBigLetter::CBigLetter(int s,QString d,QWidget *parent,const char* name,Qt::WFlags f)
+    :Q3Frame(parent,name,f)
 {
     m_nStartSize=s;
     actFontSize(m_nStartSize);
@@ -15,18 +18,18 @@ CBigLetter::CBigLetter(int s,QString d,QWidget *parent,const char* name,WFlags f
 }
 
 
-CBigLetter::CBigLetter(QWidget *parent,const char* name,WFlags f)
-    :QFrame(parent,name,f)
+CBigLetter::CBigLetter(QWidget *parent,const char* name,Qt::WFlags f)
+    :Q3Frame(parent,name,f)
 {
 }
 
 void CBigLetter::drawContents(QPainter* p)
 {
-    int lFlags=AlignVCenter;
-    if (m_nAlign==left)
-	lFlags=AlignLeft;
+    int lFlags=Qt::AlignVCenter;
+    if (m_nAlign==leftAlign)
+	lFlags=Qt::AlignLeft;
     else
-	lFlags|=AlignRight;
+	lFlags|=Qt::AlignRight;
     p->drawText(rect(),lFlags,m_sDisplay);
 }    
 
@@ -73,9 +76,9 @@ void CBigLetter::setFrame(cFrame f)
 {
     m_nFrame=f;
     if (m_nFrame==frame)
-	setFrameStyle(QFrame::Box | QFrame::Plain);
+	setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
     else 
-	setFrameStyle(/*QFrame::MenuBarPanel |*/ QFrame::Plain); 
+	setFrameStyle(/*QFrame::MenuBarPanel |*/ Q3Frame::Plain); 
 }    
 
 
@@ -89,7 +92,7 @@ void CBigLetter::resizeEvent ( QResizeEvent* r)
 {
     QSize ls=size();
     actFontSize((int) ((1.0*ls.height())/1.6));
-    this->QFrame::resizeEvent(r);
+    this->Q3Frame::resizeEvent(r);
 }
 
 
@@ -98,7 +101,7 @@ QSize CBigLetter::sizeHint() const
    QFont fo(font());
     fo.setPointSize(m_nStartSize); // empfohlene grösse ist immer die startgrösse
     QFontMetrics tfm(fo);
-    return(tfm.size(SingleLine,m_sDisplay));
+    return(tfm.size(Qt::TextSingleLine,m_sDisplay));
 }
 
 
@@ -107,7 +110,7 @@ QSize CBigLetter::minimumSizeHint() const
     QFont fo(font());
     fo.setPointSize(m_nStartSize);
     QFontMetrics tfm(fo);
-    return(tfm.size(SingleLine,m_sDisplay));
+    return(tfm.size(Qt::TextSingleLine,m_sDisplay));
 }
 
 

@@ -1,45 +1,20 @@
-/****************************************************************************
-** Form interface generated from reading ui file 'wmrawactualconfigbase.ui'
-**
-** Created: Mo Feb 13 08:25:26 2012
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
 #ifndef WMRAWACTUALCONFIGBASE_H
 #define WMRAWACTUALCONFIGBASE_H
 
 #include <qvariant.h>
 #include <qdialog.h>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QSpacerItem;
-class QButtonGroup;
-class QRadioButton;
-class QPushButton;
+namespace Ui {
+    class WMRawActualConfigBase;
+}
 
 class WMRawActualConfigBase : public QDialog
 {
     Q_OBJECT
 
 public:
-    WMRawActualConfigBase( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    explicit WMRawActualConfigBase( QWidget* parent = 0);
     ~WMRawActualConfigBase();
-
-    QButtonGroup* AmplitudebuttonGroup;
-    QRadioButton* Amplx1radioButton;
-    QRadioButton* Amplx1_sqrt2radioButton;
-    QButtonGroup* primsekbuttonGroup;
-    QRadioButton* PrimradioButton;
-    QRadioButton* SekradioButton;
-    QButtonGroup* WinkelbuttonGroup;
-    QRadioButton* MathradioButton;
-    QRadioButton* TechradioButton;
-    QPushButton* buttonOk;
-    QPushButton* buttonCancel;
 
 public slots:
     virtual void ReceiveDisplayConfSlot( int m, int m2, int m3 );
@@ -47,19 +22,8 @@ public slots:
 signals:
     void SendVektorDisplayFormat(int,int,int);
 
-protected:
-    QVBoxLayout* WMRawActualConfigBaseLayout;
-    QHBoxLayout* layout3;
-    QVBoxLayout* AmplitudebuttonGroupLayout;
-    QVBoxLayout* primsekbuttonGroupLayout;
-    QVBoxLayout* WinkelbuttonGroupLayout;
-    QHBoxLayout* Layout1;
-    QSpacerItem* Horizontal_Spacing2;
-
-protected slots:
-    virtual void languageChange();
-
 private:
+    Ui::WMRawActualConfigBase *ui;
     int AmplDisplayMode;
     int WinkelDisplayMode;
     int AmplPrimSekMode;

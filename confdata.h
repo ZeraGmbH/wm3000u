@@ -5,7 +5,7 @@
 #ifndef CONFDATA_H
 #define CONFDATA_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 #include "ethadress.h"
@@ -37,12 +37,12 @@ public:
     int ASDU; // logical node (61850-9-2)
     int DataSet; // data set in ASDU
     int Language;
-    long m_nLogFileMax; // max. logfile grösse
+    qint32 m_nLogFileMax; // max. logfile grösse
     double m_fxPhaseShift; // phasenkorrekturwert für prüfling
     double m_fxTimeShift; // totzeitkorrekturwert für prüfling 
     cETHAdress m_MacSourceAdr, m_MacDestAdr; // mac adressen für kommunikation mit mergingunit
-    ulong m_nPriorityTagged;
-    ulong m_nEthTypeHeader;
+    quint32 m_nPriorityTagged;
+    quint32 m_nEthTypeHeader;
     bool m_bStrongEthSynchronisation;
     QString m_sOETFile; // filename der eigenfehlertabelle
     QString m_sResultFile; // filename der ergebnisdatei

@@ -32,7 +32,7 @@ bool cConfData::deserialize(QDataStream& ts)
     bool ret;
     
     ts >> tmp;
-    if (ret = (tmp == ConfVersion)) {
+    if ((ret = (tmp == ConfVersion))) {
 	int s,r,o,ol;
 	ts >> s >> r >> o >> ol;
 	m_bSimulation = s; m_bRunning = r; m_bOECorrection = o; m_bOENewLoad = ol;

@@ -7,7 +7,7 @@
 
 cClientSocketDevice::cClientSocketDevice(int sock, QObject *parent, const char*  name)
 {
-    m_pSock = new QSocket(parent, name);
+    m_pSock = new Q3Socket(parent, name);
     m_pSock->setSocket(sock);
     m_pZDSWriteNotifyer = new QSocketNotifier ( sock, QSocketNotifier::Write);
     m_pZDSWriteNotifyer->setEnabled (false);
@@ -56,7 +56,7 @@ void cClientSocketDevice::SendAnswer(int)
 
 
 cDeviceServer::cDeviceServer( Q_UINT16 port, int backlog, QObject *parent, const char *name)
-    :QServerSocket(port, backlog, parent, name) 
+    :Q3ServerSocket(port, backlog, parent, name) 
 {
 }    
 

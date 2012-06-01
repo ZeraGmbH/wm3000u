@@ -1,191 +1,256 @@
-/****************************************************************************
-** Form implementation generated from reading ui file 'wmmeasvaluesbase.ui'
-**
-** Created: Mi Feb 15 08:24:43 2012
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QCloseEvent>
+#include <Q3BoxLayout>
+#include <QResizeEvent>
+#include <QFileInfo>
 #include "wmmeasvaluesbase.h"
-
-#include <qvariant.h>
-#include <qobject.h>
-#include <qlabel.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qpopupmenu.h>
-#include </home/peter/C++/WM3000I/bigletter.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
-
+#include "ui_wmmeasvaluesbase.h"
 #include "eparameter.h"
-#include "tools.h"
-#include "complex.h"
-#include "wmglobal.h"
-#include "formatinfo.h"
-#include "wmmeasconfigbase.h"
-#include "wmmeasvaluesbase.ui.h"
-/*
- *  Constructs a WMMeasValuesBase as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
- */
-WMMeasValuesBase::WMMeasValuesBase( QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl )
+
+extern eUnit LoadpointUnit[];
+extern eUnit ErrorUnit[];
+extern eUnit AngleUnit[];
+
+
+WMMeasValuesBase::WMMeasValuesBase(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::WMMeasValuesBase)
 {
-    if ( !name )
-	setName( "WMMeasValuesBase" );
-    setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, sizePolicy().hasHeightForWidth() ) );
-    QFont f( font() );
-    setFont( f ); 
-    setFocusPolicy( QDialog::NoFocus );
-    setSizeGripEnabled( TRUE );
-    setModal( FALSE );
-    WMMeasValuesBaseLayout = new QHBoxLayout( this, 11, 6, "WMMeasValuesBaseLayout"); 
-
-    layout4 = new QVBoxLayout( 0, 0, 6, "layout4"); 
-
-    cBigLetter3 = new CBigLetter( this, "cBigLetter3" );
-    cBigLetter3->setProperty( "m_nFrame", 0 );
-    cBigLetter3->setProperty( "m_nStartSize", 15 );
-    layout4->addWidget( cBigLetter3 );
-
-    cBigLetter1 = new CBigLetter( this, "cBigLetter1" );
-    cBigLetter1->setEnabled( TRUE );
-    cBigLetter1->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, cBigLetter1->sizePolicy().hasHeightForWidth() ) );
-    cBigLetter1->setMinimumSize( QSize( 16, 0 ) );
-    QFont cBigLetter1_font(  cBigLetter1->font() );
-    cBigLetter1->setFont( cBigLetter1_font ); 
-    cBigLetter1->setProperty( "m_nAlign", 0 );
-    cBigLetter1->setProperty( "m_nFrame", 0 );
-    cBigLetter1->setProperty( "m_nStartSize", 15 );
-    layout4->addWidget( cBigLetter1 );
-
-    cBigLetter2 = new CBigLetter( this, "cBigLetter2" );
-    cBigLetter2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, cBigLetter2->sizePolicy().hasHeightForWidth() ) );
-    QFont cBigLetter2_font(  cBigLetter2->font() );
-    cBigLetter2->setFont( cBigLetter2_font ); 
-    cBigLetter2->setProperty( "m_nAlign", 0 );
-    cBigLetter2->setProperty( "m_nFrame", 0 );
-    cBigLetter2->setProperty( "m_nStartSize", 15 );
-    layout4->addWidget( cBigLetter2 );
-
-    mBigAngleName = new CBigLetter( this, "mBigAngleName" );
-    mBigAngleName->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigAngleName->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigAngleName_font(  mBigAngleName->font() );
-    mBigAngleName->setFont( mBigAngleName_font ); 
-    mBigAngleName->setProperty( "m_nAlign", 0 );
-    mBigAngleName->setProperty( "m_nFrame", 0 );
-    mBigAngleName->setProperty( "m_nStartSize", 15 );
-    layout4->addWidget( mBigAngleName );
-    WMMeasValuesBaseLayout->addLayout( layout4 );
-
-    layout5 = new QVBoxLayout( 0, 0, 6, "layout5"); 
-
-    mBigLoadpointX = new CBigLetter( this, "mBigLoadpointX" );
-    mBigLoadpointX->setProperty( "m_nFrame", 0 );
-    mBigLoadpointX->setProperty( "m_nStartSize", 15 );
-    layout5->addWidget( mBigLoadpointX );
-
-    mBigLoadpointN = new CBigLetter( this, "mBigLoadpointN" );
-    mBigLoadpointN->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigLoadpointN->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigLoadpointN_font(  mBigLoadpointN->font() );
-    mBigLoadpointN->setFont( mBigLoadpointN_font ); 
-    mBigLoadpointN->setProperty( "m_nAlign", 0 );
-    mBigLoadpointN->setProperty( "m_nFrame", 0 );
-    mBigLoadpointN->setProperty( "m_nStartSize", 15 );
-    layout5->addWidget( mBigLoadpointN );
-
-    mBigAmplError = new CBigLetter( this, "mBigAmplError" );
-    mBigAmplError->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigAmplError->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigAmplError_font(  mBigAmplError->font() );
-    mBigAmplError->setFont( mBigAmplError_font ); 
-    mBigAmplError->setProperty( "m_nAlign", 0 );
-    mBigAmplError->setProperty( "m_nFrame", 0 );
-    mBigAmplError->setProperty( "m_nStartSize", 15 );
-    layout5->addWidget( mBigAmplError );
-
-    mBigAngleError = new CBigLetter( this, "mBigAngleError" );
-    mBigAngleError->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigAngleError->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigAngleError_font(  mBigAngleError->font() );
-    mBigAngleError->setFont( mBigAngleError_font ); 
-    mBigAngleError->setProperty( "m_nAlign", 0 );
-    mBigAngleError->setProperty( "m_nFrame", 0 );
-    mBigAngleError->setProperty( "m_nStartSize", 15 );
-    layout5->addWidget( mBigAngleError );
-    WMMeasValuesBaseLayout->addLayout( layout5 );
-
-    layout6 = new QVBoxLayout( 0, 0, 6, "layout6"); 
-
-    mBigLPXUnit = new CBigLetter( this, "mBigLPXUnit" );
-    mBigLPXUnit->setProperty( "m_nFrame", 0 );
-    mBigLPXUnit->setProperty( "m_nStartSize", 15 );
-    layout6->addWidget( mBigLPXUnit );
-
-    mBigLPNUnit = new CBigLetter( this, "mBigLPNUnit" );
-    mBigLPNUnit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigLPNUnit->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigLPNUnit_font(  mBigLPNUnit->font() );
-    mBigLPNUnit->setFont( mBigLPNUnit_font ); 
-    mBigLPNUnit->setProperty( "m_nAlign", 0 );
-    mBigLPNUnit->setProperty( "m_nFrame", 0 );
-    mBigLPNUnit->setProperty( "m_nStartSize", 15 );
-    layout6->addWidget( mBigLPNUnit );
-
-    mBigErrorUnit = new CBigLetter( this, "mBigErrorUnit" );
-    mBigErrorUnit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, mBigErrorUnit->sizePolicy().hasHeightForWidth() ) );
-    QFont mBigErrorUnit_font(  mBigErrorUnit->font() );
-    mBigErrorUnit->setFont( mBigErrorUnit_font ); 
-    mBigErrorUnit->setProperty( "m_nAlign", 0 );
-    mBigErrorUnit->setProperty( "m_nFrame", 0 );
-    mBigErrorUnit->setProperty( "m_nStartSize", 15 );
-    layout6->addWidget( mBigErrorUnit );
-
-    mBigAngleUnit = new CBigLetter( this, "mBigAngleUnit" );
-    mBigAngleUnit->setProperty( "m_nAlign", 0 );
-    mBigAngleUnit->setProperty( "m_nFrame", 0 );
-    mBigAngleUnit->setProperty( "m_nStartSize", 15 );
-    layout6->addWidget( mBigAngleUnit );
-    WMMeasValuesBaseLayout->addLayout( layout6 );
-    languageChange();
-    resize( QSize(638, 364).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
+    ui->setupUi(this);
     init();
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 WMMeasValuesBase::~WMMeasValuesBase()
 {
     destroy();
-    // no need to delete child widgets, Qt does it all for us
+    delete ui;
 }
 
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void WMMeasValuesBase::languageChange()
+
+void WMMeasValuesBase::init()
 {
-    setCaption( tr( "Fehlermesswerte" ) );
-    cBigLetter3->setProperty( "m_sDisplay", tr( "LP(X):" ) );
-    cBigLetter1->setProperty( "m_sDisplay", tr( "LP(N):" ) );
-    cBigLetter2->setProperty( "m_sDisplay", tr( "F:" ) );
-    mBigAngleName->setProperty( "m_sDisplay", tr( "phi:" ) );
-    mBigLoadpointX->setProperty( "m_sDisplay", tr( "---.---" ) );
-    mBigLoadpointN->setProperty( "m_sDisplay", tr( "---.---" ) );
-    mBigAmplError->setProperty( "m_sDisplay", tr( "-.-" ) );
-    mBigAngleError->setProperty( "m_sDisplay", tr( "-.-" ) );
-    mBigLPXUnit->setProperty( "m_sDisplay", tr( "%" ) );
-    mBigLPNUnit->setProperty( "m_sDisplay", tr( "%" ) );
-    mBigErrorUnit->setProperty( "m_sDisplay", tr( "%" ) );
-    mBigAngleUnit->setProperty( "m_sDisplay", trUtf8( "\xc2\xb0" ) );
+    m_nDisplayMode = IEC; // wmglobal
+    m_nLPDisplayMode = totalRms; 
+    m_pContextMenu = new WMMeasConfigBase(this);
+    m_Format[0] = cFormatInfo(7,3,LoadpointUnit[LPProzent]); // defaults
+    m_Format[1] = cFormatInfo(7,3,ErrorUnit[ErrProzent]);
+    m_Format[2] = cFormatInfo(7,4,AngleUnit[Anglegrad]);
+    connect(this,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    connect(m_pContextMenu,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),this,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    LoadSession(".ses");
 }
+
+
+void WMMeasValuesBase::destroy()
+{
+    SaveSession(".ses");
+}
+
+
+void WMMeasValuesBase::closeEvent( QCloseEvent * ce)
+{
+    m_widGeometry.SetGeometry(pos(),size());
+    m_widGeometry.SetVisible(0);
+    emit isVisibleSignal(false);
+    ce->accept();
+}
+
+
+void WMMeasValuesBase::ShowHideMVSlot(bool b)
+{
+    if (b) show();else close();
+}
+
+
+void WMMeasValuesBase::resizeEvent(QResizeEvent * e)
+{
+    if (QLayout *lay=layout()) { 
+	QLayoutIterator it = lay->iterator();
+	QLayoutItem *child;
+	int  w;
+	bool test;
+	while ( (child = it.current()) != 0 ) {
+	    Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
+	    w = l->minimumSize().width();
+	    test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
+	    ++it;
+	}
+    }
+    this->QDialog::resizeEvent(e);
+}
+
+ 
+void WMMeasValuesBase::SetActualValuesSlot( cwmActValues * av)
+{
+    m_ActValues = *av;
+    ActualizeDisplay(); // anzeige aktualisieren
+}
+
+
+void WMMeasValuesBase::ActualizeLPSlot( cwmActValues * av )
+{
+    m_ActValues = *av;
+    ActualizeLoadPoint();
+}
+
+
+
+void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
+{
+    m_ConfData = *cd;
+}
+
+
+void WMMeasValuesBase::ActualizeLoadPoint()
+{
+      double AnzeigeWertN, AnzeigeWertX;
+ 
+      if (m_nLPDisplayMode == totalRms)
+      {
+	  if (m_Format[0].UnitInfo.Name == "%")
+	  {
+	      AnzeigeWertN = m_ActValues.LoadPoint;
+	      AnzeigeWertX = m_ActValues.LoadPointX;
+	  }
+	  else
+	  {
+	      AnzeigeWertN = m_ActValues.RMSN / m_Format[0].UnitInfo.fak;
+	      AnzeigeWertX = m_ActValues.RMSX / m_Format[0].UnitInfo.fak;
+	  }
+      }
+      else
+      {
+	  if (m_Format[0].UnitInfo.Name == "%")
+	  {
+	      AnzeigeWertN = m_ActValues.LoadPoint1;
+	      AnzeigeWertX = m_ActValues.LoadPoint1X;
+	  }
+	  else
+	  {
+	      AnzeigeWertN = m_ActValues.RMSN1 / m_Format[0].UnitInfo.fak;
+	      AnzeigeWertX = m_ActValues.RMSX1 / m_Format[0].UnitInfo.fak;
+	  }
+      }
+   
+      ui->mBigLoadpointN->display(QString("%1").arg(AnzeigeWertN,m_Format[0].FieldWidth,'f',m_Format[0].Resolution));
+      ui->mBigLPNUnit->display(m_Format[0].UnitInfo.Name);
+      ui->mBigLoadpointX->display(QString("%1").arg(AnzeigeWertX,m_Format[0].FieldWidth,'f',m_Format[0].Resolution));
+      ui->mBigLPXUnit->display(m_Format[0].UnitInfo.Name);
+}
+
+
+void WMMeasValuesBase::ActualizeDisplay()
+{
+   double AnzeigeWert;
+   double normphi = 57.295779; // 360/(2*PI) winkel sind im bogenmass (rad)
+   
+   if (m_nDisplayMode == IEC)
+       AnzeigeWert = m_ActValues.AmplErrorIEC;
+   else
+       AnzeigeWert = m_ActValues.AmplErrorANSI;
+   
+   AnzeigeWert = AnzeigeWert / ( 100.0 * m_Format[1].UnitInfo.fak );
+   ui->mBigAmplError->display(QString("%1").arg(AnzeigeWert,m_Format[1].FieldWidth,'f',m_Format[1].Resolution));
+   ui->mBigErrorUnit->display(m_Format[1].UnitInfo.Name);
+   
+   AnzeigeWert = m_ActValues.AngleError * normphi; // jetzt is et in °
+   AnzeigeWert /= m_Format[2].UnitInfo.fak;
+   ui->mBigAngleError->display(QString("%1").arg(AnzeigeWert,m_Format[2].FieldWidth,'f',m_Format[2].Resolution));
+   ui->mBigAngleUnit->display(m_Format[2].UnitInfo.Name);
+   
+   if (m_nDisplayMode == ANSI)
+   {
+       ui->mBigAngleName->setEnabled(false);
+       ui->mBigAngleError->setEnabled(false);
+       ui->mBigAngleUnit->setEnabled(false);
+   }
+   else
+   {
+       ui->mBigAngleName->setEnabled(true);
+       ui->mBigAngleError->setEnabled(true);
+       ui->mBigAngleUnit->setEnabled(true);
+   }   
+}
+
+
+bool WMMeasValuesBase::LoadSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+    if ( file.open( QIODevice::ReadOnly ) ) {
+	QDataStream stream( &file );
+	stream >> m_widGeometry;
+
+	for (int i = 0; i< 3; i++) 
+	    stream >> m_Format[i];
+
+	stream >> m_nDisplayMode;
+	stream >> m_nLPDisplayMode;
+	
+	file.close();
+	hide();
+	resize(m_widGeometry.m_Size);
+	move(m_widGeometry.m_Point);
+	if (m_widGeometry.vi)
+	{
+	    show();
+	    emit isVisibleSignal(true);
+	}
+// FVWM und Gnome verhalten sich anders
+#ifndef FVWM 
+	move(m_widGeometry.m_Point);
+#endif   
+    	return true;
+    }
+    return false;
+}
+
+
+void WMMeasValuesBase::SaveSession(QString session)
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+//    file.remove();
+    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
+	file.at(0);
+	int vi;
+	vi = (isVisible()) ? 1 : 0;
+	if (vi) 
+	    m_widGeometry.SetGeometry(pos(),size());
+	m_widGeometry.SetVisible(vi);
+	
+	QDataStream stream( &file );
+	stream << m_widGeometry;
+
+	for (int i = 0; i < 3; i++) 
+	    stream << m_Format[i];
+
+	stream << m_nDisplayMode;
+	stream << m_nLPDisplayMode;
+	
+	file.close();
+    }
+}
+
+
+void WMMeasValuesBase::contextMenuEvent( QContextMenuEvent * )
+{
+    emit SendFormatInfoSignal( m_nDisplayMode,m_nLPDisplayMode, 3, m_Format);
+    m_pContextMenu->show();
+}
+
+
+void WMMeasValuesBase::ReceiveFormatInfoSlot(int m, int m2, int n, cFormatInfo* fi)
+{
+    int i;
+    for(i = 0; i < n; i++, fi++)
+	m_Format[i] = *fi;
+    
+    m_nDisplayMode = m;
+    m_nLPDisplayMode = m2;
+}
+
 

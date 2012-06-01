@@ -1,28 +1,28 @@
 // definition wm3000u
 
 #include <qapplication.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qobject.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qaction.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qsize.h>
 #include <qwidget.h>
-#include <qtextbrowser.h>
-#include <qdockwindow.h>
+#include <q3textbrowser.h>
+#include <q3dockwindow.h>
 #include <qdir.h>
-#include <qsocket.h>
+#include <q3socket.h>
 #include <qmessagebox.h>
 #include <math.h>
 #include <stdlib.h>
 #include <qdom.h>
 #include <qdatetime.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qfileinfo.h>
 
 #include "wmviewbase.h"
@@ -42,7 +42,7 @@ const double PI_180 = 1.74532925e-2;
 const float PhaseJustFreq[4] = {16.66, 30.0, 50.0, 60.0}; // feste frequenzwerte zur phasenjustage
 
 
-cWMessageBox::cWMessageBox ( const QString & caption, const QString & text, Icon icon, int button0, int button1, int button2, QWidget * parent, const char * name , bool modal, WFlags f ) : QMessageBox ( caption, text, icon, button0, button1, button2, parent, name, modal, f)
+cWMessageBox::cWMessageBox ( const QString & caption, const QString & text, Icon icon, int button0, int button1, int button2, QWidget * parent, const char * name , bool modal, Qt::WFlags f ) : QMessageBox ( caption, text, icon, button0, button1, button2, parent, name, modal, f)
 {
 }
 
@@ -176,7 +176,7 @@ cWM3000U::cWM3000U()
     
     ActValues.RMSNSek = 0.0;  // wir benötigen definierte istwerte, damit wir die korrekturwerte
     ActValues.RMSXSek = 0.0; // lesen können
-    m_OVLMsgBox = new cWMessageBox ( trUtf8("Übersteuerung"), trUtf8("Es ist eine Übersteuerung im grössten Bereich\naufgetreten. Bitte überprüfen Sie die Messgrössen"), QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, 0, 0, false ) ;
+    m_OVLMsgBox = new cWMessageBox ( trUtf8("Übersteuerung"), trUtf8("Es ist eine Übersteuerung im grössten Bereich\naufgetreten. Bitte überprüfen Sie die Messgrössen"), QMessageBox::Critical, QMessageBox::Ok, Qt::NoButton, Qt::NoButton, 0, 0, false ) ;
     connect(m_OVLMsgBox,SIGNAL(WMBoxClosed()),this,SLOT(OverLoadMaxQuitSlot()));
 
 
@@ -1498,7 +1498,7 @@ case ConfigurationTestTMode:
 		    default : break; 
 		    }
 		    
-		    if (bOverload = (bOvln || bOvlx) )
+                    if ((bOverload = (bOvln || bOvlx) ))
 				emit AffectStatus(SetQuestStat, QuestOverLoad); // und an status system melden
 		    else
 				emit AffectStatus(ResetQuestStat, QuestOverLoad ); 
@@ -1585,7 +1585,7 @@ case ConfigurationTestTMode:
 	
     case CmpPhCoeffStart:
 	StopMeasurement(); // die kumulieren jetzt nur
-	m_pProgressDialog = new QProgressDialog( trUtf8("Berechnung läuft ..."), 0, 4/*m_PhaseCalcInfoList.count()*/, g_WMView, 0, FALSE, 0 ); // ein progress dialog 
+	m_pProgressDialog = new Q3ProgressDialog( trUtf8("Berechnung läuft ..."), 0, 4/*m_PhaseCalcInfoList.count()*/, g_WMView, 0, FALSE, 0 ); // ein progress dialog 
 	m_pProgressDialog->setCaption("Phasenkorrekturkoeffizienten"); //überschrift
 	m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
 	lprogress = 0; // int. progress counter
@@ -1644,7 +1644,7 @@ case ConfigurationTestTMode:
     case PhaseNodeMeasStart:
 	m_PhaseJustLogfile.remove(); // beim starten wird das log file gelöscht
 	StopMeasurement(); // die kumulieren jetzt nur
-	m_pProgressDialog = new QProgressDialog( trUtf8("Koeffizienten 0 setzen ..."), 0, m_PhaseNodeMeasInfoList.count()+1, g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht alle justierpunkte +1 für das 0 setzen der koeffizienten
+	m_pProgressDialog = new Q3ProgressDialog( trUtf8("Koeffizienten 0 setzen ..."), 0, m_PhaseNodeMeasInfoList.count()+1, g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht alle justierpunkte +1 für das 0 setzen der koeffizienten
 	
 	m_pAbortButton = new QPushButton(trUtf8("Abbruch"),0,0);
 	m_pProgressDialog->setCancelButton(m_pAbortButton);
@@ -1738,9 +1738,9 @@ case ConfigurationTestTMode:
 	m_pProgressDialog->setLabelText (trUtf8("Konfiguration setzen ..." ));
 	PhaseNodeMeasInfo = m_PhaseNodeMeasInfoList.first(); // info was zu tun ist
 	
-	if (m_PhaseJustLogfile.open( IO_WriteOnly  | IO_Append) ) // wir loggen das mal
+	if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
 	{
-	     QTextStream stream( &m_PhaseJustLogfile );
+	     Q3TextStream stream( &m_PhaseJustLogfile );
 	     stream << QString("RangeN=%1 RangeX=%2 Mode=").arg(PhaseNodeMeasInfo->m_srng0).arg(PhaseNodeMeasInfo->m_srng1);
 	     if (PhaseNodeMeasInfo->m_nmMode == 0) 
 		 stream << "Un/Ux ";
@@ -1818,7 +1818,7 @@ case ConfigurationTestTMode:
 
     case PhaseNodeMeasExec3:
 	{
-	    uint i;
+            int i;
 	    ph0 = ActValues.dspActValues.phin;
 	    ph1 = ActValues.dspActValues.phix;
 	    switch (PhaseNodeMeasInfo->m_nTMode)
@@ -1926,9 +1926,9 @@ case ConfigurationTestTMode:
 		m_PhaseNodeMeasInfoList.removeFirst();
 		if (m_PhaseNodeMeasInfoList.isEmpty() || (! m_pAbortButton->isEnabled()) || bOverload ) // entweder normal fertig geworden oder abbruch oder übersteuerung (solls eigentlich nicht geben)
 		{ // wir sind fertig mit der ermittlung
-		    if (m_PhaseJustLogfile.open( IO_WriteOnly  | IO_Append) ) // wir loggen das mal
+		    if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
 		    {
-			QTextStream stream( &m_PhaseJustLogfile );
+			Q3TextStream stream( &m_PhaseJustLogfile );
 			stream << "\nTerminated ";
 			if (bOverload) 
 			    stream << "because of overload condition !\n";
@@ -1951,9 +1951,9 @@ case ConfigurationTestTMode:
 		}
 		else
 		{
-		    if (m_PhaseJustLogfile.open( IO_WriteOnly  | IO_Append) ) // wir loggen das mal
+		    if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
 		    {
-			QTextStream stream( &m_PhaseJustLogfile );
+			Q3TextStream stream( &m_PhaseJustLogfile );
 			stream << "\n"; // für jeden block eine leerzeile
 			m_PhaseJustLogfile.flush();
 			m_PhaseJustLogfile.close();
@@ -2039,7 +2039,7 @@ case ConfigurationTestTMode:
 	
     case SelftestStart:
 	StopMeasurement(); // die kumulieren jetzt nur
-	m_pProgressDialog = new QProgressDialog( trUtf8("Selbstest ..."), 0, m_SelftestInfoList.count(), g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht aller selbsttestpunkte 	
+	m_pProgressDialog = new Q3ProgressDialog( trUtf8("Selbstest ..."), 0, m_SelftestInfoList.count(), g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht aller selbsttestpunkte 	
 	if ( m_pAbortButton )
 	    m_pProgressDialog->setCancelButton(m_pAbortButton);
 	m_pProgressDialog->setCaption(trUtf8("Selbsttest"));
@@ -2125,9 +2125,9 @@ case ConfigurationTestTMode:
 	
     case SelftestMeasureX:
 	{
-	    if (m_SelftestLogfile.open( IO_WriteOnly  | IO_Append) )
+	    if (m_SelftestLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) )
 	    {
-		QTextStream stream( &m_SelftestLogfile );
+		Q3TextStream stream( &m_SelftestLogfile );
 		stream << QString("Range=%1").arg(m_SelftestInfoList.first())
 		           << QString("  N=(%1,%2)").arg(SenseVektor.re()).arg(SenseVektor.im())
 		           << QString("  X=(%1,%2)").arg(ActValues.VekX.re()).arg(ActValues.VekX.im())	
@@ -2142,9 +2142,9 @@ case ConfigurationTestTMode:
 	      ((fabs (1.0 - fabs(ADCVektor/ActValues.VekN))) < 0.01) )
 	{ 
 	    
-	    if (m_SelftestLogfile.open( IO_WriteOnly  | IO_Append) )
+	    if (m_SelftestLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) )
 	    {
-		QTextStream stream( &m_SelftestLogfile );
+		Q3TextStream stream( &m_SelftestLogfile );
 		stream << "  good\n";
 		m_SelftestLogfile.flush();
 		m_SelftestLogfile.close();
@@ -2177,9 +2177,9 @@ case ConfigurationTestTMode:
 	    // fehler loggen
 	    // selbst test stop
 	    
-	    if (m_SelftestLogfile.open( IO_WriteOnly | IO_Append) )
+	    if (m_SelftestLogfile.open( QIODevice::WriteOnly | QIODevice::Append) )
 	    {
-		QTextStream stream( &m_SelftestLogfile );
+		Q3TextStream stream( &m_SelftestLogfile );
 		stream << "  bad\n";
 		m_SelftestLogfile.flush();
 		m_SelftestLogfile.close();
@@ -2671,7 +2671,7 @@ bool cWM3000U::LoadSettings(QString session)
     QFileInfo fi(session);
     QString ls = QString(".wm3000u%1").arg(fi.fileName());
     QFile file(ls); 
-    if (ret = file.open( IO_ReadOnly ) ) {
+    if ((ret = file.open( QIODevice::ReadOnly ) )) {
 	QDataStream stream(&file);
 	ret &= m_ConfData.deserialize(stream);
 	file.close();
@@ -2687,7 +2687,7 @@ void cWM3000U::WriteSettings(QString session)
     QString ls = QString(".wm3000u%1").arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
-    if ( file.open( IO_Raw | IO_WriteOnly ) ) {
+    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
 	file.at(0);
 	QDataStream stream(&file);
 	m_ConfData.serialize(stream);
@@ -2702,7 +2702,7 @@ void cWM3000U::StoreResultsSlot()
 	bool ok;
 	QDomDocument resultDoc("WM3000ResultData");
 	QFile rfile(m_ConfData.m_sResultFile);
-	if (rfile.open( IO_ReadOnly ) ) { // ? xml file lesen
+	if (rfile.open( QIODevice::ReadOnly ) ) { // ? xml file lesen
 	    ok = resultDoc.setContent(&rfile);
 	    rfile.close();
 	}
@@ -2798,8 +2798,8 @@ void cWM3000U::StoreResultsSlot()
 	    
 	tag = resultDoc.createElement( "Mode" );
 	conditionsTag.appendChild( tag );
-	char* modeName[3] = {"Un/Ux","Un/EVT","UN/nConvent"};
-	char* simName[2] = {"real","simulated"};
+        char* modeName[3] = {(char*)"Un/Ux",(char*)"Un/EVT",(char*)"UN/nConvent"};
+        char* simName[2] = {(char*)"real",(char*)"simulated"};
 	t = resultDoc.createTextNode(QString("%1 %2").arg(QString(simName[(int)m_ConfData.m_bSimulation]))
 				                            .arg(QString(modeName[m_ConfData.m_nMeasMode])));
 	tag.appendChild( t );
@@ -2841,9 +2841,9 @@ void cWM3000U::StoreResultsSlot()
 	tag.appendChild( t );
 	
 	rfile.remove();
-	if (rfile.open( IO_WriteOnly ) ) {
+	if (rfile.open( QIODevice::WriteOnly ) ) {
 	    QString xml = resultDoc.toString();
-	    QTextStream stream( &rfile );
+	    Q3TextStream stream( &rfile );
 	    stream << xml;
 	    rfile.close();
 	}
@@ -2880,7 +2880,7 @@ bool cWM3000U::SelectRange(cWMRangeList& RangeList, QString& sRange, QString& sR
 
 CWMRange* cWM3000U::Range(cRSelectString selector,cWMRangeList &rlist)  // sucht den bereich in der liste zu selector
 {    
-    QPtrListIterator<CWMRange> it(rlist);
+    Q3PtrListIterator<CWMRange> it(rlist);
     CWMRange *range;
     
     while ( (range = it.current()) != 0 ) {
@@ -2895,7 +2895,7 @@ CWMRange* cWM3000U::Range(cRSelectString selector,cWMRangeList &rlist)  // sucht
 
 CWMRange* cWM3000U::Range(QString name,cWMRangeList &rlist) // sucht bereich in der liste zu name
 {    
-    QPtrListIterator<CWMRange> it(rlist);
+    Q3PtrListIterator<CWMRange> it(rlist);
     CWMRange *range;
     
     while ( (range = it.current()) != 0 ) {
@@ -2910,7 +2910,7 @@ CWMRange* cWM3000U::Range(QString name,cWMRangeList &rlist) // sucht bereich in 
 
 CWMRange* cWM3000U::Range(float mw,cWMRangeList& rlist) 
 {
-    QPtrListIterator<CWMRange> it(rlist);
+    Q3PtrListIterator<CWMRange> it(rlist);
     CWMRange *range;
     
     it.toLast(); // zeigt auf den "kleinsten bereich

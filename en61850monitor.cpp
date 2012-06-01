@@ -1,278 +1,180 @@
-/****************************************************************************
-** Form implementation generated from reading ui file 'en61850monitor.ui'
-**
-** Created: Mo Feb 13 08:29:44 2012
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QTimer>
+#include <QFileInfo>
 #include "en61850monitor.h"
+#include "ui_en61850monitor.h"
 
-#include <qvariant.h>
-#include <qobject.h>
-#include <qlabel.h>
-#include <qtimer.h>
-#include <qfileinfo.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
-
-#include "en61850.h"
-#include "en61850monitor.ui.h"
-/*
- *  Constructs a EN61850monbase as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
- */
-EN61850monbase::EN61850monbase( QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl )
+EN61850monbase::EN61850monbase( QWidget* parent):
+    QDialog(parent),
+    ui(new Ui::EN61850monbase)
 {
-    if ( !name )
-	setName( "EN61850monbase" );
-    setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, sizePolicy().hasHeightForWidth() ) );
-    setSizeGripEnabled( FALSE );
-    setModal( FALSE );
-    EN61850monbaseLayout = new QVBoxLayout( this, 11, 6, "EN61850monbaseLayout"); 
-    EN61850monbaseLayout->setResizeMode( QLayout::Fixed );
-
-    MonitorCountbuttonGroup = new QButtonGroup( this, "MonitorCountbuttonGroup" );
-    MonitorCountbuttonGroup->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, MonitorCountbuttonGroup->sizePolicy().hasHeightForWidth() ) );
-    MonitorCountbuttonGroup->setColumnLayout(0, Qt::Vertical );
-    MonitorCountbuttonGroup->layout()->setSpacing( 6 );
-    MonitorCountbuttonGroup->layout()->setMargin( 11 );
-    MonitorCountbuttonGroupLayout = new QVBoxLayout( MonitorCountbuttonGroup->layout() );
-    MonitorCountbuttonGroupLayout->setAlignment( Qt::AlignTop );
-
-    layout11 = new QHBoxLayout( 0, 0, 6, "layout11"); 
-
-    ByteCountLabel = new QLabel( MonitorCountbuttonGroup, "ByteCountLabel" );
-    ByteCountLabel->setEnabled( FALSE );
-    layout11->addWidget( ByteCountLabel );
-
-    ByteCountValLabel = new QLabel( MonitorCountbuttonGroup, "ByteCountValLabel" );
-    layout11->addWidget( ByteCountValLabel );
-    spacer36 = new QSpacerItem( 210, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout11->addItem( spacer36 );
-    MonitorCountbuttonGroupLayout->addLayout( layout11 );
-
-    layout8 = new QHBoxLayout( 0, 0, 6, "layout8"); 
-
-    LostSyncCountLabel = new QLabel( MonitorCountbuttonGroup, "LostSyncCountLabel" );
-    LostSyncCountLabel->setEnabled( FALSE );
-    layout8->addWidget( LostSyncCountLabel );
-
-    LostSyncValLabel = new QLabel( MonitorCountbuttonGroup, "LostSyncValLabel" );
-    layout8->addWidget( LostSyncValLabel );
-    spacer37 = new QSpacerItem( 130, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout8->addItem( spacer37 );
-    MonitorCountbuttonGroupLayout->addLayout( layout8 );
-    EN61850monbaseLayout->addWidget( MonitorCountbuttonGroup );
-
-    layout12 = new QHBoxLayout( 0, 0, 6, "layout12"); 
-
-    MACErrorsbuttonGroup = new QButtonGroup( this, "MACErrorsbuttonGroup" );
-    MACErrorsbuttonGroup->setColumnLayout(0, Qt::Vertical );
-    MACErrorsbuttonGroup->layout()->setSpacing( 6 );
-    MACErrorsbuttonGroup->layout()->setMargin( 11 );
-    MACErrorsbuttonGroupLayout = new QVBoxLayout( MACErrorsbuttonGroup->layout() );
-    MACErrorsbuttonGroupLayout->setAlignment( Qt::AlignTop );
-
-    layout7 = new QHBoxLayout( 0, 0, 6, "layout7"); 
-
-    layout5 = new QVBoxLayout( 0, 0, 6, "layout5"); 
-
-    RUNTFramecheckBox = new QCheckBox( MACErrorsbuttonGroup, "RUNTFramecheckBox" );
-    RUNTFramecheckBox->setEnabled( FALSE );
-    layout5->addWidget( RUNTFramecheckBox );
-
-    LateCollisioncheckBox = new QCheckBox( MACErrorsbuttonGroup, "LateCollisioncheckBox" );
-    LateCollisioncheckBox->setEnabled( FALSE );
-    layout5->addWidget( LateCollisioncheckBox );
-
-    RWTOcheckBox = new QCheckBox( MACErrorsbuttonGroup, "RWTOcheckBox" );
-    RWTOcheckBox->setEnabled( FALSE );
-    layout5->addWidget( RWTOcheckBox );
-
-    PHysLayercheckBox = new QCheckBox( MACErrorsbuttonGroup, "PHysLayercheckBox" );
-    PHysLayercheckBox->setEnabled( FALSE );
-    layout5->addWidget( PHysLayercheckBox );
-    layout7->addLayout( layout5 );
-
-    layout6 = new QVBoxLayout( 0, 0, 6, "layout6"); 
-
-    AlignErrorcheckBox = new QCheckBox( MACErrorsbuttonGroup, "AlignErrorcheckBox" );
-    AlignErrorcheckBox->setEnabled( FALSE );
-    layout6->addWidget( AlignErrorcheckBox );
-
-    CRCErrorcheckBox = new QCheckBox( MACErrorsbuttonGroup, "CRCErrorcheckBox" );
-    CRCErrorcheckBox->setEnabled( FALSE );
-    layout6->addWidget( CRCErrorcheckBox );
-
-    FIFOOvfcheckBox = new QCheckBox( MACErrorsbuttonGroup, "FIFOOvfcheckBox" );
-    FIFOOvfcheckBox->setEnabled( FALSE );
-    layout6->addWidget( FIFOOvfcheckBox );
-
-    MACSyncLostcheckBox = new QCheckBox( MACErrorsbuttonGroup, "MACSyncLostcheckBox" );
-    MACSyncLostcheckBox->setEnabled( FALSE );
-    layout6->addWidget( MACSyncLostcheckBox );
-    layout7->addLayout( layout6 );
-    MACErrorsbuttonGroupLayout->addLayout( layout7 );
-    spacer5 = new QSpacerItem( 20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    MACErrorsbuttonGroupLayout->addItem( spacer5 );
-    layout12->addWidget( MACErrorsbuttonGroup );
-
-    DecoderErrorbuttonGroup = new QButtonGroup( this, "DecoderErrorbuttonGroup" );
-    DecoderErrorbuttonGroup->setColumnLayout(0, Qt::Vertical );
-    DecoderErrorbuttonGroup->layout()->setSpacing( 6 );
-    DecoderErrorbuttonGroup->layout()->setMargin( 11 );
-    DecoderErrorbuttonGroupLayout = new QHBoxLayout( DecoderErrorbuttonGroup->layout() );
-    DecoderErrorbuttonGroupLayout->setAlignment( Qt::AlignTop );
-
-    layout8_2 = new QVBoxLayout( 0, 0, 6, "layout8_2"); 
-
-    savPducheckBox = new QCheckBox( DecoderErrorbuttonGroup, "savPducheckBox" );
-    savPducheckBox->setEnabled( FALSE );
-    savPducheckBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, savPducheckBox->sizePolicy().hasHeightForWidth() ) );
-    layout8_2->addWidget( savPducheckBox );
-
-    ASDUcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "ASDUcheckBox" );
-    ASDUcheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( ASDUcheckBox );
-
-    seqASDUcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "seqASDUcheckBox" );
-    seqASDUcheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( seqASDUcheckBox );
-
-    seqASDUncheckBox = new QCheckBox( DecoderErrorbuttonGroup, "seqASDUncheckBox" );
-    seqASDUncheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( seqASDUncheckBox );
-
-    serviceIdentcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "serviceIdentcheckBox" );
-    serviceIdentcheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( serviceIdentcheckBox );
-
-    smpCountcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "smpCountcheckBox" );
-    smpCountcheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( smpCountcheckBox );
-
-    confRevcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "confRevcheckBox" );
-    confRevcheckBox->setEnabled( FALSE );
-    layout8_2->addWidget( confRevcheckBox );
-    DecoderErrorbuttonGroupLayout->addLayout( layout8_2 );
-
-    layout11_2 = new QVBoxLayout( 0, 0, 6, "layout11_2"); 
-
-    smpSynchcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "smpSynchcheckBox" );
-    smpSynchcheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( smpSynchcheckBox );
-
-    seqDatacheckBox = new QCheckBox( DecoderErrorbuttonGroup, "seqDatacheckBox" );
-    seqDatacheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( seqDatacheckBox );
-
-    ETHMacAdrcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "ETHMacAdrcheckBox" );
-    ETHMacAdrcheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( ETHMacAdrcheckBox );
-
-    ETHHeadercheckBox = new QCheckBox( DecoderErrorbuttonGroup, "ETHHeadercheckBox" );
-    ETHHeadercheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( ETHHeadercheckBox );
-
-    PriorityTaggedcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "PriorityTaggedcheckBox" );
-    PriorityTaggedcheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( PriorityTaggedcheckBox );
-
-    nASDUcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "nASDUcheckBox" );
-    nASDUcheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( nASDUcheckBox );
-
-    DataSyncLostcheckBox = new QCheckBox( DecoderErrorbuttonGroup, "DataSyncLostcheckBox" );
-    DataSyncLostcheckBox->setEnabled( FALSE );
-    layout11_2->addWidget( DataSyncLostcheckBox );
-    DecoderErrorbuttonGroupLayout->addLayout( layout11_2 );
-    layout12->addWidget( DecoderErrorbuttonGroup );
-    EN61850monbaseLayout->addLayout( layout12 );
-
-    Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
-    Horizontal_Spacing2 = new QSpacerItem( 300, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout1->addItem( Horizontal_Spacing2 );
-
-    buttonOk = new QPushButton( this, "buttonOk" );
-    buttonOk->setAutoDefault( TRUE );
-    buttonOk->setDefault( TRUE );
-    Layout1->addWidget( buttonOk );
-
-    buttonCancel = new QPushButton( this, "buttonCancel" );
-    buttonCancel->setAutoDefault( TRUE );
-    Layout1->addWidget( buttonCancel );
-    EN61850monbaseLayout->addLayout( Layout1 );
-    languageChange();
-    resize( QSize(713, 367).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
-
-    // signals and slots connections
-    connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-    connect( buttonCancel, SIGNAL( pressed() ), this, SLOT( reject() ) );
+    ui->setupUi(this);
     init();
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 EN61850monbase::~EN61850monbase()
 {
     destroy();
-    // no need to delete child widgets, Qt does it all for us
+    delete ui;
 }
 
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void EN61850monbase::languageChange()
+void EN61850monbase::init()
 {
-    setCaption( tr( "EN61850-9-2 Monitor" ) );
-    MonitorCountbuttonGroup->setTitle( tr( "Counters" ) );
-    ByteCountLabel->setText( tr( "Bytes received:" ) );
-    ByteCountValLabel->setText( tr( "0" ) );
-    LostSyncCountLabel->setText( tr( "Syncronization lost: " ) );
-    LostSyncValLabel->setText( tr( "0" ) );
-    MACErrorsbuttonGroup->setTitle( tr( "MAC Errors" ) );
-    RUNTFramecheckBox->setText( tr( "Runt Frame" ) );
-    QToolTip::add( RUNTFramecheckBox, QString::null );
-    LateCollisioncheckBox->setText( tr( "Late Collision" ) );
-    RWTOcheckBox->setText( tr( "Receive Timeout" ) );
-    PHysLayercheckBox->setText( tr( "Physical Layer" ) );
-    AlignErrorcheckBox->setText( tr( "Alignment" ) );
-    CRCErrorcheckBox->setText( tr( "CRC" ) );
-    FIFOOvfcheckBox->setText( tr( "FIFO Overflow" ) );
-    MACSyncLostcheckBox->setText( tr( "Sync lost" ) );
-    DecoderErrorbuttonGroup->setTitle( tr( "Decoder Errors" ) );
-    savPducheckBox->setText( tr( "savPdu" ) );
-    ASDUcheckBox->setText( tr( "num. of ASDU" ) );
-    seqASDUcheckBox->setText( tr( "seq. of ASDU's" ) );
-    seqASDUncheckBox->setText( tr( "seq. of ASDU n" ) );
-    serviceIdentcheckBox->setText( tr( "Service Ident." ) );
-    smpCountcheckBox->setText( tr( "smpCnt" ) );
-    confRevcheckBox->setText( tr( "confRev" ) );
-    smpSynchcheckBox->setText( tr( "smpSynch" ) );
-    seqDatacheckBox->setText( tr( "seq. of Data" ) );
-    ETHMacAdrcheckBox->setText( tr( "MAC Adress mismatch" ) );
-    ETHHeadercheckBox->setText( tr( "Ethertype, APPID" ) );
-    PriorityTaggedcheckBox->setText( tr( "Priority tagged" ) );
-    nASDUcheckBox->setText( tr( "ASDU not avail" ) );
-    DataSyncLostcheckBox->setText( tr( "Data Sync lost" ) );
-    buttonOk->setText( tr( "&OK" ) );
-    buttonOk->setAccel( QKeySequence( QString::null ) );
-    buttonCancel->setText( tr( "&Reset" ) );
-    buttonCancel->setAccel( QKeySequence( tr( "Alt+R" ) ) );
+    ETHStatus.ByteCount[0] = 0;
+    ETHStatus.ByteCount[1] = 0;
+    ETHStatus.SyncLostCount = 0;
+    ETHStatus.ETHErrors = 0;
+        
+    m_pTimer = new QTimer();
+    QObject::connect(m_pTimer,SIGNAL(timeout()),this,SLOT(TimerSlot()));
+    LoadSession(".ses");
 }
 
+
+void EN61850monbase::destroy()
+{
+    delete m_pTimer;
+    SaveSession(".ses");
+}
+
+
+void EN61850monbase::ShowHideSlot(bool b)
+{
+    if (b) {
+	show();
+	emit InformationRequest(); // anfrage an wm3000 die status infos zu besorgen
+	m_pTimer->start(2000); // wenn sichtbar -> timer läuft
+    }
+    else {
+	close();
+	m_pTimer->stop();
+    }
+}
+
+
+void EN61850monbase::closeEvent( QCloseEvent * ce )
+{
+    m_widGeometry.SetGeometry(pos(),size());
+    m_widGeometry.SetVisible(0);
+    emit isVisibleSignal(false);
+    ce->accept();
+}
+
+
+void EN61850monbase::TimerSlot()
+{
+    emit InformationRequest(); // anfrage an wm3000 die status infos zu besorgen
+}
+
+
+void EN61850monbase::SetETHStatusSlot( cEN61850Info *ethInfo )
+{
+    QString s;
+    double count;
+    ulong stat;
+ 
+    ETHStatus = *ethInfo;
+    count = ETHStatus.ByteCount[0]*4294967296.0+ethInfo->ByteCount[1];
+    s = QString("%1").arg( count, 0, 'f', 0 ); // keine nachkommastellen
+    uint i,p,l;
+    p = l = s.length();
+    i = 1;
+    while (p>3) {
+	s.insert(l-(i*3),'.');
+	i++;
+	p -= 3;
+    }
+	    
+    ui->ByteCountValLabel->setText(s);
+    
+    count = ETHStatus.SyncLostCount;
+    s = QString("%1").arg( count, 0, 'f', 0 ); // keine nachkommastellen
+    ui->LostSyncValLabel->setText(s);
+    
+    stat = ETHStatus.ETHErrors;
+    
+    ui->savPducheckBox->setChecked(stat & savPdu);
+    ui->ASDUcheckBox->setChecked(stat & noASDU);
+    ui->seqASDUcheckBox->setChecked(stat & seqASDU);
+    ui->seqASDUncheckBox->setChecked(stat & seqASDUn);
+    ui->serviceIdentcheckBox->setChecked(stat & svID);
+    ui->smpCountcheckBox->setChecked(stat & smpCnt);
+    ui->confRevcheckBox->setChecked(stat & confRev);
+    ui->smpSynchcheckBox->setChecked(stat & smpSync);
+    ui->seqDatacheckBox->setChecked(stat & seqData);
+    
+    ui->MACSyncLostcheckBox->setChecked(stat & macSyncLost);
+    ui->DataSyncLostcheckBox->setChecked(stat & dataSyncLost);
+    ui->nASDUcheckBox->setChecked(stat & ASDUnavail);
+    ui->ETHMacAdrcheckBox->setChecked(stat & ETHMacAdressError);
+    ui->ETHHeadercheckBox->setChecked(stat & ETHHeaderAppIdError);
+    ui->PriorityTaggedcheckBox->setChecked(stat & ETHPriorityTaggedError);
+    
+    ui->FIFOOvfcheckBox->setChecked(stat & FifoOverflow);
+    ui->CRCErrorcheckBox->setChecked(stat & CRCError);
+    ui->AlignErrorcheckBox->setChecked(stat & AlignError);
+    ui->PHysLayercheckBox->setChecked(stat & PhysicalLayer);
+    ui->RWTOcheckBox->setChecked(stat & ReceiveWDogTimeout);
+    ui->LateCollisioncheckBox->setChecked(stat & LateCollisionSeen);
+    ui->RUNTFramecheckBox->setChecked(stat & RuntFrame);
+}
+
+
+bool EN61850monbase::LoadSession( QString session )
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+    if ( file.open( QIODevice::ReadOnly ) ) {
+	QDataStream stream( &file );
+	stream >> m_widGeometry;
+	file.close();
+	hide();
+	resize(m_widGeometry.m_Size);
+	move(m_widGeometry.m_Point);
+	if (m_widGeometry.vi) show();
+// FVWM und Gnome verhalten sich anders
+#ifndef FVWM 
+	move(m_widGeometry.m_Point);
+#endif   
+    	return true;
+    }
+    return false;
+}
+
+
+void EN61850monbase::SaveSession( QString session )
+{
+    QFileInfo fi(session);
+    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QFile file(ls); 
+//    file.remove();
+    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
+	file.at(0);
+	
+	int vi;
+	
+	vi = (isVisible()) ? 1 : 0;
+	if (vi) 
+	    m_widGeometry.SetGeometry(pos(),size());
+	m_widGeometry.SetVisible(vi);	    
+	
+	QDataStream stream( &file );
+	stream << m_widGeometry;
+	file.close();
+    }
+}
+
+
+void EN61850monbase::accept()
+{
+    emit isVisibleSignal(false);
+    QDialog::accept();
+}
+
+
+void EN61850monbase::reject()
+{
+    emit ResetETHStatus();
+}

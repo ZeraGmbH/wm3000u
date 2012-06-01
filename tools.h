@@ -5,7 +5,7 @@
 
 #include <qobject.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "complex.h"
 
@@ -37,8 +37,8 @@ signals:
     void timeout(int); // wir senden bei timeout die action
      
 private:
-    QValueList<SMTimerData> m_TimerDataList;
-    QValueList<SMTimerData> m_TimerEventList;
+    Q3ValueList<SMTimerData> m_TimerDataList;
+    Q3ValueList<SMTimerData> m_TimerEventList;
 //    QTimer* m_lTimer;
     
 private slots:

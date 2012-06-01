@@ -7,18 +7,20 @@
 #define BIGLETTER_H
 
 #include <qwidget.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qobject.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 //class QString;
-enum cAlign {right,left}; // rechtsbündig ist default
+enum cAlign {rightAlign,leftAlign}; // rechtsbündig ist default
 enum cFrame {frame,noframe}; // mit rahmen ist default
    
 //class cAlign;
 //class cFrame;
 
-class CBigLetter:public QFrame
+class CBigLetter:public Q3Frame
 {
     Q_OBJECT
     Q_PROPERTY( QString m_sDisplay READ isDisplay WRITE display)
@@ -29,8 +31,8 @@ class CBigLetter:public QFrame
     Q_ENUMS(cFrame)
     
 public:
-    CBigLetter(int,QString,QWidget* parent=0,const char* name=0,WFlags f=0);
-    CBigLetter(QWidget* parent=0,const char* name=0,WFlags f=0);
+    CBigLetter(int,QString,QWidget* parent=0,const char* name=0,Qt::WFlags f=0);
+    CBigLetter(QWidget* parent=0,const char* name=0,Qt::WFlags f=0);
     void display(QString);
     QString isDisplay() const;
     void setStartSize(int);

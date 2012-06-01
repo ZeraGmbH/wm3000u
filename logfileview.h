@@ -7,9 +7,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtimer.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qdialog.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QCloseEvent>
 #include "widgeom.h"
 
 class CLogFileView:public QDialog
@@ -19,7 +22,7 @@ class CLogFileView:public QDialog
 public:
     CLogFileView(const QString,const long,QWidget * parent = 0, const char * wname = 0);
     virtual ~CLogFileView();
-    QTextEdit *m_pText;
+    Q3TextEdit *m_pText;
     
 public slots:    
     void SaveSession(QString);

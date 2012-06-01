@@ -7,7 +7,9 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include "tools.h"
 #include "ethadress.h"
@@ -45,8 +47,8 @@ public:
     QString& name();
     
 private:
-    QPtrList<cDspVar> DspVarList;
-    QMemArray<float> DspVarData;
+    Q3PtrList<cDspVar> DspVarList;
+    Q3MemArray<float> DspVarData;
     QString m_sname;
     QString m_slist;
 };
@@ -187,8 +189,8 @@ private:
     QString m_sHost; // host name
     int m_nPort; // host port
     QStringList CycCmdList, IntCmdList;
-    QPtrList<cDspMeasData> DspMeasDataList; // eine liste mit zeigern auf "programmdaten"
-    QPtrList<cDspMeasData> DspMemoryDataList; // eine liste mit zeigern auf  dsp speicher allgemein
+    Q3PtrList<cDspMeasData> DspMeasDataList; // eine liste mit zeigern auf "programmdaten"
+    Q3PtrList<cDspMeasData> DspMemoryDataList; // eine liste mit zeigern auf  dsp speicher allgemein
     cSMTimer* m_ActTimer;
     void GetInterfaceData();
     void TestDspRunning(); // schreibt test kommando an dsp

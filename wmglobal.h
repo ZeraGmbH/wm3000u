@@ -3,17 +3,19 @@
 #ifndef WMGLOBAL_H
 #define WMGLOBAL_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include "confdata.h"
 #include "complex.h"
 #include "range.h"
 
-#define FVWM 1
+//#define FVWM 1
 
-#define TheDevice "127.0.0.1"
-//#define TheDevice "10.0.2.16"
+//#define TheDevice "127.0.0.1"
+#define TheDevice "10.0.2.16"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -78,8 +80,8 @@ class cTCPConfig
 
 class cDspVar; // forward
 
-typedef QMemArray<float> cDspVarMemArray;
-typedef QPtrList<cDspVar> cDspVarPtrList;
+typedef Q3MemArray<float> cDspVarMemArray;
+typedef Q3PtrList<cDspVar> cDspVarPtrList;
 
 
 struct cDspActValues { // raw data, wie vom dsp geliefert
@@ -156,8 +158,8 @@ public:
     int m_nnMeas; // anzahl messungen zur messwertbestimmung
 };
 
-typedef QPtrList<CWMRange> cWMRangeList;
-typedef QPtrList<cPhaseCalcInfo> cPhaseCalcInfoList;
-typedef QPtrList<cPhaseNodeMeasInfo> cPhaseNodeMeasInfoList;
+typedef Q3PtrList<CWMRange> cWMRangeList;
+typedef Q3PtrList<cPhaseCalcInfo> cPhaseCalcInfoList;
+typedef Q3PtrList<cPhaseNodeMeasInfo> cPhaseNodeMeasInfoList;
 #endif
 

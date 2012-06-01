@@ -7,12 +7,12 @@
 
 
 extern  scpiErrorType SCPIError[];
-char* MModeName[maxMMode] = {"Un/Ux","Un/EVT","Un/nConvent"};
-char* FreqName[MaxFreq] = {"16.67","50.0","60.0"};
+char* MModeName[maxMMode] = {(char*)"Un/Ux",(char*)"Un/EVT",(char*)"Un/nConvent"};
+char* FreqName[MaxFreq] = {(char*)"16.67",(char*)"50.0",(char*)"60.0"};
 double SFrequency[MaxFreq] = {16.67, 50.0, 60.0};
-char* SRatesName[MaxSRate] = {"80","256"}; // abtastraten
+char* SRatesName[MaxSRate] = {(char*)"80",(char*)"256"}; // abtastraten
 int SRates[MaxSRate] = {80,256};
-char* SSourceName[MaxSSource] = {"intern","extern"};
+char* SSourceName[MaxSSource] = {(char*)"intern",(char*)"extern"};
 
 
 cWM3000SCPIFace::cWM3000SCPIFace(cClientIODevice* ciod, short l)
@@ -232,7 +232,7 @@ void cWM3000SCPIFace::CmdExecution(QString& s)
 void cWM3000SCPIFace::SetRangeListSlot( cWMRangeList& nx,  cWMRangeList& evt)
 {
     CWMRange *Range;
-    QPtrListIterator<CWMRange> it(nx);
+    Q3PtrListIterator<CWMRange> it(nx);
    
    m_sNXItemList.clear(); // liste erst mal leeren
    for(Range=it.toFirst();Range;Range=++it) m_sNXItemList.append(Range->Name());
@@ -433,7 +433,7 @@ char* cWM3000SCPIFace::mGetStatusStandard()
 // sense model routinen    
 char* cWM3000SCPIFace::mOutRangeCatalog()
 {
-    uint i;
+    int i;
     QString dedicatedChannel = m_pCmdInterpreter->dedicatedList.first();
     QString s = "";
     QStringList* sl;
@@ -513,7 +513,7 @@ char* cWM3000SCPIFace::mGetRange()
 
 char* cWM3000SCPIFace::mOutChannelCatalog()
 {
-    uint i;
+    int i;
     QString s = "";
     for (i = 0; i < mMeasChannelList.size()-1; i++)
 	s = s+ mMeasChannelList[i] + ";";

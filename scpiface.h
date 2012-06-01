@@ -6,6 +6,8 @@
 
 #include <qobject.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "tools.h"
 #include "cbiface.h"
@@ -234,7 +236,7 @@ protected:
     void SetIEEE488Register(char*, uchar&);
     void SetnoOperFlag(bool);
     bool m_bCmdError; // kommando fehler speicher
-    QValueList<int> m_ErrEventQueue;
+    Q3ValueList<int> m_ErrEventQueue;
     
     
 signals:

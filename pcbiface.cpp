@@ -1,6 +1,6 @@
 // implementation cPCBIFace
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdir.h>
 
 #include "pcbiface.h"

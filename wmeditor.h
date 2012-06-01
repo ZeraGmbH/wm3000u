@@ -3,12 +3,14 @@
 #ifndef WMEDITOR_H
 #define WMEDITOR_H
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qobject.h>
 #include <qwidget.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 
-class wmEditor: public QTextEdit {
+class wmEditor: public Q3TextEdit {
     Q_OBJECT
 public:
     wmEditor(QWidget* parent = 0, const char *name = 0);

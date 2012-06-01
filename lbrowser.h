@@ -6,12 +6,12 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qwidget.h>
-#include <qtextbrowser.h>
-#include <qmainwindow.h>
+#include <q3textbrowser.h>
+#include <q3mainwindow.h>
 
 class cLittleBrowser;
 
-class cLittleBrowser : public QMainWindow
+class cLittleBrowser : public Q3MainWindow
 {
    Q_OBJECT
 public:
@@ -20,7 +20,7 @@ public slots:
     virtual void show();
 private:
     QString m_sFileName;
-    QTextBrowser* m_pbrowser;
+    Q3TextBrowser* m_pbrowser;
 };
 
 #endif

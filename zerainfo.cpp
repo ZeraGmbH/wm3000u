@@ -15,9 +15,9 @@ void cZeraInfo::AboutZeraSlot()
 					          "<p>We provide powerful solutions for meter testing<br>as well as transformer testing.</p>"
 					          "<p>For further information please visit <tt>http://www.zera.de</tt></p>"),
 					      QMessageBox::NoIcon,
-					      QMessageBox::NoButton,
-					      QMessageBox::NoButton,
-					      QMessageBox::NoButton);
+					      Qt::NoButton,
+					      Qt::NoButton,
+					      Qt::NoButton);
     
     pAboutZera->setIconPixmap(QPixmap("./images/zeralogo.png"));
     pAboutZera->show();
@@ -31,9 +31,9 @@ void cZeraInfo::AboutWM3000Slot()
 					     "<p>WM3000U is the new voltage transformer test<br>device developed by ZERA.</p>"
 					     "<p>It provides abilities of testing conventional<br>transformers, EVT as well as nonconventional<br>transformers using IEC 61850-9-2.</p>"),
 					     QMessageBox::NoIcon,
-					     QMessageBox::NoButton,
-					     QMessageBox::NoButton,
-					     QMessageBox::NoButton);
+					     Qt::NoButton,
+					     Qt::NoButton,
+					     Qt::NoButton);
     
      pAboutWM->show();
 }

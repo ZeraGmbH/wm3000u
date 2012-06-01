@@ -1,11 +1,14 @@
 // definition CLogFileView
 
 #include <qstring.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qevent.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QCloseEvent>
 
 #include "wmglobal.h"
 #include "logfileview.h"
@@ -14,9 +17,10 @@ CLogFileView::CLogFileView(const QString cap,const long max,QWidget * parent, co
     :	QDialog(parent,wname)
 {
     setCaption(cap);
-    m_pText=new QTextEdit(this);
-    m_pText->setTextFormat(LogText);
+    m_pText=new Q3TextEdit(this);
+    m_pText->setTextFormat(Qt::LogText);
     m_pText->setMaxLogLines(max);
+    setBaseSize(100,100);
     LoadSession(".ses");
     showT.start(2000);
     QObject::connect(&showT,SIGNAL(timeout()),this,SLOT(showList())); 
@@ -45,7 +49,7 @@ void CLogFileView::showList()
 {
     if (m_loglist.count()) { // ist überhaupt etwas gesendet worden ?
 	QString s;
-	QTextStream ts( &s, IO_WriteOnly );
+	Q3TextStream ts( &s, QIODevice::WriteOnly );
 	uint i;
 	for (i = 0; i < (m_loglist.count()-1); i++) 
 	    ts << m_loglist[i] << "\n";
@@ -62,7 +66,7 @@ void CLogFileView::SaveSession(QString session)
     QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
-    if ( file.open( IO_Raw | IO_WriteOnly ) ) {
+    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
 	file.at(0);
 	
 	int vi;
@@ -84,7 +88,7 @@ bool CLogFileView::LoadSession(QString session)
     QFileInfo fi(session);
     QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
     QFile file(ls); 
-    if ( file.open( IO_ReadOnly ) ) {
+    if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );
 	stream >> m_widGeometry;
 	file.close();

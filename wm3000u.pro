@@ -34,7 +34,17 @@ HEADERS	+= logfile.h \
 	wm3000scpiface.h \
 	devserver.h \
 	zeraglobal.h \
-	formatinfo.h
+	formatinfo.h \
+    confdialogbase.h \
+    rangedialogbase.h \
+    wmmeasvaluesbase.h \
+    wmmeasconfigbase.h \
+    wmoeviewbase.h \
+    wmrawactualvalbase.h \
+    wmrawactualconfigbase.h \
+    wmviewbase.h \
+    en61850monitor.h \
+    versionviewbase.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
@@ -62,7 +72,17 @@ SOURCES	+= Logfile.cpp \
 	wm3000scpiface.cpp \
 	devserver.cpp \
 	cmdinterpret.cpp \
-	formatinfo.cpp
+	formatinfo.cpp \
+    wmviewbase.cpp \
+    wmmeasvaluesbase.cpp \
+    wmoeviewbase.cpp \
+    wmrawactualvalbase.cpp \
+    en61850monitor.cpp \
+    confdialogbase.cpp \
+    rangedialogbase.cpp \
+    versionviewbase.cpp \
+    wmmeasconfigbase.cpp \
+    wmrawactualconfigbase.cpp
 
 FORMS	= wmviewbase.ui \
 	confdialogbase.ui \
@@ -371,3 +391,5 @@ IMAGES	= images/filenew \
 TRANSLATIONS    = tt2_gb.ts
 
 # Input
+#The following line was inserted by qt3to4
+QT += xml  qt3support 
