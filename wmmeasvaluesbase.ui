@@ -315,7 +315,7 @@
   <customwidget>
    <class>CBigLetter</class>
    <extends>QWidget</extends>
-   <header location="global">/home/peter/C++/wm3000u/bigletter.h</header>
+   <header location="local">bigletter.h</header>
   </customwidget>
  </customwidgets>
  <includes>
