@@ -393,3 +393,6 @@ TRANSLATIONS    = tt2_gb.ts
 # Input
 #The following line was inserted by qt3to4
 QT += xml  qt3support 
+
+target.path = /usr/bin
+INSTALLS += target
