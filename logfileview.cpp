@@ -20,7 +20,7 @@ CLogFileView::CLogFileView(const QString cap,const long max,QWidget * parent, co
     m_pText=new Q3TextEdit(this);
     m_pText->setTextFormat(Qt::LogText);
     m_pText->setMaxLogLines(max);
-    setBaseSize(100,100);
+    setMinimumSize(200,200);
     LoadSession(".ses");
     showT.start(2000);
     QObject::connect(&showT,SIGNAL(timeout()),this,SLOT(showList())); 
