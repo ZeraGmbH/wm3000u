@@ -2773,7 +2773,7 @@ void cWM3000U::StoreResultsSlot()
 	
 	tag = resultDoc.createElement( "AngleError" );
 	resultTag.appendChild( tag );
-	t = resultDoc.createTextNode( QString("%1rad").arg(ActValues.AngleError,7,'f',3));
+        t = resultDoc.createTextNode( QString("%1rad").arg(ActValues.AngleError,8,'f',5));
 	tag.appendChild( t );
 	    	    
 	tag = resultDoc.createElement( "ANSIError" );
