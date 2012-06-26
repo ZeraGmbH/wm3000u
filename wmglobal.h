@@ -41,9 +41,8 @@
 // die max. anzahl messperiode für 256 samples musste auf 14 perioden reduziert werden (speichermangel im dsp)
 // information ob justiert oder nicht in statuszeile, in xml bei ergebnisexport, in status system questionable bit 11
 // V1.11 26.06.2012 auflösung winkel fehler in xml datei auf 5 nachkommastellen erhöht
-// V1.12 27.06.2012 variablen namen max1,max2 -> maxx, maxn korrigiert nach bugfix im server notwendig
 
-#define WMVersion "V1.12"
+#define WMVersion "V1.11"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"
