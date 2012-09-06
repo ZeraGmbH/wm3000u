@@ -40,9 +40,11 @@
 // die ansi fehlerberechnung wurde korrigiert
 // die max. anzahl messperiode für 256 samples musste auf 14 perioden reduziert werden (speichermangel im dsp)
 // information ob justiert oder nicht in statuszeile, in xml bei ergebnisexport, in status system questionable bit 11
-// V1.11 26.06.2012 auflösung winkel fehler in xml datei auf 5 nachkommastellen erhöht
+// V1.11 26.06.2012 winkel auflösung in xml datei auf 5 stellen erhöht
+// V1.12 06.09.2012 bei der istwertabfrage über scpi lastpunkte auf kanal x umgestellt
 
-#define WMVersion "V1.11"
+
+#define WMVersion "V1.12"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"

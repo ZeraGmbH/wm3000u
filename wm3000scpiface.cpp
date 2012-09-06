@@ -271,6 +271,8 @@ void cWM3000SCPIFace::ReceiveLPValue(cwmActValues* av)
 	m_nWait4What = wait4Nothing;
 	mActValues.LoadPoint = av->LoadPoint;
 	mActValues.LoadPoint1 = av->LoadPoint1;
+    mActValues.LoadPointX = av->LoadPointX;
+    mActValues.LoadPoint1X = av->LoadPoint1X;
 	m_pSMachineTimer->start(0, ExecCmdContinue); // und geben die kontrolle an die statemachine
     }    
 }
@@ -1553,8 +1555,8 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	    .arg(mActValues.PHIN)
 	    .arg(fabs(mActValues.VekX))	 
 	    .arg(mActValues.PHIX)
-	    .arg(mActValues.LoadPoint)
-	    .arg(mActValues.LoadPoint1)
+        .arg(mActValues.LoadPointX)
+        .arg(mActValues.LoadPoint1X)
 	    .arg(mActValues.AmplErrorIEC)
 	    .arg(mActValues.AmplErrorANSI);
 	s += QString(";%1").arg(mActValues.AngleError);
@@ -1569,7 +1571,7 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	break;
 	
     case ReadLPRead:	
-	s = QString("%1,%2").arg(mActValues.LoadPoint).arg(mActValues.LoadPoint1);
+    s = QString("%1,%2").arg(mActValues.LoadPointX).arg(mActValues.LoadPoint1X);
 	answ = sAlloc(s);
 	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
 	break;	 
