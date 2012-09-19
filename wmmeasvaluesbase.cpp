@@ -165,6 +165,7 @@ WMMeasValuesBase::WMMeasValuesBase( QWidget* parent, const char* name, bool moda
 WMMeasValuesBase::~WMMeasValuesBase()
 {
     destroy();
+<<<<<<< HEAD
     // no need to delete child widgets, Qt does it all for us
 }
 
@@ -187,5 +188,82 @@ void WMMeasValuesBase::languageChange()
     mBigLPNUnit->setProperty( "m_sDisplay", tr( "%" ) );
     mBigErrorUnit->setProperty( "m_sDisplay", tr( "%" ) );
     mBigAngleUnit->setProperty( "m_sDisplay", trUtf8( "\xc2\xb0" ) );
+=======
+    delete ui;
+}
+
+
+void WMMeasValuesBase::init()
+{
+    m_nDisplayMode = IEC; // wmglobal
+    m_nLPDisplayMode = totalRms; 
+    m_pContextMenu = new WMMeasConfigBase(this);
+    m_Format[0] = cFormatInfo(7,3,LoadpointUnit[LPProzent]); // defaults
+    m_Format[1] = cFormatInfo(7,3,ErrorUnit[ErrProzent]);
+    m_Format[2] = cFormatInfo(7,4,AngleUnit[Anglegrad]);
+    connect(this,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    connect(m_pContextMenu,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),this,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    LoadSession(".ses");
+}
+
+
+void WMMeasValuesBase::destroy()
+{
+    SaveSession(".ses");
+}
+
+
+void WMMeasValuesBase::closeEvent( QCloseEvent * ce)
+{
+    m_widGeometry.SetGeometry(pos(),size());
+    m_widGeometry.SetVisible(0);
+    emit isVisibleSignal(false);
+    ce->accept();
+}
+
+
+void WMMeasValuesBase::ShowHideMVSlot(bool b)
+{
+    if (b) show();else close();
+}
+
+
+void WMMeasValuesBase::resizeEvent(QResizeEvent * e)
+{
+    if (QLayout *lay=layout()) { 
+	QLayoutIterator it = lay->iterator();
+	QLayoutItem *child;
+     int  w;
+     bool test;
+	while ( (child = it.current()) != 0 ) {
+	    Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
+        w = l->minimumSize().width();
+        test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
+	    ++it;
+	}
+    }
+    this->QDialog::resizeEvent(e);
+}
+
+ 
+void WMMeasValuesBase::SetActualValuesSlot( cwmActValues * av)
+{
+    m_ActValues = *av;
+    ActualizeDisplay(); // anzeige aktualisieren
+}
+
+
+void WMMeasValuesBase::ActualizeLPSlot( cwmActValues * av )
+{
+    m_ActValues = *av;
+    ActualizeLoadPoint();
+}
+
+
+
+void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
+{
+    m_ConfData = *cd;
+>>>>>>> 5a91ce3... Contextmenu of measurement values extended with mrad.
 }
 

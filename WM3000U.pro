@@ -34,7 +34,9 @@ HEADERS	+= logfile.h \
 	wm3000scpiface.h \
 	devserver.h \
 	zeraglobal.h \
-	formatinfo.h
+	formatinfo.h \
+    wmmeasconfigbase.ui.h \
+    wmmeasvaluesbase.ui.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \

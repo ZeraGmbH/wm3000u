@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by Qt Creator 2.4.1, 2012-09-06T09:21:19. -->
+=======
+<!-- Written by Qt Creator 2.4.1, 2012-09-19T07:26:17. -->
+>>>>>>> 5a91ce3... Contextmenu of measurement values extended with mrad.
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
