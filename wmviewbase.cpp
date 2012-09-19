@@ -281,9 +281,9 @@ void WMViewBase::ReceiveOETFileSlot(QString nText)
         m_ConfData.m_sOETFile = Q3FileDialog::getSaveFileName( m_ConfData.m_sOETFile,
 							      tr("Eigenfehlertabelle (*oet)"),
 							      this,
-							      "",
-							      tr("Speichern unter"));
-	m_ConfData.m_bOENewLoad = true;
+                                  "",
+                                  tr("Speichern unter"));
+    m_ConfData.m_bOENewLoad = true;
     }
         
     QFile file(m_ConfData.m_sOETFile); 
@@ -305,11 +305,11 @@ void WMViewBase::OpenResultFileSlot()
     ResultFileDialog->setMode( Q3FileDialog::AnyFile);
     ResultFileDialog->setSelection("results.xml");
     if ( ResultFileDialog->exec() == QDialog::Accepted ) {
-	QString rFile;
-	rFile=ResultFileDialog->selectedFile();
-	UpdateRecentFileList(recentResultFiles,rFile); // liste event. kürzen und einträge ins menu
-	m_ConfData.m_sResultFile = rFile;
-	emit SendConfDataSignal(&m_ConfData);
+    QString rFile;
+    rFile=ResultFileDialog->selectedFile();
+    UpdateRecentFileList(recentResultFiles,rFile); // liste event. kürzen und einträge ins menu
+    m_ConfData.m_sResultFile = rFile;
+    emit SendConfDataSignal(&m_ConfData);
     }
     delete ResultFileDialog;
 }

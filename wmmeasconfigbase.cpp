@@ -44,10 +44,11 @@ void WMMeasConfigBase::init()
     m_AngleUnit[0] = AngleUnit + Anglegrad;
     m_AngleUnit[1] = AngleUnit + Anglemin;
     m_AngleUnit[2] = AngleUnit + Anglecrad;
-    m_AngleUnit[3] = AngleUnit + Angleurad;
-    m_AngleUnit[4] = AngleUnit + Anglerad;
+    m_AngleUnit[3] = AngleUnit + Anglemrad;
+    m_AngleUnit[4] = AngleUnit + Angleurad;
+    m_AngleUnit[5] = AngleUnit + Anglerad;
     
-    for (i = 0; i < 5; i++)    
+    for (i = 0; i < 6; i++)
         ui->WcomboBox->insertItem(m_AngleUnit[i]->Name);
     
     m_nDisplayMode = IEC; // wmglobal

@@ -14,8 +14,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
+#define TheDevice "192.168.6.10"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -44,8 +45,11 @@
 // information ob justiert oder nicht in statuszeile, in xml bei ergebnisexport, in status system questionable bit 11
 // V1.11 26.06.2012 winkel auflösung in xml datei auf 5 stellen erhöht
 // V1.12 06.09.2012 bei der istwertabfrage über scpi lastpunkte auf kanal x umgestellt
+// V1.13 17.09.2012 kontextmenu für istwertanzeige um mrad erweitert, bei start des programms immer bereichautomatik ein,
+//                  bei ergebnisdatei, eigenfehlerdatei solte open anstatt save beim öffnen verwendet werden, nicht machbar unter qt3 wenn man default selection verwenden möchte.
 
-#define WMVersion "V1.12"
+
+#define WMVersion "V1.13"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"

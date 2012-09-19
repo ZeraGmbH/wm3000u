@@ -122,6 +122,10 @@ cWM3000U::cWM3000U()
     // ende default TCP connection 
     
     LoadSettings(".ses"); // liess ev. mal die einstellungen 
+
+    m_ConfData.m_sRangeNVorgabe = "Auto";
+    m_ConfData.m_sRangeXVorgabe = "Auto";
+    m_ConfData.m_sRangeEVTVorgabe = "Auto";
     
     DspIFace = new cDspIFace (m_ConfData.m_sADSPFile, TCPConfig.dspHost, TCPConfig.dspPort);
     connect(DspIFace,SIGNAL(iFaceAsync(const QString&)),this,SLOT(DspIFaceAsyncDataSlot(const QString&))); 
