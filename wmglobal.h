@@ -45,10 +45,11 @@
 // V1.12 06.09.2012 bei der istwertabfrage über scpi lastpunkte auf kanal x umgestellt
 // V1.13 17.09.2012 kontextmenu für istwertanzeige um mrad erweitert, bei start des programms immer bereichautomatik ein,
 //                  bei ergebnisdatei, eigenfehlerdatei solte open anstatt save beim öffnen verwendet werden, nicht machbar unter qt3 wenn man default selection verwenden möchte.
+// V1.14 20.09.2012 in eparameter scalefactors eingeführt sonst fehler wenn keine einheit und /3 oder /w3 button
 
 
+#define WMVersion "V1.14"
 
-#define WMVersion "V1.13"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"

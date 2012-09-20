@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <!-- Written by Qt Creator 2.4.1, 2012-09-06T09:21:19. -->
 =======
 <!-- Written by Qt Creator 2.4.1, 2012-09-19T07:26:17. -->
 >>>>>>> 5a91ce3... Contextmenu of measurement values extended with mrad.
+=======
+<!-- Written by Qt Creator 2.4.1, 2012-09-20T08:16:07. -->
+>>>>>>> 5e606a2... eparameter extended with scalefactors to avoid parse errors
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>

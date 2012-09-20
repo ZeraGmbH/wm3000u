@@ -5,7 +5,7 @@
 
 #include <qstring.h>
 
-
+enum ScaleFactors { d3, dw3, AnzScaleFactors};
 enum ErrorUnits {ErrProzent, ErrPromill, Errppm, AnzErrorUnits};
 enum VoltageUnits {VoltMV, VoltkV3, VoltkVw3, VoltkV, VoltV3, VoltVw3, VoltmV3, VoltmVw3,VoltmV, VoltuV, VoltV, AnzVoltageUnits};
 enum CurrentUnits {CurrkA, CurrmA, CurruA, CurrA, AnzCurrentUnits};
@@ -38,8 +38,10 @@ public:
     bool isError();
     bool isAngle();
     bool withoutUnit();
+
     double toDouble(bool *ok = 0);
 private:
+    bool isScaleFactor();
     eUnit* Unit;
     QString eP;
     bool Test(eUnit*, int);
