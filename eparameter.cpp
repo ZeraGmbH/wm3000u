@@ -7,6 +7,10 @@
 #include "eparameter.h"
 
 
+eUnit ScaleFactor[AnzScaleFactors] = { eUnit("/3", 0.33333333),
+                                       eUnit("/w3", 0.57735026)};
+
+
 eUnit CurrentUnit[AnzCurrentUnits] ={ eUnit("kA", 1.0e3),
 		                            eUnit("mA", 1.0e-3),
 		                            eUnit("uA", 1.0e-6),
@@ -122,5 +126,12 @@ double eParameter::toDouble(bool* ok) {
 	if (isAngle()) return toDouble(ok);
 	return (s.toDouble(ok)); // im zweifelsfalle für den angeklagten
     }
+}
+
+
+bool eParameter::isScaleFactor()
+{
+    Unit = 0;
+    return Test(ScaleFactor, sizeof(ScaleFactor)/sizeof(eUnit));
 }
 
