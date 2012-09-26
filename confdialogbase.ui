@@ -61,6 +61,9 @@
      <property name="tabShape">
       <enum>QTabWidget::Rounded</enum>
      </property>
+     <property name="currentIndex">
+      <number>4</number>
+     </property>
      <widget class="QWidget" name="Widget8">
       <attribute name="title">
        <string>Modus</string>
@@ -870,12 +873,18 @@
             <property name="text">
              <string>/3</string>
             </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="2">
            <widget class="QRadioButton" name="evtSek_3radioButton">
             <property name="text">
              <string>/3</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -884,12 +893,18 @@
             <property name="text">
              <string>/sqrt(3)</string>
             </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="3">
            <widget class="QRadioButton" name="evtSek_w3radioButton">
             <property name="text">
              <string>/sqrt(3)</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -983,6 +998,9 @@
             <property name="text">
              <string>/3</string>
             </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="2">
@@ -996,6 +1014,9 @@
            <widget class="QRadioButton" name="nPrim_w3radioButton">
             <property name="text">
              <string>/sqrt(3)</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -1236,12 +1257,18 @@
             <property name="text">
              <string>/3</string>
             </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="2">
            <widget class="QRadioButton" name="xSek_3radioButton">
             <property name="text">
              <string>/3</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -1250,12 +1277,18 @@
             <property name="text">
              <string>/sqrt(3)</string>
             </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="3">
            <widget class="QRadioButton" name="xSek_w3radioButton">
             <property name="text">
              <string>/sqrt(3)</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
