@@ -427,43 +427,67 @@ const QString& ConfDialogBase::baseUnitText(const QString& s )
 void ConfDialogBase::nPrim_3radioButtonChecked()
 {
     if (ui->nPrim_3radioButton->isChecked())
+    {
         ui->nPrim_w3radioButton->setChecked(false);
+        ui->nSek_3radioButton->setChecked(is_3(m_ConfData.m_NSecondary));
+        ui->nSek_w3radioButton->setChecked(is_w3(m_ConfData.m_NSecondary));
+    }
 }
 
 
 void ConfDialogBase::nPrim_w3radioButtonChecked()
 {
     if (ui->nPrim_w3radioButton->isChecked())
+    {
         ui->nPrim_3radioButton->setChecked(false);
+        ui->nSek_3radioButton->setChecked(is_3(m_ConfData.m_NSecondary));
+        ui->nSek_w3radioButton->setChecked(is_w3(m_ConfData.m_NSecondary));
+    }
 }
 
 
 void ConfDialogBase::nSek_3radioButtonChecked()
 {
     if (ui->nSek_3radioButton->isChecked())
+    {
         ui->nSek_w3radioButton->setChecked(false);
+        ui->nPrim_3radioButton->setChecked(is_3(m_ConfData.m_NPrimary));
+        ui->nPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_NPrimary));
+    }
 }
 
 
 void ConfDialogBase::nSek_w3radioButtonChecked()
 {
     if (ui->nSek_w3radioButton->isChecked())
+    {
         ui->nSek_3radioButton->setChecked(false);
+        ui->nPrim_3radioButton->setChecked(is_3(m_ConfData.m_NPrimary));
+        ui->nPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_NPrimary));
+    }
 }
 
 
 void ConfDialogBase::xPrim_3radioButtonChecked()
 {
     if (ui->xPrim_3radioButton->isChecked())
+    {
         ui->xPrim_w3radioButton->setChecked(false);
+        ui->xSek_3radioButton->setChecked(is_3(m_ConfData.m_XSecondary));
+        ui->xSek_w3radioButton->setChecked(is_w3(m_ConfData.m_XSecondary));
+    }
 }
 
 
 
 void ConfDialogBase::xPrim_w3radioButtonChecked()
 {
-        if (ui->xPrim_w3radioButton->isChecked())
+    if (ui->xPrim_w3radioButton->isChecked())
+    {
         ui->xPrim_3radioButton->setChecked(false);
+        ui->xSek_3radioButton->setChecked(is_3(m_ConfData.m_XSecondary));
+        ui->xSek_w3radioButton->setChecked(is_w3(m_ConfData.m_XSecondary));
+    }
 
 }
 
@@ -471,42 +495,66 @@ void ConfDialogBase::xPrim_w3radioButtonChecked()
 void ConfDialogBase::xSek_3radioButtonChecked()
 {
     if (ui->xSek_3radioButton->isChecked())
+    {
         ui->xSek_w3radioButton->setChecked(false);
+        ui->xPrim_3radioButton->setChecked(is_3(m_ConfData.m_XPrimary));
+        ui->xPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_XPrimary));
+    }
 }
 
 
 void ConfDialogBase::xSek_w3radioButtonChecked()
 {
     if (ui->xSek_w3radioButton->isChecked())
+    {
         ui->xSek_3radioButton->setChecked(false);
+        ui->xPrim_3radioButton->setChecked(is_3(m_ConfData.m_XPrimary));
+        ui->xPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_XPrimary));
+    }
 }
 
 
 void ConfDialogBase::evtPrim_3radioButtonChecked()
 {
     if (ui->evtPrim_3radioButton->isChecked())
+    {
         ui->evtPrim_w3radioButton->setChecked(false);
+        ui->evtSek_3radioButton->setChecked(is_3(m_ConfData.m_EVTSecondary));
+        ui->evtSek_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTSecondary));
+    }
 }
 
 
 void ConfDialogBase::evtPrim_w3radioButtonChecked()
 {
     if (ui->evtPrim_w3radioButton->isChecked())
+    {
         ui->evtPrim_3radioButton->setChecked(false);
+        ui->evtSek_3radioButton->setChecked(is_3(m_ConfData.m_EVTSecondary));
+        ui->evtSek_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTSecondary));
+    }
 }
 
 
 void ConfDialogBase::evtSek_3radioButtonChecked()
 {
     if (ui->evtSek_3radioButton->isChecked())
+    {
         ui->evtSek_w3radioButton->setChecked(false);
+        ui->evtPrim_3radioButton->setChecked(is_3(m_ConfData.m_EVTPrimary));
+        ui->evtPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTPrimary));
+    }
 }
 
 
 void ConfDialogBase::evtSek_w3radioButtonChecked()
 {
     if (ui->evtSek_w3radioButton->isChecked())
+    {
         ui->evtSek_3radioButton->setChecked(false);
+        ui->evtPrim_3radioButton->setChecked(is_3(m_ConfData.m_EVTPrimary));
+        ui->evtPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTPrimary));
+    }
 }
 
 

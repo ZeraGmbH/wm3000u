@@ -40,7 +40,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QTabWidget" name="ConfTabWidget">
      <property name="sizePolicy">
@@ -61,9 +61,6 @@
      <property name="tabShape">
       <enum>QTabWidget::Rounded</enum>
      </property>
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
      <widget class="QWidget" name="Widget8">
       <attribute name="title">
        <string>Modus</string>
@@ -73,8 +70,8 @@
         <rect>
          <x>12</x>
          <y>12</y>
-         <width>150</width>
-         <height>112</height>
+         <width>123</width>
+         <height>116</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -96,61 +93,77 @@
         <enum>Q3GroupBox::Sunken</enum>
        </property>
        <property name="margin">
-        <number>8</number>
+        <number>0</number>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QRadioButton" name="Mode0RadioButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Un/Ux &amp;abs.</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+A</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="Mode2RadioButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Un/&amp;EVT</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+E</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="Mode3RadioButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font/>
-          </property>
-          <property name="text">
-           <string>Un/n&amp;Convent</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+C</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QRadioButton" name="Mode0RadioButton">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>22</y>
+          <width>91</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Un/Ux &amp;abs.</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+A</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="Mode2RadioButton">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>48</y>
+          <width>72</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Un/&amp;EVT</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+E</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="Mode3RadioButton">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>74</y>
+          <width>101</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>Un/n&amp;Convent</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+C</string>
+        </property>
+       </widget>
       </widget>
      </widget>
      <widget class="QWidget" name="Widget9">
@@ -284,7 +297,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage1">
+     <widget class="QWidget" name="TabPage">
       <attribute name="title">
        <string>Messung</string>
       </attribute>
@@ -554,7 +567,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage2">
+     <widget class="QWidget" name="TabPage1">
       <attribute name="title">
        <string>Synchronisation</string>
       </attribute>
@@ -759,7 +772,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage3">
+     <widget class="QWidget" name="TabPage2">
       <attribute name="title">
        <string>Teilerverhältnisse</string>
       </attribute>
@@ -1251,7 +1264,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabPage3">
       <attribute name="title">
        <string>nConvent</string>
       </attribute>

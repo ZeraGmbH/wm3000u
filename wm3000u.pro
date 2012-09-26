@@ -85,7 +85,6 @@ SOURCES	+= Logfile.cpp \
     wmrawactualconfigbase.cpp
 
 FORMS	= wmviewbase.ui \
-	confdialogbase.ui \
 	rangedialogbase.ui \
 	wmmeasvaluesbase.ui \
 	wmoeviewbase.ui \
@@ -93,7 +92,8 @@ FORMS	= wmviewbase.ui \
 	en61850monitor.ui \
 	versionviewbase.ui \
 	wmmeasconfigbase.ui \
-	wmrawactualconfigbase.ui
+	wmrawactualconfigbase.ui \
+    confdialogbase.ui
 
 IMAGES	= images/filenew \
 	images/fileopen \
@@ -396,3 +396,5 @@ QT += xml  qt3support
 
 target.path = /usr/bin
 INSTALLS += target
+
+
