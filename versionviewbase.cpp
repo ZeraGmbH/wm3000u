@@ -16,9 +16,9 @@ VersionsViewBase::~VersionsViewBase()
 void VersionsViewBase::ReceiveVersionData(tVersSerial* p)
 {
     pVersion = p;
-    ui->DeviceLabel->setText(p->DeviceName);
-    ui->DevVersionLabel->setText(p->DeviceVersion);
-    ui->SerialNrLabel->setText(p->PCBSerialNr);
+    ui->DeviceText->setText(p->DeviceName);
+    ui->DeviceVersionText->setText(p->DeviceVersion);
+    ui->SerialNrText->setText(p->PCBSerialNr);
     ui->AdjDataText->setText(p->JDataChksum);
     ui->PCBVersionText->setText( p->PCBVersion);
     ui->PCBServerText->setText(p->PCBServer);
