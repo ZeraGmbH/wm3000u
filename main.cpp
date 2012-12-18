@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     
     g_WMDevice = new cWM3000U; //  die eigentliche Messeinrichtung wird später dynamisch je nach aufruf erzeugt 
     
-    QString qmPath = g_app->applicationDirPath() + "/translations";
+    QString qmPath = "/usr/share/wm3000u";
     QTranslator* appTranslator = new QTranslator(g_app);
     QTranslator* qtTranslator = new QTranslator(g_app);
     
@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
        case de:
 	   break;
        case gb:
-	   appTranslator->load("tt2_gb.qm",qmPath);
-	   qtTranslator->load("tt2_gb.qm",qmPath);
+       appTranslator->load("wm3000u_gb.qm",qmPath);
+       qtTranslator->load("wm3000u_gb.qm",qmPath);
 	   break;
     }
  
