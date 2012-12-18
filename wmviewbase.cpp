@@ -132,7 +132,7 @@ void WMViewBase::ActualizeStates()
 
 void WMViewBase::OpenOETFileSlot() // zum laden einer eigenfehlertabelle
 {
-   Q3FileDialog *OETFileDialog=new Q3FileDialog ( ".",tr("Eigenfehlertabellen (*.oet)"),this);
+   Q3FileDialog *OETFileDialog=new Q3FileDialog ( wm3000uHome,tr("Eigenfehlertabellen (*.oet)"),this);
    OETFileDialog->setCaption(tr("Eigenfehlertabellen"));
    OETFileDialog->setMode( Q3FileDialog::AnyFile);
    OETFileDialog-> setSelection("./Transformer.oet");
@@ -300,7 +300,7 @@ void WMViewBase::ReceiveOETFileSlot(QString nText)
 void WMViewBase::OpenResultFileSlot()
 {
     Q3FileDialog *ResultFileDialog=new Q3FileDialog ( ".",tr("Ergebnisdateien (*.xml)"),this);
-    ResultFileDialog->setDir(QDir("./results"));
+    ResultFileDialog->setDir(QDir(QString("%1%2").arg(wm3000uHome).arg("results")));
     ResultFileDialog->setCaption(tr("Ergebnisdateien"));
     ResultFileDialog->setMode( Q3FileDialog::AnyFile);
     ResultFileDialog->setSelection("results.xml");
@@ -382,7 +382,7 @@ void WMViewBase::OpenRecentResultFileSlot(int index)
 bool WMViewBase::LoadSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( IO_ReadOnly ) ) {
 	QDataStream stream( &file );
@@ -414,7 +414,7 @@ bool WMViewBase::LoadSession(QString session)
 void WMViewBase::SaveSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
     if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {

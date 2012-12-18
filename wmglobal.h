@@ -53,9 +53,10 @@
 
 #define WMVersion "V2.15"
 
-#define ServerCommLogFilePath "./log/ServerComm.log"
-#define SelftestLogFilePath "./log/Selftest.log"
-#define PhaseJustLogFilePath "./log/PhaseJust.log"
+#define wm3000uHome "/usr/share/wm3000u/"
+#define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
+#define SelftestLogFilePath "/usr/share/wm3000u/log/Selftest.log"
+#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
 
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;

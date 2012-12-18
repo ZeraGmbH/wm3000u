@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include "en61850monitor.h"
 #include "ui_en61850monitor.h"
+#include "wmglobal.h"
 
 EN61850monbase::EN61850monbase( QWidget* parent):
     QDialog(parent),
@@ -124,7 +125,7 @@ void EN61850monbase::SetETHStatusSlot( cEN61850Info *ethInfo )
 bool EN61850monbase::LoadSession( QString session )
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );
@@ -147,7 +148,7 @@ bool EN61850monbase::LoadSession( QString session )
 void EN61850monbase::SaveSession( QString session )
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
     if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {

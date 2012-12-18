@@ -177,7 +177,7 @@ void WMMeasValuesBase::ActualizeDisplay()
 bool WMMeasValuesBase::LoadSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );
@@ -211,7 +211,7 @@ bool WMMeasValuesBase::LoadSession(QString session)
 void WMMeasValuesBase::SaveSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString(".%1%2").arg(name()).arg(fi.fileName());
+    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
     if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {

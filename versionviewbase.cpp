@@ -27,8 +27,6 @@ void VersionsViewBase::ReceiveVersionData(tVersSerial* p)
 }
 
 
-
-
 void VersionsViewBase::ShowVersionSlot()
 {
     show();
