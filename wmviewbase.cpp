@@ -357,7 +357,7 @@ void WMViewBase::StoreResultSlot()
 {
     if (m_ConfData.m_sResultFile=="") { // wir haben noch keine ergebnisdatei geöffnet
         QString s = Q3FileDialog::getSaveFileName(
-		"./results/results.xml",
+        QString("%1%2").arg(wm3000uHome).arg("results/results.xml"),
 		"Ergebnisdateien (*.xml)",
 		this,
 		"",
@@ -439,7 +439,7 @@ void WMViewBase::SaveSession(QString session)
 
 void WMViewBase::StoreSessionSlot()
 {
-    SessionName = Q3FileDialog::getSaveFileName( "./Session.ses",
+    SessionName = Q3FileDialog::getSaveFileName( QString("%1%2").arg(wm3000uHome).arg("Session.ses"),
 		  			  tr("Sitzung Name (*.ses)"),
 					  this,
 					  "",
@@ -456,7 +456,7 @@ void WMViewBase::StoreSessionSlot()
 
 void WMViewBase::LoadSessionSlot()
 {
-    Q3FileDialog *SessionFileDialog=new Q3FileDialog ( ".",tr("Sitzung Name (*.ses)"),this);
+    Q3FileDialog *SessionFileDialog=new Q3FileDialog (  wm3000uHome,tr("Sitzung Name (*.ses)"),this);
     SessionFileDialog->setCaption(tr("Sitzung laden"));
     SessionFileDialog->setMode( Q3FileDialog::ExistingFile);
     if ( SessionFileDialog->exec() == QDialog::Accepted ) {
@@ -538,12 +538,12 @@ void WMViewBase::JustFlashProgSlot()
 
 void WMViewBase::JustFlashExportSlot()
 {
-    QString File = Q3FileDialog::getSaveFileName( "./JData.xml",
+    QString File = Q3FileDialog::getSaveFileName(QString("%1%2").arg(wm3000uHome).arg("JData.xml"),
 					tr("Datei Name (*.xml)"),
 					 this,
 					"",
 					tr("Justagedaten exportieren"));
-    
+
     if (File != "") // wenn ""  -> es war cancel
 	emit JustFlashExportSignal(File);
 }
@@ -551,7 +551,7 @@ void WMViewBase::JustFlashExportSlot()
 
 void WMViewBase::JustFlashImportSlot()
 {
-    QString File = Q3FileDialog::getOpenFileName("./JData.xml",
+    QString File = Q3FileDialog::getOpenFileName(QString("%1%2").arg(wm3000uHome).arg("JData.xml"),
 					 tr("Datei Name (*.xml)"),
 					 this,
 					 "",
