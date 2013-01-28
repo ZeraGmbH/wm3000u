@@ -72,7 +72,7 @@ bool CLogFileView::LoadSession(QString session)
 {
   cWidgetGeometry tmpGeometry;
   tmpGeometry=cSessionHelper::readSession(this, session);
-  if(tmpGeometry.m_Size!=0)
+  if(tmpGeometry.m_Size.isValid())
   {
     m_widGeometry=tmpGeometry;
     return true;
