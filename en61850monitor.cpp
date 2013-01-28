@@ -148,7 +148,7 @@ bool EN61850monbase::LoadSession( QString session )
 
 void EN61850monbase::SaveSession( QString session )
 {
-  CSessionHelper::writeSession(this,m_widGeometry,session);
+  cSessionHelper::writeSession(this,m_widGeometry,session);
 }
 
 

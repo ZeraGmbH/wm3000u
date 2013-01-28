@@ -63,7 +63,7 @@ void CLogFileView::showList()
 
 void CLogFileView::SaveSession(QString session)
 {
-  CSessionHelper::writeSession(this, m_widGeometry, session);
+  cSessionHelper::writeSession(this, m_widGeometry, session);
 }
 
 

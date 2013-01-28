@@ -71,7 +71,7 @@ void WMOeViewBase::ShowHideOESlot( bool b )
 
 void WMOeViewBase::SaveSession(QString session)
 {
-  CSessionHelper::writeSession(this, m_widGeometry, session);
+  cSessionHelper::writeSession(this, m_widGeometry, session);
 }
 
 
