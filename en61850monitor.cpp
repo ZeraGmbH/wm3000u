@@ -2,6 +2,7 @@
 #include <QCloseEvent>
 #include <QTimer>
 #include <QFileInfo>
+#include "csessionhelper.h"
 #include "en61850monitor.h"
 #include "ui_en61850monitor.h"
 #include "wmglobal.h"
@@ -125,7 +126,7 @@ void EN61850monbase::SetETHStatusSlot( cEN61850Info *ethInfo )
 bool EN61850monbase::LoadSession( QString session )
 {
     QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
+    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );
@@ -147,24 +148,7 @@ bool EN61850monbase::LoadSession( QString session )
 
 void EN61850monbase::SaveSession( QString session )
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
-//    file.remove();
-    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
-	file.at(0);
-	
-	int vi;
-	
-	vi = (isVisible()) ? 1 : 0;
-	if (vi) 
-	    m_widGeometry.SetGeometry(pos(),size());
-	m_widGeometry.SetVisible(vi);	    
-	
-	QDataStream stream( &file );
-	stream << m_widGeometry;
-	file.close();
-    }
+  CSessionHelper::writeSession(this,m_widGeometry,session);
 }
 
 

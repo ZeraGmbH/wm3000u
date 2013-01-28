@@ -5,11 +5,11 @@
 #include "csessionhelper.h"
 #include "widgeom.h"
 #include "wmglobal.h"
-CSessionHelper::CSessionHelper()
+cSessionHelper::cSessionHelper()
 {
 }
 
-void CSessionHelper::writeSession(QWidget *widget, cWidgetGeometry geometry, QString session)
+void cSessionHelper::writeSession(QWidget *widget, cWidgetGeometry geometry, QString session)
 {
   QFileInfo fi(session);
   if(!QDir(QString("%1/.wm3000u/").arg(wm3000uHome)).exists())
@@ -38,7 +38,7 @@ void CSessionHelper::writeSession(QWidget *widget, cWidgetGeometry geometry, QSt
   }
 }
 
-cWidgetGeometry CSessionHelper::readSession(QWidget *widget, QString session)
+cWidgetGeometry cSessionHelper::readSession(QWidget *widget, QString session)
 {
   cWidgetGeometry geometry;
   QFileInfo fi(session);

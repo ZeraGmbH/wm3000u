@@ -8,6 +8,8 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 
+#include <QDir>
+
 #include "confdata.h"
 #include "complex.h"
 #include "range.h"
@@ -53,7 +55,7 @@
 
 #define WMVersion "V2.15"
 
-#define wm3000uHome "/usr/share/wm3000u/"
+#define wm3000uHome QDir::homePath()
 #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
 #define SelftestLogFilePath "/usr/share/wm3000u/log/Selftest.log"
 #define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"

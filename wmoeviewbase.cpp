@@ -1,6 +1,8 @@
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <QFileInfo>
+
+#include "csessionhelper.h"
 #include "wmoeviewbase.h"
 #include "ui_wmoeviewbase.h"
 
@@ -69,30 +71,20 @@ void WMOeViewBase::ShowHideOESlot( bool b )
 
 void WMOeViewBase::SaveSession(QString session)
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
- //   file.remove();
-    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
-	file.at(0);
-	
-	int vi;
-	vi = (isVisible()) ? 1 : 0;
-	if (vi) 
-	    m_widGeometry.SetGeometry(pos(),size());
-	m_widGeometry.SetVisible(vi);
-	
-	QDataStream stream( &file );
-	stream << m_widGeometry;
-	file.close();
-    }
+  CSessionHelper::writeSession(this, m_widGeometry, session);
 }
 
 
 bool WMOeViewBase::LoadSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
+    if(!QDir(QString("%1/.wm3000u/").arg(wm3000uHome)).exists())
+    {
+      //create temporary object that gets deleted when leaving the control block
+      QDir().mkdir(QString("%1/.wm3000u/").arg(wm3000uHome));
+    }
+
+    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );

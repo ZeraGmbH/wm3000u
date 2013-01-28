@@ -10,6 +10,7 @@
 #include <QResizeEvent>
 #include <QCloseEvent>
 
+#include "csessionhelper.h"
 #include "wmglobal.h"
 #include "logfileview.h"
 
@@ -62,23 +63,7 @@ void CLogFileView::showList()
 
 void CLogFileView::SaveSession(QString session)
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
-//    file.remove();
-    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
-	file.at(0);
-	
-	int vi;
-	vi = isVisible();
-	if (vi) 
-	    m_widGeometry.SetGeometry(pos(),size());
-	m_widGeometry.SetVisible(vi);
-	
-	QDataStream stream( &file );
-	stream << m_widGeometry;
-	file.close();
-    }
+  CSessionHelper::writeSession(this, m_widGeometry, session);
 }
 
 
@@ -86,7 +71,7 @@ bool CLogFileView::LoadSession(QString session)
 	
 {
     QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
+    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( QIODevice::ReadOnly ) ) {
 	QDataStream stream( &file );

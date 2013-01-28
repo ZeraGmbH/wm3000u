@@ -44,7 +44,8 @@ HEADERS	+= logfile.h \
     wmrawactualconfigbase.h \
     wmviewbase.h \
     en61850monitor.h \
-    versionviewbase.h
+    versionviewbase.h \
+    csessionhelper.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
@@ -82,7 +83,8 @@ SOURCES	+= Logfile.cpp \
     rangedialogbase.cpp \
     versionviewbase.cpp \
     wmmeasconfigbase.cpp \
-    wmrawactualconfigbase.cpp
+    wmrawactualconfigbase.cpp \
+    csessionhelper.cpp
 
 FORMS	= wmviewbase.ui \
 	rangedialogbase.ui \

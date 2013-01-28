@@ -5,10 +5,10 @@ class QWidget;
 class QString;
 class cWidgetGeometry;
 
-class CSessionHelper
+class cSessionHelper
 {
 protected:
-  CSessionHelper();
+  cSessionHelper();
 
 public:
   static void writeSession(QWidget *widget, cWidgetGeometry geometry, QString session);
