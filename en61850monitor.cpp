@@ -125,24 +125,17 @@ void EN61850monbase::SetETHStatusSlot( cEN61850Info *ethInfo )
 
 bool EN61850monbase::LoadSession( QString session )
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
-    if ( file.open( QIODevice::ReadOnly ) ) {
-	QDataStream stream( &file );
-	stream >> m_widGeometry;
-	file.close();
-	hide();
-	resize(m_widGeometry.m_Size);
-	move(m_widGeometry.m_Point);
-	if (m_widGeometry.vi) show();
-// FVWM und Gnome verhalten sich anders
-#ifndef FVWM 
-	move(m_widGeometry.m_Point);
-#endif   
-    	return true;
-    }
+  cWidgetGeometry tmpGeometry;
+  tmpGeometry=cSessionHelper::readSession(this, session);
+  if(tmpGeometry.m_Size!=0)
+  {
+    m_widGeometry=tmpGeometry;
+    return true;
+  }
+  else
+  {
     return false;
+  }
 }
 
 
