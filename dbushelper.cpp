@@ -37,7 +37,14 @@ void WM3000UDBusHelper::setVisible(QString widgetName, bool visibility)
   }
   if (target!=0)
   {
-    target->setVisible(visibility);
+    if(visibility==true)
+    {
+      target->show();
+    }
+    else
+    {
+      target->close();
+    }
   }
 }
 

@@ -206,7 +206,6 @@ int main(int argc, char *argv[])
   dbushelper.registerWidget(g_ETHMonitor);
   dbushelper.registerWidget(g_WMConfDialog);
   dbushelper.registerWidget(g_WMRangeDialog);
-  dbushelper.registerWidget(g_WMView);
 
   int ret = g_app->exec();
 
