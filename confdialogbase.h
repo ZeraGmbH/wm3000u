@@ -25,6 +25,7 @@ public slots:
     virtual void SetConfInfoSlot( cConfData * cd );
     virtual void SetConfListSlot( QStringList & NPItems, QStringList & NSItems );
     virtual void accept();
+    virtual void abortSlot();
     virtual void SetnConventMenu();
     virtual void RemoteCtrlInfoSlot( bool remote );
 
@@ -42,7 +43,7 @@ protected:
 
 private:
     Ui::ConfDialogBase *ui;
-    cConfData m_ConfData;
+    cConfData m_ConfData, m_ConfDataTemp;
     bool m_bRemoteCtrl;
     QString m_sText;
 
