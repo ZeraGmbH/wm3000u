@@ -44,7 +44,10 @@ HEADERS	+= logfile.h \
     wmrawactualconfigbase.h \
     wmviewbase.h \
     en61850monitor.h \
-    versionviewbase.h
+    versionviewbase.h \
+    csessionhelper.h \
+    dbushelper.h \
+    dbushelperadapter.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
@@ -82,7 +85,10 @@ SOURCES	+= Logfile.cpp \
     rangedialogbase.cpp \
     versionviewbase.cpp \
     wmmeasconfigbase.cpp \
-    wmrawactualconfigbase.cpp
+    wmrawactualconfigbase.cpp \
+    csessionhelper.cpp \
+    dbushelper.cpp \
+    dbushelperadapter.cpp
 
 FORMS	= wmviewbase.ui \
 	rangedialogbase.ui \
@@ -392,9 +398,13 @@ TRANSLATIONS    = wm3000u_gb.ts
 
 # Input
 #The following line was inserted by qt3to4
-QT += xml  qt3support 
+QT += xml  qt3support dbus
 
 target.path = /usr/bin
 INSTALLS += target
+
+OTHER_FILES += \
+    dbushelperadapter. \
+    de.zera.wm3000u.xml
 
 

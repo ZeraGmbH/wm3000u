@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <Q3FileDialog>
 #include <QStatusBar>
+#include <QDebug>
 #include "wmglobal.h"
 #include "wmeditor.h"
 #include "widgeom.h"
@@ -382,7 +383,7 @@ void WMViewBase::OpenRecentResultFileSlot(int index)
 bool WMViewBase::LoadSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
+    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
     if ( file.open( IO_ReadOnly ) ) {
 	QDataStream stream( &file );
@@ -414,7 +415,7 @@ bool WMViewBase::LoadSession(QString session)
 void WMViewBase::SaveSession(QString session)
 {
     QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
+    QString ls = QString("%1/.wm3000u/%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
     QFile file(ls); 
 //    file.remove();
     if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {

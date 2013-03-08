@@ -2,6 +2,7 @@
 #include <QCloseEvent>
 #include <QTimer>
 #include <QFileInfo>
+#include "csessionhelper.h"
 #include "en61850monitor.h"
 #include "ui_en61850monitor.h"
 #include "wmglobal.h"
@@ -124,47 +125,23 @@ void EN61850monbase::SetETHStatusSlot( cEN61850Info *ethInfo )
 
 bool EN61850monbase::LoadSession( QString session )
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
-    if ( file.open( QIODevice::ReadOnly ) ) {
-	QDataStream stream( &file );
-	stream >> m_widGeometry;
-	file.close();
-	hide();
-	resize(m_widGeometry.m_Size);
-	move(m_widGeometry.m_Point);
-	if (m_widGeometry.vi) show();
-// FVWM und Gnome verhalten sich anders
-#ifndef FVWM 
-	move(m_widGeometry.m_Point);
-#endif   
-    	return true;
-    }
+  cWidgetGeometry tmpGeometry;
+  tmpGeometry=cSessionHelper::readSession(this, session);
+  if(tmpGeometry.m_Size.isValid())
+  {
+    m_widGeometry=tmpGeometry;
+    return true;
+  }
+  else
+  {
     return false;
+  }
 }
 
 
 void EN61850monbase::SaveSession( QString session )
 {
-    QFileInfo fi(session);
-    QString ls = QString("%1.%2%3").arg(wm3000uHome).arg(name()).arg(fi.fileName());
-    QFile file(ls); 
-//    file.remove();
-    if ( file.open( QIODevice::Unbuffered | QIODevice::WriteOnly ) ) {
-	file.at(0);
-	
-	int vi;
-	
-	vi = (isVisible()) ? 1 : 0;
-	if (vi) 
-	    m_widGeometry.SetGeometry(pos(),size());
-	m_widGeometry.SetVisible(vi);	    
-	
-	QDataStream stream( &file );
-	stream << m_widGeometry;
-	file.close();
-    }
+  cSessionHelper::writeSession(this,m_widGeometry,session);
 }
 
 
