@@ -18,7 +18,7 @@
 
 #define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.10"
+//#define TheDevice "192.168.6.58"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert

@@ -2023,9 +2023,9 @@ case ConfigurationTestTMode:
 	if ( !DspIFace->IFaceError() ) // wenn kein fehler aufgetreten
 	{
 	    cEN61850Info EnStat; // holen der werte
-	    ulong *source = (ulong*) DspIFace->data(ETHStatusHandle);
-	    ulong *dest = &(EnStat.ByteCount[0]);
-	    for (uint i=0; i< sizeof(EnStat)/sizeof(ulong);i++) *dest++ = *source++; 
+        quint32 *source = (quint32*) DspIFace->data(ETHStatusHandle);
+        quint32 *dest = &(EnStat.ByteCount[0]);
+        for (uint i=0; i< sizeof(EnStat)/sizeof(quint32);i++) *dest++ = *source++;
 	    emit EN61850StatusSignal(&EnStat); // und senden
 	}
 	

@@ -32,9 +32,9 @@ enum ETHErrorType {    savPdu = 0x00000001, // asn tag errors
 
 struct cEN61850Info 
 {
-    ulong ByteCount[2]; // 2^64 counter
-    ulong ETHErrors; // alle fehler bits
-    ulong SyncLostCount; // 2^32 counter
+    quint32 ByteCount[2]; // 2^64 counter
+    quint32 ETHErrors; // alle fehler bits
+    quint32 SyncLostCount; // 2^32 counter
 };
 
 #endif
