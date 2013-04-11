@@ -40,7 +40,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <spacer name="spacer45">
      <property name="orientation">
@@ -78,7 +78,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="Widget8">
       <attribute name="title">
@@ -1325,872 +1325,894 @@
       <attribute name="title">
        <string>nConvent</string>
       </attribute>
-      <layout class="QHBoxLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QVBoxLayout">
-         <item>
-          <widget class="Q3GroupBox" name="groupBox7">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title">
-            <string>MAC adresses 61850-9-2</string>
-           </property>
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>0</number>
+        <widget class="Q3GroupBox" name="groupBox7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>MAC adresses 61850-9-2</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QLabel" name="MacMULabel">
+              <property name="text">
+               <string>Merging unit:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="MacWMLabel">
+              <property name="text">
+               <string>WM3000:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout">
+            <item>
+             <layout class="QHBoxLayout">
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit1">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel4">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel5">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel6">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel7">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel8">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacSLineEdit6">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer47">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Preferred</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>16</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout">
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit1">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel4_2">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel5_2">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel6_2">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel7_2">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel8_2">
+                <property name="maximumSize">
+                 <size>
+                  <width>19</width>
+                  <height>16</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="MacDLineEdit6">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>FF</string>
+                </property>
+                <property name="maxLength">
+                 <number>2</number>
+                </property>
+                <property name="frame">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignHCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer46">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Preferred</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>16</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="spacer51">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-            <item>
-             <layout class="QVBoxLayout">
-              <item>
-               <widget class="QLabel" name="MacMULabel">
-                <property name="text">
-                 <string>Merging unit:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="MacWMLabel">
-                <property name="text">
-                 <string>WM3000:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout">
-              <item>
-               <layout class="QHBoxLayout">
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit1">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel4">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::AutoText</enum>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit2">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel5">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit3">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel6">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit4">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel7">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel8">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacSLineEdit6">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="spacer47">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Preferred</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>16</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout">
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit1">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel4_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::AutoText</enum>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit2">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel5_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit3">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel6_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit4">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel7_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="textLabel8_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>19</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>-</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="MacDLineEdit6">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>FF</string>
-                  </property>
-                  <property name="maxLength">
-                   <number>2</number>
-                  </property>
-                  <property name="frame">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignHCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="spacer46">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Preferred</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>16</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="spacer51">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="Q3GroupBox" name="groupBox11">
+           <property name="title">
+            <string>Priority tagged</string>
+           </property>
+           <layout class="QGridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="textLabel2">
+              <property name="text">
+               <string>User priority:</string>
               </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
+              <property name="wordWrap">
+               <bool>false</bool>
               </property>
-              <property name="sizeHint" stdset="0">
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="UPrioritylineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="TPIDtextLabel">
+              <property name="text">
+               <string>TPID:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLineEdit" name="TPIDlineEdit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
                <size>
                 <width>40</width>
                 <height>20</height>
                </size>
               </property>
-             </spacer>
+              <property name="text">
+               <string>8100</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="textLabel3">
+              <property name="text">
+               <string>CFI:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="CFIlineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="textLabel4_3">
+              <property name="text">
+               <string>VID:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="VIDlineEdit">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="Q3GroupBox" name="groupBox11">
-             <property name="title">
-              <string>Priority tagged</string>
-             </property>
-             <layout class="QGridLayout">
-              <item row="0" column="2">
-               <widget class="QLabel" name="TPIDtextLabel">
-                <property name="text">
-                 <string>TPID:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="textLabel4_3">
-                <property name="text">
-                 <string>VID:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="textLabel2">
-                <property name="text">
-                 <string>User priority:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="textLabel3">
-                <property name="text">
-                 <string>CFI:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="UPrioritylineEdit">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="CFIlineEdit">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QLineEdit" name="TPIDlineEdit">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0000</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QLineEdit" name="VIDlineEdit">
-                <property name="maximumSize">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="Q3GroupBox" name="groupBox12">
-             <property name="title">
-              <string>Ethertype header</string>
-             </property>
-             <layout class="QGridLayout">
-              <item row="0" column="0">
-               <widget class="QLabel" name="textLabel5_3">
-                <property name="text">
-                 <string>Ethertype:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="textLabel6_3">
-                <property name="text">
-                 <string>APPID:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="EthTypelineEdit">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0000</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="APPIDlineEdit">
-                <property name="maximumSize">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>0000</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="Q3GroupBox" name="groupBox9">
-             <property name="title">
-              <string>Data set</string>
-             </property>
-             <layout class="QGridLayout">
-              <item row="0" column="0">
-               <widget class="QLabel" name="ASDUTextLabel">
-                <property name="text">
-                 <string>ASDU:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="DatasetTextLabel">
-                <property name="text">
-                 <string>Set:</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="ASDUSpinBox">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>8</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="SetSpinBox">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>8</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
+          <widget class="Q3GroupBox" name="groupBox12">
+           <property name="title">
+            <string>Ethertype header</string>
+           </property>
+           <layout class="QGridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="textLabel5_3">
+              <property name="text">
+               <string>Ethertype:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="EthTypelineEdit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>88BA</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="textLabel6_3">
+              <property name="text">
+               <string>APPID:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="APPIDlineEdit">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>0000</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="Q3GroupBox" name="groupBox9">
+           <property name="title">
+            <string>Data set</string>
+           </property>
+           <layout class="QGridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="ASDUTextLabel">
+              <property name="text">
+               <string>First ASDU:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="FirstASDUlineEdit">
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Last ASDU:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="LastASDUlineEdit">
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="DatasetTextLabel">
+              <property name="text">
+               <string>Set:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="SetlineEdit">
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>
@@ -2364,310 +2386,5 @@
   <include location="local">wmglobal.h</include>
  </includes>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonOk</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>386</x>
-     <y>299</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nSek_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>nSek_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>120</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Mode2RadioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>34</x>
-     <y>103</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Mode3RadioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>34</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nSek_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>nSek_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>156</x>
-     <y>120</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nPrim_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>nPrim_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>89</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nPrim_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>nPrim_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>156</x>
-     <y>89</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>evtPrim_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>evtPrim_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>437</x>
-     <y>191</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>evtSek_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>evtSek_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>396</x>
-     <y>223</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>evtSek_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>evtSek_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>437</x>
-     <y>223</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xPrim_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>xPrim_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>156</x>
-     <y>191</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>evtPrim_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>evtPrim_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>396</x>
-     <y>191</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>S80RadioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>31</x>
-     <y>63</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>S256RadioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>31</x>
-     <y>63</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Mode0RadioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>34</x>
-     <y>77</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CmpCorrCheckBox</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>ApplyDataSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>31</x>
-     <y>63</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xSek_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>xSek_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>223</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xSek_3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>xSek_3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>156</x>
-     <y>223</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xPrim_w3radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ConfDialogBase</receiver>
-   <slot>xPrim_w3radioButtonChecked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>191</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -65,17 +65,19 @@ void WMMeasValuesBase::ShowHideMVSlot(bool b)
 
 void WMMeasValuesBase::resizeEvent(QResizeEvent * e)
 {
-    if (QLayout *lay=layout()) { 
-	QLayoutIterator it = lay->iterator();
-	QLayoutItem *child;
-     int  w;
-     bool test;
-	while ( (child = it.current()) != 0 ) {
-	    Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
-        w = l->minimumSize().width();
-        test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
-	    ++it;
-	}
+    if (QLayout *lay=layout())
+    {
+        QLayoutIterator it = lay->iterator();
+        QLayoutItem *child;
+        int  w;
+        bool test;
+        while ( (child = it.current()) != 0 )
+        {
+            Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
+            w = l->minimumSize().width();
+            test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
+            ++it;
+        }
     }
     this->QDialog::resizeEvent(e);
 }

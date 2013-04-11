@@ -16,9 +16,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.58"
+#define TheDevice "192.168.6.121"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -52,8 +52,11 @@
 // V1.14 20.09.2012 in eparameter scalefactors eingeführt sonst fehler wenn keine einheit und /3 oder /w3 button
 // V1.15 19.11.2012 dsp loader file location changed
 // V2.15 14.12.2012 version number changed for difference old/new device
+// V2.16 11.04.2013 en61850-9-2 decoder: ethernetframe sendet 8 samples/frame wenn 256samples/periode. 2 eingabefelder erforderlich
+//                  für asdu nummern. first asdu, last asdu. es wird versucht von der 1. bis zur letzten asdu alles zuzuordnen.
+//                  sync. überwachung läuft auch mit. es ist dsp version ab 3.09 erforderlich für diese funktion.
 
-#define WMVersion "V2.15"
+#define WMVersion "V2.16"
 
 #define wm3000uHome QDir::homePath()
 #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"

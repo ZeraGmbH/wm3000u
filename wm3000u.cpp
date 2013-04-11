@@ -121,7 +121,7 @@ cWM3000U::cWM3000U()
     TCPConfig.dspPort = 6310;
     // ende default TCP connection 
     
-    LoadSettings(".ses"); // liess ev. mal die einstellungen 
+    LoadSettings(".ses"); // liess ev. mal die einstellungen
 
     m_ConfData.m_sRangeNVorgabe = "Auto";
     m_ConfData.m_sRangeXVorgabe = "Auto";
@@ -619,16 +619,21 @@ void cWM3000U::ActionHandler(int entryAHS)
     case ConfigurationSetDspSignalRouting:	    
     case InitializationSetDspSignalRouting:
 	{
-	    ulong ethroute[8];
+        ulong ethroute[64];
 	    int i;
 	    if (m_ConfData.m_bSimulation) {
 		AHS = wm3000Idle;
 	    }
 	    else
 	    {
-		for (i = 0; i < 8; i++) ethroute[i] = 0;
+        for (i = 0; i < 64; i++) ethroute[i] = 0;
 		if (m_ConfData.m_nMeasMode == Un_nConvent) // ersetzt kanal 1 daten durch eth. daten
-		    ethroute[0] = (((m_ConfData.ASDU << 4) | m_ConfData.DataSet)) << 16;  
+        {
+            int asdu;
+            int n = m_ConfData.LastASDU - m_ConfData.FirstASDU +1;
+            for (i = 0, asdu = m_ConfData.FirstASDU; i < n; i++, asdu++ )
+            ethroute[i << 3] = (((asdu << 4) | m_ConfData.DataSet)) << 16;
+        }
 		DspIFace->SetSignalRouting(ethroute);
 		AHS++;
 	    }
@@ -694,7 +699,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    else
 	    {
 		if ( m_ConfData.m_bStrongEthSynchronisation)
-		    p = m_ConfData.ASDU;
+            p = m_ConfData.FirstASDU;
 		
 		DspIFace->SetDsp61850EthSynchronisation(p);
 		AHS++;
@@ -1042,15 +1047,16 @@ case ConfigurationTestTMode:
 	}
 	else
 	{
-	    if ( (m_ConfDataCopy.m_nMeasMode != m_ConfData.m_nMeasMode)  ||
-		 (m_ConfDataCopy.ASDU != m_ConfData.ASDU) ||
-		 (m_ConfDataCopy.DataSet != m_ConfData.DataSet) ) 	
-	    {
-		StopMeasurement();
-		AHS++; // signalrouting (ethrouting tab)
-	    }
-	    else
-		AHS = ConfigurationTestDsp61850SourceAdr;
+        if ( (m_ConfDataCopy.m_nMeasMode != m_ConfData.m_nMeasMode)  ||
+             (m_ConfDataCopy.FirstASDU != m_ConfData.FirstASDU) ||
+             (m_ConfDataCopy.LastASDU != m_ConfData.LastASDU) ||
+             (m_ConfDataCopy.DataSet != m_ConfData.DataSet) )
+        {
+            StopMeasurement();
+            AHS++; // signalrouting (ethrouting tab)
+        }
+        else
+            AHS = ConfigurationTestDsp61850SourceAdr;
 	   
 	    m_ActTimer->start(0,wm3000Continue); 
 	}
@@ -2430,7 +2436,8 @@ void cWM3000U::DefaultSettings(cConfData& cdata) // alle einstellungen default
     cdata.m_sRangeX = m_ConfData.m_sRangeXVorgabe = m_ConfData.m_sRangeXSoll  = "480V";
     cdata.m_sRangeEVT = m_ConfData.m_sRangeEVTVorgabe = m_ConfData.m_sRangeEVTSoll = "15.0V";
     
-    cdata.ASDU = 1;
+    cdata.FirstASDU = 1;
+    cdata.LastASDU = 1;
     cdata.DataSet = 1;
 
     for(int i = 0; i < 6; i++) // default mac adressen

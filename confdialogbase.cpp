@@ -76,10 +76,39 @@ void ConfDialogBase::init()
     ui->RatioPrimEVTLineEdit->setValidator(RatioValidator);
     ui->RatioSekEVTLineEdit->setValidator(RatioValidator);
 
+    QRegExp rx7( "^[1-8]{1,1}$" );
+    QValidator* ASDUSetValidator = new QRegExpValidator( rx7, this );
+    ui->FirstASDUlineEdit->setInputMask("N");
+    ui->FirstASDUlineEdit->setValidator(ASDUSetValidator);
+    ui->LastASDUlineEdit->setInputMask("N");
+    ui->LastASDUlineEdit->setValidator(ASDUSetValidator);
+    ui->SetlineEdit->setInputMask("N");
+    ui->SetlineEdit->setValidator(ASDUSetValidator);
+
+    connect(ui->buttonOk,SIGNAL(clicked()),this,SLOT(accept()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(abortSlot()));
-    
+    connect(ui->Mode0RadioButton,SIGNAL(clicked()),this,SLOT(ApplyDataSlot()));
+    connect(ui->Mode2RadioButton,SIGNAL(clicked()),this,SLOT(ApplyDataSlot()));
+    connect(ui->Mode3RadioButton,SIGNAL(clicked()),this,SLOT(ApplyDataSlot()));
+    connect(ui->CmpCorrCheckBox,SIGNAL(clicked()),this,SLOT(ApplyDataSlot()));
+    connect(ui->nSek_w3radioButton,SIGNAL(clicked()),this,SLOT(nSek_w3radioButtonChecked()));
+    connect(ui->nSek_3radioButton,SIGNAL(clicked()),this,SLOT(nSek_3radioButtonChecked()));
+    connect(ui->nPrim_w3radioButton,SIGNAL(clicked()),this,SLOT(nPrim_w3radioButtonChecked()));
+    connect(ui->nPrim_3radioButton,SIGNAL(clicked()),this,SLOT(nPrim_3radioButtonChecked()));
+    connect(ui->evtPrim_w3radioButton,SIGNAL(clicked()),this,SLOT(evtPrim_w3radioButtonChecked()));
+    connect(ui->evtPrim_3radioButton,SIGNAL(clicked()),this,SLOT(evtPrim_3radioButtonChecked()));
+    connect(ui->evtSek_w3radioButton,SIGNAL(clicked()),this,SLOT(evtSek_w3radioButtonChecked()));
+    connect(ui->evtSek_3radioButton,SIGNAL(clicked()),this,SLOT(evtSek_3radioButtonChecked()));
+    connect(ui->xPrim_w3radioButton,SIGNAL(clicked()),this,SLOT(xPrim_w3radioButtonChecked()));
+    connect(ui->xPrim_3radioButton,SIGNAL(clicked()),this,SLOT(xPrim_3radioButtonChecked()));
+    connect(ui->xSek_w3radioButton,SIGNAL(clicked()),this,SLOT(xSek_w3radioButtonChecked()));
+    connect(ui->xSek_3radioButton,SIGNAL(clicked()),this,SLOT(xSek_3radioButtonChecked()));
+    connect(ui->S80RadioButton,SIGNAL(clicked()),this,SLOT(S80RadioButtonChecked()));
+    connect(ui->S256RadioButton,SIGNAL(clicked()),this,SLOT(S256RadioButtonChecked()));
+
     m_bRemoteCtrl = false;
 }
+
 
 void ConfDialogBase::SetConfInfoSlot(cConfData *cd )
 {
@@ -91,7 +120,7 @@ void ConfDialogBase::SetConfInfoSlot(cConfData *cd )
 	SetRatioMenu(); // teiler menu einrichten  
 	SetLogMenu(); // logfile menu einrichten
 	SetMessungMenu(); // messung menu einrichten
-	SetnConventMenu(); // nconvent menu einrichten 
+    SetnConventMenu(); // nconvent menu einrichten
 	Actualize();
     }
 }
@@ -308,8 +337,9 @@ void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen,
     m_ConfDataTemp.m_MacDestAdr.MacAdrByte[1]=ui->MacDLineEdit2->text().toUShort(0,16);
     m_ConfDataTemp.m_MacDestAdr.MacAdrByte[0]=ui->MacDLineEdit1->text().toUShort(0,16);
     
-    m_ConfDataTemp.ASDU = ui->ASDUSpinBox->value();
-    m_ConfDataTemp.DataSet = ui->SetSpinBox->value();
+    m_ConfDataTemp.FirstASDU = ui->FirstASDUlineEdit->text().toUShort(0,10);
+    m_ConfDataTemp.LastASDU = ui->LastASDUlineEdit->text().toUShort(0,10);
+    m_ConfDataTemp.DataSet = ui->SetlineEdit->text().toUShort(0,10);
     
     m_ConfDataTemp.m_nPriorityTagged = (ui->TPIDlineEdit->text().toUShort(0,16) << 16);
     m_ConfDataTemp.m_nPriorityTagged +=(ui->UPrioritylineEdit->text().toUShort(0,10) << 13);
@@ -375,9 +405,10 @@ void ConfDialogBase::SetnConventMenu()
     ui->MacDLineEdit2->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[1],2,16).replace(' ','0').upper() );
     ui->MacDLineEdit1->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[0],2,16).replace(' ','0').upper() );
     
-    ui->ASDUSpinBox->setValue(m_ConfDataTemp.ASDU);
-    ui->SetSpinBox->setValue(m_ConfDataTemp.DataSet);
-    
+    ui->FirstASDUlineEdit->setText(QString("%1").arg(m_ConfDataTemp.FirstASDU) );
+    ui->LastASDUlineEdit->setText(QString("%1").arg(m_ConfDataTemp.LastASDU) );
+    ui->SetlineEdit->setText(QString("%1").arg(m_ConfDataTemp.DataSet) );
+
     ui->TPIDlineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 16) & 0xFFFF,4,16).replace(' ','0').upper() );
     ui->UPrioritylineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 13) & 7,1,10));
     ui->CFIlineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 12) & 1,1,10));
@@ -518,6 +549,30 @@ void ConfDialogBase::evtSek_w3radioButtonChecked()
 {
     if (ui->evtSek_w3radioButton->isChecked())
         ui->evtSek_3radioButton->setChecked(false);
+}
+
+
+void ConfDialogBase::S80RadioButtonChecked()
+{
+    if (ui->S80RadioButton->isChecked())
+    {
+        m_ConfDataTemp.FirstASDU = 1;
+        m_ConfDataTemp.LastASDU = 1;
+        SetnConventMenu();
+        ApplyDataSlot();
+    }
+}
+
+
+void ConfDialogBase::S256RadioButtonChecked()
+{
+    if (ui->S256RadioButton->isChecked())
+    {
+        m_ConfDataTemp.FirstASDU = 1;
+        m_ConfDataTemp.LastASDU = 8;
+        SetnConventMenu();
+        ApplyDataSlot();
+    }
 }
 
 
