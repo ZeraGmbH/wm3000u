@@ -210,24 +210,27 @@ void cWM3000U::ActionHandler(int entryAHS)
     static float ph0,ph1;
     static complex SenseVektor, ADCVektor;
       
-    if (entryAHS == EnterSimulationMode) { // wenn fehler aufgetreten und bediener sim. gewählt hat
-	m_ConfData.m_bSimulation = true;
-	emit SendConfDataSignal(&m_ConfData);
-	AHSFifo.clear();
-	if (m_pProgressDialog) 
-	    delete m_pProgressDialog;
-	m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren 
-	
-	AHS = wm3000Idle;
-	return;
+
+    if (entryAHS == EnterSimulationMode)
+    { // wenn fehler aufgetreten und bediener sim. gewählt hat
+        m_ConfData.m_bSimulation = true;
+        emit SendConfDataSignal(&m_ConfData);
+        AHSFifo.clear();
+        if (m_pProgressDialog)
+            delete m_pProgressDialog;
+        m_ActTimer->start(0,DeInstallationDspProgramlistStart); // messung reaktivieren
+
+        AHS = wm3000Idle;
+        return;
     }
     
-    if ( (entryAHS != wm3000Continue) && (entryAHS != wm3000Repeat) ) { // wir sollen was neues starten
-	if (AHS != wm3000Idle) { // sind aber noch nicht fertig
-	 if (AHSFifo.contains(entryAHS) ==0 ) // wir haben dieses event noch nicht in der liste
-		AHSFifo.push_back(entryAHS); // dann merken wir uns was starten wir sollten starten sollten
-	    return; // und sind fertig
-	}
+    if ( (entryAHS != wm3000Continue) && (entryAHS != wm3000Repeat) )
+    { // wir sollen was neues starten
+    if (AHS != wm3000Idle) { // sind aber noch nicht fertig
+     if (AHSFifo.contains(entryAHS) ==0 ) // wir haben dieses event noch nicht in der liste
+        AHSFifo.push_back(entryAHS); // dann merken wir uns was starten wir sollten starten sollten
+        return; // und sind fertig
+    }
 	else // oder wir sind fertig und 
 	    AHS = entryAHS; // wir starten es
     }
@@ -239,6 +242,19 @@ void cWM3000U::ActionHandler(int entryAHS)
         
     switch (AHS)
     {
+
+    case ConfigurationClearDspCmdList:
+    case DeInstallationDspProgramlistStart:
+        DspIFace->DeactivateInterface();
+        AHS++;
+        break; // DeInstallationDspProgramlistStart
+
+    case DeInstallationDspProgramlistFinished:
+        // wir sind so oder so fertig
+        m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren
+        AHS = wm3000Idle;
+        break; // DeInstallationDspProgramlistFinished
+
     case InitializationStart:
 	StopMeasurement();
 	m_binitDone = false; // wir initialisieren !!
@@ -911,7 +927,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 	     AHS++;
 	 }
 	     
-     case ConfigurationTestDspVarList:
+    case ConfigurationTestDspVarList:
 	 if (m_ConfData.m_bSimulation) {
 	    AHS = wm3000Idle;
 	}
