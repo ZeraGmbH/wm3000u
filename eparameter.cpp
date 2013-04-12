@@ -124,6 +124,7 @@ double eParameter::toDouble(bool* ok) {
 	if (isLoadPoint()) return toDouble(ok);
 	if (isError()) return toDouble(ok);
 	if (isAngle()) return toDouble(ok);
+    if (isScaleFactor()) return toDouble(ok);
 	return (s.toDouble(ok)); // im zweifelsfalle für den angeklagten
     }
 }
