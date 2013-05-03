@@ -218,7 +218,6 @@ void cWM3000U::ActionHandler(int entryAHS)
         AHSFifo.clear();
         if (m_pProgressDialog)
             delete m_pProgressDialog;
-        m_ActTimer->start(0,DeInstallationDspProgramlistStart); // messung reaktivieren
 
         AHS = wm3000Idle;
         return;
@@ -242,18 +241,6 @@ void cWM3000U::ActionHandler(int entryAHS)
         
     switch (AHS)
     {
-
-    case ConfigurationClearDspCmdList:
-    case DeInstallationDspProgramlistStart:
-        DspIFace->DeactivateInterface();
-        AHS++;
-        break; // DeInstallationDspProgramlistStart
-
-    case DeInstallationDspProgramlistFinished:
-        // wir sind so oder so fertig
-        m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren
-        AHS = wm3000Idle;
-        break; // DeInstallationDspProgramlistFinished
 
     case InitializationStart:
 	StopMeasurement();
@@ -635,22 +622,22 @@ void cWM3000U::ActionHandler(int entryAHS)
     case ConfigurationSetDspSignalRouting:	    
     case InitializationSetDspSignalRouting:
 	{
-        ulong ethroute[64];
+        ulong ethroute[16];
 	    int i;
 	    if (m_ConfData.m_bSimulation) {
 		AHS = wm3000Idle;
 	    }
 	    else
 	    {
-        for (i = 0; i < 64; i++) ethroute[i] = 0;
+        for (i = 0; i < 16; i++) ethroute[i] = 0;
 		if (m_ConfData.m_nMeasMode == Un_nConvent) // ersetzt kanal 1 daten durch eth. daten
         {
             int asdu;
             int n = m_ConfData.LastASDU - m_ConfData.FirstASDU +1;
             for (i = 0, asdu = m_ConfData.FirstASDU; i < n; i++, asdu++ )
-            ethroute[i << 3] = (((asdu << 4) | m_ConfData.DataSet)) << 16;
+                ethroute[i >> 1] |= ((1 << 8) | (asdu << 4) | m_ConfData.DataSet) << ((1-(i&1))*16);
         }
-		DspIFace->SetSignalRouting(ethroute);
+        DspIFace->SetSignalRouting(ethroute);
 		AHS++;
 	    }
 	    break; // InitializationSetDspSignalRouting
