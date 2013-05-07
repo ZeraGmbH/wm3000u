@@ -668,7 +668,7 @@ void cWM3000SCPIFace::mSetConfEnUPriority(char* s)
 char* cWM3000SCPIFace::mGetConfENAsdu()
 {
     m_ConfDataTarget = m_ConfDataActual;
-    QString s = QString("%1").arg(m_ConfDataActual.ASDU);
+    QString s = QString("%1").arg(m_ConfDataActual.FirstASDU);
     return sAlloc(s);
 }
 
@@ -678,7 +678,7 @@ void cWM3000SCPIFace::mSetConfENAsdu(char* s)
     ushort us;
     if ( GetParameter(&s, us, 1, 8, 10, true) )
     {
-	m_ConfDataTarget.ASDU = us;
+	m_ConfDataTarget.FirstASDU = us;
 //	emit SendConfiguration(&m_ConfData);
     }
 }

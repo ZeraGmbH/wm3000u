@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'en61850monitor.ui'
 **
-** Created: Mo Feb 13 08:25:26 2012
+** Created: Mi Sep 19 07:33:29 2012
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!

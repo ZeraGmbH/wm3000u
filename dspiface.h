@@ -218,7 +218,7 @@ private:
     bool m_biFaceError;
     int m_nP1, m_nP2, m_nP3; // parameter
     ulong m_nuP1;
-    ulong m_lP1[8]; // parameter
+    ulong m_lP1[16]; // parameter
     cETHAdress m_ethadr;
     cDspMeasData *m_pMeasData; 
     int m_nBusyCount;

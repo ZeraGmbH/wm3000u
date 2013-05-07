@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'wmmeasconfigbase.ui'
 **
-** Created: Mo Feb 13 08:25:24 2012
+** Created: Mo Mai 6 13:06:55 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -84,12 +84,12 @@ protected slots:
     virtual void languageChange();
 
 private:
-    eUnit* m_LPUnit[3];
-    eUnit* m_ErrUnit[2];
-    eUnit* m_AngleUnit[6];
-    cFormatInfo m_Format[3];
-    int m_nDisplayMode;
     int m_nLPDisplayMode;
+    int m_nDisplayMode;
+    cFormatInfo m_Format[3];
+    eUnit* m_AngleUnit[6];
+    eUnit* m_ErrUnit[2];
+    eUnit* m_LPUnit[3];
 
     void init();
     virtual void Actualize();

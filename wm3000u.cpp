@@ -619,16 +619,20 @@ void cWM3000U::ActionHandler(int entryAHS)
     case ConfigurationSetDspSignalRouting:	    
     case InitializationSetDspSignalRouting:
 	{
-	    ulong ethroute[8];
+	    ulong ethroute[16];
 	    int i;
 	    if (m_ConfData.m_bSimulation) {
 		AHS = wm3000Idle;
 	    }
 	    else
 	    {
-		for (i = 0; i < 8; i++) ethroute[i] = 0;
+		for ( i = 0; i < 16; i++) ethroute[i] = 0;
 		if (m_ConfData.m_nMeasMode == Un_nConvent) // ersetzt kanal 1 daten durch eth. daten
-		    ethroute[0] = (((m_ConfData.ASDU << 4) | m_ConfData.DataSet)) << 16;  
+		{
+		    int asdu;
+		    int n = m_ConfData.LastASDU - m_ConfData.FirstASDU +1;
+		    for (i = 0, asdu = m_ConfData.FirstASDU; i < n; i++, asdu++) 
+			ethroute[ i >> 1] |= ((1 << 8) | (asdu << 4) | m_ConfData.DataSet) <<  ((1-(i&1))*16);			}
 		DspIFace->SetSignalRouting(ethroute);
 		AHS++;
 	    }
@@ -694,7 +698,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    else
 	    {
 		if ( m_ConfData.m_bStrongEthSynchronisation)
-		    p = m_ConfData.ASDU;
+		    p = m_ConfData.FirstASDU;
 		
 		DspIFace->SetDsp61850EthSynchronisation(p);
 		AHS++;
@@ -1043,7 +1047,8 @@ case ConfigurationTestTMode:
 	else
 	{
 	    if ( (m_ConfDataCopy.m_nMeasMode != m_ConfData.m_nMeasMode)  ||
-		 (m_ConfDataCopy.ASDU != m_ConfData.ASDU) ||
+		 (m_ConfDataCopy.FirstASDU != m_ConfData.FirstASDU) ||
+		 (m_ConfDataCopy.LastASDU != m_ConfData.LastASDU) ||
 		 (m_ConfDataCopy.DataSet != m_ConfData.DataSet) ) 	
 	    {
 		StopMeasurement();
@@ -2430,7 +2435,8 @@ void cWM3000U::DefaultSettings(cConfData& cdata) // alle einstellungen default
     cdata.m_sRangeX = m_ConfData.m_sRangeXVorgabe = m_ConfData.m_sRangeXSoll  = "480V";
     cdata.m_sRangeEVT = m_ConfData.m_sRangeEVTVorgabe = m_ConfData.m_sRangeEVTSoll = "15.0V";
     
-    cdata.ASDU = 1;
+    cdata.FirstASDU = 1;
+    cdata.LastASDU = 1;
     cdata.DataSet = 1;
 
     for(int i = 0; i < 6; i++) // default mac adressen
@@ -3248,8 +3254,8 @@ void cWM3000U::SetDspWMCmdList()
 	
 	// rücksetzen der maxima wie oben per int cmd list mit angabe der subketten nr.
 	DspIFace->addIntListItem( s = "STARTCHAIN(1,1,0x0002)"); // aktiv, prozessnr.(dummy), hauptkette 0 subkette 2 start 
-	DspIFace->addIntListItem( s = "SETVAL(MAX1,0.0)");
-	DspIFace->addIntListItem( s = "SETVAL(MAX2,0.0)");
+	DspIFace->addIntListItem( s = "SETVAL(MAXN,0.0)");
+	DspIFace->addIntListItem( s = "SETVAL(MAXX,0.0)");
 	DspIFace->addIntListItem( s = "SETVAL(MAXRDY,0.0)");
 	//    DspIFace->addIntListItem( s = "DSPINTTRIGGER(0x0,0x0002)"); // gibt interrupt an controler
 	DspIFace->addIntListItem( s = "STOPCHAIN(1,0x0002)"); // ende prozessnr., hauptkette 0 subkette 2

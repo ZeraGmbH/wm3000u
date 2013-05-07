@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'confdialogbase.ui'
 **
-** Created: Mi Feb 15 08:23:13 2012
+** Created: Mo Mai 6 15:16:58 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -506,9 +506,7 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     ConfTabWidget->insertTab( TabPage_3, QString::fromLatin1("") );
 
     TabPage_4 = new QWidget( ConfTabWidget, "TabPage_4" );
-    TabPageLayout_4 = new QHBoxLayout( TabPage_4, 11, 6, "TabPageLayout_4"); 
-
-    layout23 = new QVBoxLayout( 0, 0, 6, "layout23"); 
+    TabPageLayout_4 = new QVBoxLayout( TabPage_4, 11, 6, "TabPageLayout_4"); 
 
     groupBox7 = new QGroupBox( TabPage_4, "groupBox7" );
     groupBox7->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, groupBox7->sizePolicy().hasHeightForWidth() ) );
@@ -681,9 +679,9 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     groupBox7Layout->addLayout( layout78 );
     spacer51 = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     groupBox7Layout->addItem( spacer51 );
-    layout23->addWidget( groupBox7 );
+    TabPageLayout_4->addWidget( groupBox7 );
 
-    layout47 = new QHBoxLayout( 0, 0, 6, "layout47"); 
+    layout33 = new QHBoxLayout( 0, 0, 6, "layout33"); 
 
     groupBox11 = new QGroupBox( TabPage_4, "groupBox11" );
     groupBox11->setColumnLayout(0, Qt::Vertical );
@@ -736,7 +734,9 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     VIDlineEdit->setMaximumSize( QSize( 40, 20 ) );
 
     groupBox11Layout->addWidget( VIDlineEdit, 1, 3 );
-    layout47->addWidget( groupBox11 );
+    spacer45 = new QSpacerItem( 16, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    groupBox11Layout->addItem( spacer45, 2, 1 );
+    layout33->addWidget( groupBox11 );
 
     groupBox12 = new QGroupBox( TabPage_4, "groupBox12" );
     groupBox12->setColumnLayout(0, Qt::Vertical );
@@ -765,7 +765,9 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     APPIDlineEdit->setAlignment( int( QLineEdit::AlignLeft ) );
 
     groupBox12Layout->addWidget( APPIDlineEdit, 1, 1 );
-    layout47->addWidget( groupBox12 );
+    spacer46_2 = new QSpacerItem( 16, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    groupBox12Layout->addItem( spacer46_2, 2, 0 );
+    layout33->addWidget( groupBox12 );
 
     groupBox9 = new QGroupBox( TabPage_4, "groupBox9" );
     groupBox9->setColumnLayout(0, Qt::Vertical );
@@ -774,28 +776,34 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     groupBox9Layout = new QGridLayout( groupBox9->layout() );
     groupBox9Layout->setAlignment( Qt::AlignTop );
 
-    ASDUTextLabel = new QLabel( groupBox9, "ASDUTextLabel" );
+    FirstASDUTextLabel = new QLabel( groupBox9, "FirstASDUTextLabel" );
 
-    groupBox9Layout->addWidget( ASDUTextLabel, 0, 0 );
+    groupBox9Layout->addWidget( FirstASDUTextLabel, 0, 0 );
 
     DatasetTextLabel = new QLabel( groupBox9, "DatasetTextLabel" );
 
-    groupBox9Layout->addWidget( DatasetTextLabel, 1, 0 );
+    groupBox9Layout->addWidget( DatasetTextLabel, 2, 0 );
 
-    ASDUSpinBox = new QSpinBox( groupBox9, "ASDUSpinBox" );
-    ASDUSpinBox->setMaxValue( 8 );
-    ASDUSpinBox->setMinValue( 1 );
+    LastASDUtextLabel = new QLabel( groupBox9, "LastASDUtextLabel" );
 
-    groupBox9Layout->addWidget( ASDUSpinBox, 0, 1 );
+    groupBox9Layout->addWidget( LastASDUtextLabel, 1, 0 );
 
-    SetSpinBox = new QSpinBox( groupBox9, "SetSpinBox" );
-    SetSpinBox->setMaxValue( 8 );
-    SetSpinBox->setMinValue( 1 );
+    LastASDUlineEdit = new QLineEdit( groupBox9, "LastASDUlineEdit" );
+    LastASDUlineEdit->setMaximumSize( QSize( 16, 20 ) );
 
-    groupBox9Layout->addWidget( SetSpinBox, 1, 1 );
-    layout47->addWidget( groupBox9 );
-    layout23->addLayout( layout47 );
-    TabPageLayout_4->addLayout( layout23 );
+    groupBox9Layout->addWidget( LastASDUlineEdit, 1, 1 );
+
+    SetlineEdit = new QLineEdit( groupBox9, "SetlineEdit" );
+    SetlineEdit->setMaximumSize( QSize( 16, 20 ) );
+
+    groupBox9Layout->addWidget( SetlineEdit, 2, 1 );
+
+    FirstASDUlineEdit = new QLineEdit( groupBox9, "FirstASDUlineEdit" );
+    FirstASDUlineEdit->setMaximumSize( QSize( 16, 20 ) );
+
+    groupBox9Layout->addWidget( FirstASDUlineEdit, 0, 1 );
+    layout33->addWidget( groupBox9 );
+    TabPageLayout_4->addLayout( layout33 );
     ConfTabWidget->insertTab( TabPage_4, QString::fromLatin1("") );
 
     LogPage = new QWidget( ConfTabWidget, "LogPage" );
@@ -831,8 +839,6 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     LogPageLayout->addItem( spacer50 );
     ConfTabWidget->insertTab( LogPage, QString::fromLatin1("") );
     ConfDialogBaseLayout->addWidget( ConfTabWidget );
-    spacer45 = new QSpacerItem( 20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    ConfDialogBaseLayout->addItem( spacer45 );
 
     layout19 = new QHBoxLayout( 0, 0, 6, "layout19"); 
     Horizontal_Spacing2 = new QSpacerItem( 254, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -848,7 +854,7 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     layout19->addWidget( buttonCancel );
     ConfDialogBaseLayout->addLayout( layout19 );
     languageChange();
-    resize( QSize(542, 315).expandedTo(minimumSizeHint()) );
+    resize( QSize(489, 290).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
 
     // signals and slots connections
@@ -862,8 +868,8 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     connect( CmpCorrCheckBox, SIGNAL( clicked() ), this, SLOT( ApplyDataSlot() ) );
     connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-    connect( S256RadioButton, SIGNAL( clicked() ), this, SLOT( ApplyDataSlot() ) );
-    connect( S80RadioButton, SIGNAL( clicked() ), this, SLOT( ApplyDataSlot() ) );
+    connect( S256RadioButton, SIGNAL( clicked() ), this, SLOT( S256RadioButtonChecked() ) );
+    connect( S80RadioButton, SIGNAL( clicked() ), this, SLOT( S80RadioButtonChecked() ) );
     connect( evtPrim_3radioButton, SIGNAL( clicked() ), this, SLOT( evtPrim_3radioButtonChecked() ) );
     connect( evtPrim_w3radioButton, SIGNAL( clicked() ), this, SLOT( evtPrim_w3radioButtonChecked() ) );
     connect( evtSek_3radioButton, SIGNAL( clicked() ), this, SLOT( evtSek_3radioButtonChecked() ) );
@@ -872,6 +878,7 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     connect( xPrim_w3radioButton, SIGNAL( clicked() ), this, SLOT( xPrim_w3radioButtonChecked() ) );
     connect( xSek_3radioButton, SIGNAL( clicked() ), this, SLOT( xSek_3radioButtonChecked() ) );
     connect( xSek_w3radioButton, SIGNAL( clicked() ), this, SLOT( xSek_w3radioButtonChecked() ) );
+    connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( abortSlot() ) );
 
     // tab order
     setTabOrder( ConfTabWidget, buttonOk );
@@ -1007,8 +1014,12 @@ void ConfDialogBase::languageChange()
     EthTypelineEdit->setText( tr( "0000" ) );
     APPIDlineEdit->setText( tr( "0000" ) );
     groupBox9->setTitle( tr( "Data set" ) );
-    ASDUTextLabel->setText( tr( "ASDU:" ) );
+    FirstASDUTextLabel->setText( tr( "First ASDU:" ) );
     DatasetTextLabel->setText( tr( "Set:" ) );
+    LastASDUtextLabel->setText( tr( "Last ASDU:" ) );
+    LastASDUlineEdit->setText( tr( "1" ) );
+    SetlineEdit->setText( tr( "1" ) );
+    FirstASDUlineEdit->setText( tr( "1" ) );
     ConfTabWidget->changeTab( TabPage_4, tr( "nConvent" ) );
     LogfileSizeGroupBox->setTitle( tr( "Logfile" ) );
     LogfileSizeTextLabel->setText( trUtf8( "\x47\x72\xc3\xb6\x73\x73\x65" ) );

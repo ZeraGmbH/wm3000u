@@ -6,9 +6,8 @@
 #include <qdatastream.h>
 #include "eparameter.h"
 
-
-eUnit ScaleFactor[AnzScaleFactors] = { eUnit("/3", 0.33333333),
-                                       eUnit("/w3", 0.57735026)};
+eUnit ScaleFactor[AnzScaleFactors] = { eUnit ("/3", 0.33333333),
+				   eUnit ("/w3", 0.57735026)};    
 
 
 eUnit CurrentUnit[AnzCurrentUnits] ={ eUnit("kA", 1.0e3),
@@ -124,6 +123,7 @@ double eParameter::toDouble(bool* ok) {
 	if (isLoadPoint()) return toDouble(ok);
 	if (isError()) return toDouble(ok);
 	if (isAngle()) return toDouble(ok);
+	if (isScaleFactor()) return toDouble(ok);
 	return (s.toDouble(ok)); // im zweifelsfalle für den angeklagten
     }
 }
@@ -132,6 +132,9 @@ double eParameter::toDouble(bool* ok) {
 bool eParameter::isScaleFactor()
 {
     Unit = 0;
-    return Test(ScaleFactor, sizeof(ScaleFactor)/sizeof(eUnit));
+    return Test( ScaleFactor, sizeof(ScaleFactor)/sizeof(eUnit));
 }
+
+
+
 

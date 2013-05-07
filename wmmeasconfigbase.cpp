@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'wmmeasconfigbase.ui'
 **
-** Created: Mo Feb 13 08:30:01 2012
+** Created: Mo Mai 6 13:10:00 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -188,76 +188,7 @@ WMMeasConfigBase::WMMeasConfigBase( QWidget* parent, const char* name, bool moda
  */
 WMMeasConfigBase::~WMMeasConfigBase()
 {
-<<<<<<< HEAD
     // no need to delete child widgets, Qt does it all for us
-=======
-    destroy();
-    delete ui;
-}
-
-void WMMeasConfigBase::init()
-{
-   int i;
-   
-   m_LPUnit[0] = LoadpointUnit + LPProzent;
-   m_LPUnit[1] = VoltageUnit + VoltV;
-   m_LPUnit[2] = VoltageUnit + VoltkV;
-    
-   for (i = 0; i < 3; i++)
-        ui->LPcomboBox->insertItem(m_LPUnit[i]->Name);
-       
-    m_ErrUnit[0] = ErrorUnit + ErrProzent;
-    m_ErrUnit[1] = ErrorUnit + Errppm;
-    // FcomboBox-	>insertItem(ErrorUnit[ErrPromill]->Name);
-    
-    for (i = 0; i < 2; i++)
-        ui->ErrcomboBox->insertItem(m_ErrUnit[i]->Name);
-
-    m_AngleUnit[0] = AngleUnit + Anglegrad;
-    m_AngleUnit[1] = AngleUnit + Anglemin;
-    m_AngleUnit[2] = AngleUnit + Anglecrad;
-    m_AngleUnit[3] = AngleUnit + Anglemrad;
-    m_AngleUnit[4] = AngleUnit + Angleurad;
-    m_AngleUnit[5] = AngleUnit + Anglerad;
-    
-    for (i = 0; i < 6; i++)
-        ui->WcomboBox->insertItem(m_AngleUnit[i]->Name);
-    
-    m_nDisplayMode = IEC; // wmglobal
-    m_nLPDisplayMode = totalRms;
-}
-
-
-void WMMeasConfigBase::ReceiveFormatInfoSlot(int m, int m2, int n, cFormatInfo* fi )
-{
-    int i;
-    for(i = 0; i < n; i++, fi++)
-	m_Format[i] = *fi;
-    
-    m_nDisplayMode = m;
-    m_nLPDisplayMode = m2;
-    
-    ui->LPspinBoxFW->setValue(m_Format[0].FieldWidth);
-    ui->LPspinBoxRS->setValue(m_Format[0].Resolution);
-    ui->LPcomboBox->setCurrentText(m_Format[0].UnitInfo.Name);
-		
-    ui->ErrspinBoxFW->setValue(m_Format[1].FieldWidth);
-    ui->ErrspinBoxRS->setValue(m_Format[1].Resolution);
-    ui->ErrcomboBox->setCurrentText(m_Format[1].UnitInfo.Name);
-    
-    ui->WspinBoxFW->setValue(m_Format[2].FieldWidth);
-    ui->WspinBoxRS->setValue(m_Format[2].Resolution);
-    ui->WcomboBox->setCurrentText(m_Format[2].UnitInfo.Name);
- 
-    Actualize();
-}
-
-
-
-void WMMeasConfigBase::LPComboActivatedSlot(int index)
-{
-    m_Format[0].UnitInfo = *m_LPUnit[index];
->>>>>>> 5a91ce3... Contextmenu of measurement values extended with mrad.
 }
 
 /*

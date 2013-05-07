@@ -34,7 +34,7 @@ public:
     float m_fSFreq; // signal frequenzwert float
     int m_nSRate; // abtastrate 80 bzw 256 samples /periode 
     int m_nTMode; // der aktuelle testmode normal 0 !!! wird nicht gespeichert !!!!!!
-    int ASDU; // logical node (61850-9-2)
+    int FirstASDU, LastASDU; // logical node (61850-9-2)
     int DataSet; // data set in ASDU
     int Language;
     long m_nLogFileMax; // max. logfile grösse

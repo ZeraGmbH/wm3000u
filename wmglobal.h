@@ -45,11 +45,11 @@
 // V1.12 06.09.2012 bei der istwertabfrage über scpi lastpunkte auf kanal x umgestellt
 // V1.13 17.09.2012 kontextmenu für istwertanzeige um mrad erweitert, bei start des programms immer bereichautomatik ein,
 //                  bei ergebnisdatei, eigenfehlerdatei solte open anstatt save beim öffnen verwendet werden, nicht machbar unter qt3 wenn man default selection verwenden möchte.
-// V1.14 20.09.2012 in eparameter scalefactors eingeführt sonst fehler wenn keine einheit und /3 oder /w3 button
+// v1.14 19.09.2012 in eparameter falls keine einheit angegeben unit gesetzt auf curra (1/1)
+// v1.15 06.05.2013 neues dsp programm version v3.09, mit neuem ethernet decoder für 256 samples, es war ebenfalls ein neuer dsp-server erforderlich(v1.09) . im nConvent menu wurde ein zusätzliches feld für die asdu eingebaut. es gibt jetzt die beiden felder first asdu und last adsu. eine apdu kann jetzt mehrere samples liefern was bei 256 samples standardmäßig genutzt wird. in eparamter scalefactors eingeführt weilsonst fehler wenn /3 oder /w3 und keine einheit vorhanden 
 
 
-#define WMVersion "V1.14"
-
+#define WMVersion "V1.15"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"
@@ -159,7 +159,7 @@ public:
     QString m_srng1; // bereich kanal x
     tsmode m_nTMode; // test mode (was zu testen bzw. justieren ist)
     MeasModes m_nmMode; // in welchem messmodus
-    int m_nnS; // samples pro periode
+    int m_nnS; // samples pro periodewm3000
     int m_nIgnore; // anzahl messungen zum einschwingen
     int m_nnMeas; // anzahl messungen zur messwertbestimmung
 };

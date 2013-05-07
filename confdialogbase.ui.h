@@ -71,13 +71,22 @@ void ConfDialogBase::init()
     RatioPrimEVTLineEdit->setValidator(RatioValidator);
     RatioSekEVTLineEdit->setValidator(RatioValidator);
     
+    QRegExp rx7(  "^[1-8]{1,1}$" );
+    QValidator* ASDUSetValidator = new QRegExpValidator( rx7, this );
+    FirstASDUlineEdit->setInputMask("N");
+    FirstASDUlineEdit->setValidator(ASDUSetValidator);
+    LastASDUlineEdit->setInputMask("N");
+    LastASDUlineEdit->setValidator(ASDUSetValidator);
+    SetlineEdit->setInputMask("N");
+    SetlineEdit->setValidator(ASDUSetValidator);
+    
     m_bRemoteCtrl = false;
 }
 
 void ConfDialogBase::SetConfInfoSlot(cConfData *cd )
 {
     if ( true /*! isVisible()*/ ) {
-	m_ConfData=*cd;
+	m_ConfDataTemp = m_ConfData = *cd;
 	SetModeMenu(); // modus menu einrichten 
 	SetCmpMenu(); // berechnung menu einrichten
 	SetSyncMenu(); // sync menu einrichten
@@ -95,16 +104,16 @@ void ConfDialogBase::SetConfListSlot( QStringList & NPItems, QStringList & NSIte
     if (! isVisible() ) {
 	RatioNPrimComboBox->clear();
 	RatioNPrimComboBox->insertStringList(NPItems); // normalwandler primär stufen 
-	RatioNPrimComboBox->setCurrentItem(NPItems.findIndex(m_ConfData.m_NPrimary));
+	RatioNPrimComboBox->setCurrentItem(NPItems.findIndex(m_ConfDataTemp.m_NPrimary));
 	RatioNSekComboBox->clear();
 	RatioNSekComboBox->insertStringList(NSItems); // normalwandler sekundär stufen
-	RatioNSekComboBox->setCurrentItem(NSItems.findIndex(m_ConfData.m_NSecondary));    	}
+	RatioNSekComboBox->setCurrentItem(NSItems.findIndex(m_ConfDataTemp.m_NSecondary));    	}
 }
 
 
 void ConfDialogBase::Actualize()
 {
-   switch (m_ConfData.m_nMeasMode) {
+   switch (m_ConfDataTemp.m_nMeasMode) {
 	case Un_UxAbs:
 	case Un_nConvent:
 	    XTRatioGroupBox->setEnabled(true);
@@ -151,15 +160,24 @@ void ConfDialogBase::accept()
     else
     {
 	ApplyDataSlot();
+	m_ConfData = m_ConfDataTemp;
 	emit SendConfDataSignal(&m_ConfData);
 	close();
     }
 }
 
 
+void ConfDialogBase::abortSlot()
+{
+    m_ConfDataTemp = m_ConfData;
+    SetConfInfoSlot(&m_ConfData);
+    close();
+}
+
+
 void ConfDialogBase::SetModeMenu()
 {
-    switch (m_ConfData.m_nMeasMode) {
+    switch (m_ConfDataTemp.m_nMeasMode) {
 	case Un_UxAbs:
 	    Mode0RadioButton->setChecked(true);
 	    break;
@@ -175,15 +193,15 @@ void ConfDialogBase::SetModeMenu()
 
 void ConfDialogBase::SetCmpMenu()
 {
-    CmpKorrLineEdit1->setText(QString( "%1" ).arg(m_ConfData.m_fxPhaseShift,8,'f',4));
-    CmpKorrLineEdit2->setText(QString( "%1" ).arg(m_ConfData.m_fxTimeShift,5,'f',3));
-    CmpCorrCheckBox->setChecked(m_ConfData.m_bOECorrection);
+    CmpKorrLineEdit1->setText(QString( "%1" ).arg(m_ConfDataTemp.m_fxPhaseShift,8,'f',4));
+    CmpKorrLineEdit2->setText(QString( "%1" ).arg(m_ConfDataTemp.m_fxTimeShift,5,'f',3));
+    CmpCorrCheckBox->setChecked(m_ConfDataTemp.m_bOECorrection);
 }
 
 
 void ConfDialogBase::SetSyncMenu()
 {
-    switch (m_ConfData.m_nSyncSource) {
+    switch (m_ConfDataTemp.m_nSyncSource) {
 	case Extern:
 	    SyncRadioButton1->setChecked(true);
 	    break;
@@ -192,151 +210,152 @@ void ConfDialogBase::SetSyncMenu()
 	    break;
 	}
     
-    TSyncSpinBox->setValue(m_ConfData.m_nTSync);
-    SSynccheckBox->setChecked(m_ConfData.m_bStrongEthSynchronisation);
+    TSyncSpinBox->setValue(m_ConfDataTemp.m_nTSync);
+    SSynccheckBox->setChecked(m_ConfDataTemp.m_bStrongEthSynchronisation);
 }
 
 
 void ConfDialogBase::SetRatioMenu()
 {
     // alle edit felder  und radiobuttons vorbesetzen
-    RatioPrimNLineEdit->setText(baseUnitText(m_ConfData.m_NPrimary));
-    RatioSekNLineEdit->setText(baseUnitText(m_ConfData.m_NSecondary));
-    nPrim_3radioButton->setChecked(is_3(m_ConfData.m_NPrimary));
-    nPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_NPrimary));
-    nSek_3radioButton->setChecked(is_3(m_ConfData.m_NSecondary));
-    nSek_w3radioButton->setChecked(is_w3(m_ConfData.m_NSecondary));
+    RatioPrimNLineEdit->setText(baseUnitText(m_ConfDataTemp.m_NPrimary));
+    RatioSekNLineEdit->setText(baseUnitText(m_ConfDataTemp.m_NSecondary));
+    nPrim_3radioButton->setChecked(is_3(m_ConfDataTemp.m_NPrimary));
+    nPrim_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_NPrimary));
+    nSek_3radioButton->setChecked(is_3(m_ConfDataTemp.m_NSecondary));
+    nSek_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_NSecondary));
     
     
-    RatioPrimXLineEdit->setText(baseUnitText(m_ConfData.m_XPrimary));
-    RatioSekXLineEdit->setText(baseUnitText(m_ConfData.m_XSecondary));
-    xPrim_3radioButton->setChecked(is_3(m_ConfData.m_XPrimary));
-    xPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_XPrimary));
-    xSek_3radioButton->setChecked(is_3(m_ConfData.m_XSecondary));
-    xSek_w3radioButton->setChecked(is_w3(m_ConfData.m_XSecondary));
+    RatioPrimXLineEdit->setText(baseUnitText(m_ConfDataTemp.m_XPrimary));
+    RatioSekXLineEdit->setText(baseUnitText(m_ConfDataTemp.m_XSecondary));
+    xPrim_3radioButton->setChecked(is_3(m_ConfDataTemp.m_XPrimary));
+    xPrim_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_XPrimary));
+    xSek_3radioButton->setChecked(is_3(m_ConfDataTemp.m_XSecondary));
+    xSek_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_XSecondary));
     
     
-    RatioPrimEVTLineEdit->setText(baseUnitText(m_ConfData.m_EVTPrimary));
-    RatioSekEVTLineEdit->setText(baseUnitText(m_ConfData.m_EVTSecondary));
-    evtPrim_3radioButton->setChecked(is_3(m_ConfData.m_EVTPrimary));
-    evtPrim_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTPrimary));
-    evtSek_3radioButton->setChecked(is_3(m_ConfData.m_EVTSecondary));
-    evtSek_w3radioButton->setChecked(is_w3(m_ConfData.m_EVTSecondary));
+    RatioPrimEVTLineEdit->setText(baseUnitText(m_ConfDataTemp.m_EVTPrimary));
+    RatioSekEVTLineEdit->setText(baseUnitText(m_ConfDataTemp.m_EVTSecondary));
+    evtPrim_3radioButton->setChecked(is_3(m_ConfDataTemp.m_EVTPrimary));
+    evtPrim_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_EVTPrimary));
+    evtSek_3radioButton->setChecked(is_3(m_ConfDataTemp.m_EVTSecondary));
+    evtSek_w3radioButton->setChecked(is_w3(m_ConfDataTemp.m_EVTSecondary));
 }
 
 
 
 void ConfDialogBase::SetLogMenu()
 {
-   LogfileSizeSpinbox->setValue(m_ConfData.m_nLogFileMax >>16);
+   LogfileSizeSpinbox->setValue(m_ConfDataTemp.m_nLogFileMax >>16);
 }
 
 
 void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen, die menus aktualisiert
 {
-    switch (m_ConfData.m_nMeasMode) {
+    switch (m_ConfDataTemp.m_nMeasMode) {
 	case Un_UxAbs:
 	case Un_nConvent:
-	    m_ConfData.m_XPrimary = genRatioText( RatioPrimXLineEdit->text(), xPrim_3radioButton, xPrim_w3radioButton);
-	    m_ConfData.m_XSecondary = genRatioText( RatioSekXLineEdit->text(), xSek_3radioButton, xSek_w3radioButton);
+	    m_ConfDataTemp.m_XPrimary = genRatioText( RatioPrimXLineEdit->text(), xPrim_3radioButton, xPrim_w3radioButton);
+	    m_ConfDataTemp.m_XSecondary = genRatioText( RatioSekXLineEdit->text(), xSek_3radioButton, xSek_w3radioButton);
 	    break;
 	case Un_EVT:
-	    m_ConfData.m_EVTPrimary = genRatioText( RatioPrimEVTLineEdit->text(), evtPrim_3radioButton, evtPrim_w3radioButton);
-	    m_ConfData.m_EVTSecondary = genRatioText( RatioSekEVTLineEdit->text(), evtSek_3radioButton, evtSek_w3radioButton);
+	    m_ConfDataTemp.m_EVTPrimary = genRatioText( RatioPrimEVTLineEdit->text(), evtPrim_3radioButton, evtPrim_w3radioButton);
+	    m_ConfDataTemp.m_EVTSecondary = genRatioText( RatioSekEVTLineEdit->text(), evtSek_3radioButton, evtSek_w3radioButton);
 	    break;
 	}
  
-    if (Mode0RadioButton->isChecked()) m_ConfData.m_nMeasMode=Un_UxAbs;
-    if (Mode2RadioButton->isChecked()) m_ConfData.m_nMeasMode=Un_EVT;
-    if (Mode3RadioButton->isChecked()) m_ConfData.m_nMeasMode=Un_nConvent;
+    if (Mode0RadioButton->isChecked()) m_ConfDataTemp.m_nMeasMode=Un_UxAbs;
+    if (Mode2RadioButton->isChecked()) m_ConfDataTemp.m_nMeasMode=Un_EVT;
+    if (Mode3RadioButton->isChecked()) m_ConfDataTemp.m_nMeasMode=Un_nConvent;
     
     // ModeMenu gescannt
     
-    m_ConfData.m_fxPhaseShift=(CmpKorrLineEdit1->text()).toDouble();
-    m_ConfData.m_fxTimeShift=(CmpKorrLineEdit2->text()).toDouble();
-    m_ConfData.m_bOECorrection=CmpCorrCheckBox->isChecked();
+    m_ConfDataTemp.m_fxPhaseShift=(CmpKorrLineEdit1->text()).toDouble();
+    m_ConfDataTemp.m_fxTimeShift=(CmpKorrLineEdit2->text()).toDouble();
+    m_ConfDataTemp.m_bOECorrection=CmpCorrCheckBox->isChecked();
     // CmpMenu gescannt
     
-    if (SyncRadioButton1->isChecked()) m_ConfData.m_nSyncSource=Extern;
-    if (SyncRadioButton2->isChecked()) m_ConfData.m_nSyncSource=Intern;
-    m_ConfData.m_nTSync=TSyncSpinBox->value();
-    m_ConfData.m_bStrongEthSynchronisation=SSynccheckBox->isChecked();
+    if (SyncRadioButton1->isChecked()) m_ConfDataTemp.m_nSyncSource=Extern;
+    if (SyncRadioButton2->isChecked()) m_ConfDataTemp.m_nSyncSource=Intern;
+    m_ConfDataTemp.m_nTSync=TSyncSpinBox->value();
+    m_ConfDataTemp.m_bStrongEthSynchronisation=SSynccheckBox->isChecked();
     // SyncMenu gescannt
     
-    m_ConfData.m_nLogFileMax=(LogfileSizeSpinbox->value())<<16;
+    m_ConfDataTemp.m_nLogFileMax=(LogfileSizeSpinbox->value())<<16;
     // LogMenu gescannt
     
      if (RatioNPrimComboBox->count()==0)   // es existiert keine eigenfehlertabelle, bzw. korrektur aus
     {
-	 m_ConfData.m_NPrimary = genRatioText( RatioPrimNLineEdit->text(), nPrim_3radioButton, nPrim_w3radioButton);
-	 m_ConfData.m_NSecondary = genRatioText( RatioSekNLineEdit->text(), nSek_3radioButton, nSek_w3radioButton);
+	 m_ConfDataTemp.m_NPrimary = genRatioText( RatioPrimNLineEdit->text(), nPrim_3radioButton, nPrim_w3radioButton);
+	 m_ConfDataTemp.m_NSecondary = genRatioText( RatioSekNLineEdit->text(), nSek_3radioButton, nSek_w3radioButton);
     }
     else
     {	
-	m_ConfData.m_NPrimary = RatioNPrimComboBox->currentText();
-	m_ConfData.m_NSecondary = RatioNSekComboBox->currentText();
+	m_ConfDataTemp.m_NPrimary = RatioNPrimComboBox->currentText();
+	m_ConfDataTemp.m_NSecondary = RatioNSekComboBox->currentText();
     }
     
-    m_ConfData.m_MacSourceAdr.MacAdrByte[5]=MacSLineEdit6->text().toUShort(0,16);
-    m_ConfData.m_MacSourceAdr.MacAdrByte[4]=MacSLineEdit5->text().toUShort(0,16);
-    m_ConfData.m_MacSourceAdr.MacAdrByte[3]=MacSLineEdit4->text().toUShort(0,16);
-    m_ConfData.m_MacSourceAdr.MacAdrByte[2]=MacSLineEdit3->text().toUShort(0,16);
-    m_ConfData.m_MacSourceAdr.MacAdrByte[1]=MacSLineEdit2->text().toUShort(0,16);
-    m_ConfData.m_MacSourceAdr.MacAdrByte[0]=MacSLineEdit1->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[5]=MacSLineEdit6->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[4]=MacSLineEdit5->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[3]=MacSLineEdit4->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[2]=MacSLineEdit3->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[1]=MacSLineEdit2->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[0]=MacSLineEdit1->text().toUShort(0,16);
     
-    m_ConfData.m_MacDestAdr.MacAdrByte[5]=MacDLineEdit6->text().toUShort(0,16);
-    m_ConfData.m_MacDestAdr.MacAdrByte[4]=MacDLineEdit5->text().toUShort(0,16);
-    m_ConfData.m_MacDestAdr.MacAdrByte[3]=MacDLineEdit4->text().toUShort(0,16);
-    m_ConfData.m_MacDestAdr.MacAdrByte[2]=MacDLineEdit3->text().toUShort(0,16);
-    m_ConfData.m_MacDestAdr.MacAdrByte[1]=MacDLineEdit2->text().toUShort(0,16);
-    m_ConfData.m_MacDestAdr.MacAdrByte[0]=MacDLineEdit1->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[5]=MacDLineEdit6->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[4]=MacDLineEdit5->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[3]=MacDLineEdit4->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[2]=MacDLineEdit3->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[1]=MacDLineEdit2->text().toUShort(0,16);
+    m_ConfDataTemp.m_MacDestAdr.MacAdrByte[0]=MacDLineEdit1->text().toUShort(0,16);
     
-    m_ConfData.ASDU = ASDUSpinBox->value();
-    m_ConfData.DataSet = SetSpinBox->value();
+    m_ConfDataTemp.FirstASDU = FirstASDUlineEdit->text().toUShort(0,10);
+    m_ConfDataTemp.LastASDU = LastASDUlineEdit->text().toUShort(0,10);
+    m_ConfDataTemp.DataSet = SetlineEdit->text().toUShort(0,10);
     
-    m_ConfData.m_nPriorityTagged = (TPIDlineEdit->text().toUShort(0,16) << 16);
-    m_ConfData.m_nPriorityTagged +=(UPrioritylineEdit->text().toUShort(0,10) << 13);
-    m_ConfData.m_nPriorityTagged +=(CFIlineEdit->text().toUShort(0,10) << 12);
-    m_ConfData.m_nPriorityTagged +=(VIDlineEdit->text().toUShort(0,16));
+    m_ConfDataTemp.m_nPriorityTagged = (TPIDlineEdit->text().toUShort(0,16) << 16);
+    m_ConfDataTemp.m_nPriorityTagged +=(UPrioritylineEdit->text().toUShort(0,10) << 13);
+    m_ConfDataTemp.m_nPriorityTagged +=(CFIlineEdit->text().toUShort(0,10) << 12);
+    m_ConfDataTemp.m_nPriorityTagged +=(VIDlineEdit->text().toUShort(0,16));
     
-    m_ConfData.m_nEthTypeHeader = (EthTypelineEdit->text().toUShort(0,16) << 16);
-    m_ConfData.m_nEthTypeHeader += APPIDlineEdit->text().toUShort(0,16);
+    m_ConfDataTemp.m_nEthTypeHeader = (EthTypelineEdit->text().toUShort(0,16) << 16);
+    m_ConfDataTemp.m_nEthTypeHeader += APPIDlineEdit->text().toUShort(0,16);
     
     // nConventMenu gescannt
     
-    if (F16RadioButton->isChecked()) m_ConfData.m_nSFreq=F16;
-    if (F50RadioButton->isChecked()) m_ConfData.m_nSFreq=F50;
-    if (F60RadioButton->isChecked()) m_ConfData.m_nSFreq=F60;
+    if (F16RadioButton->isChecked()) m_ConfDataTemp.m_nSFreq=F16;
+    if (F50RadioButton->isChecked()) m_ConfDataTemp.m_nSFreq=F50;
+    if (F60RadioButton->isChecked()) m_ConfDataTemp.m_nSFreq=F60;
     
     float f;
-    switch (m_ConfData.m_nSFreq) {  // wir setzen den realen frequenzwert
+    switch (m_ConfDataTemp.m_nSFreq) {  // wir setzen den realen frequenzwert
       case F16: f = 50.0/3;break;
       case F50: f = 50.0;break;
       case F60: f = 60.0;
       }
     
-    m_ConfData.m_fSFreq = f;
+    m_ConfDataTemp.m_fSFreq = f;
     
-    m_ConfData.m_nMeasPeriod=CmpIntervallSpinBox->value();
+    m_ConfDataTemp.m_nMeasPeriod=CmpIntervallSpinBox->value();
     
     if (S80RadioButton->isChecked())
     {
-	m_ConfData.m_nSRate=S80;
+	m_ConfDataTemp.m_nSRate=S80;
 	CmpIntervallSpinBox->setMaxValue(40);
     }
 	    
     if (S256RadioButton->isChecked())
     {
-	m_ConfData.m_nSRate=S256;
+	m_ConfDataTemp.m_nSRate=S256;
 	CmpIntervallSpinBox->setMaxValue(14);
-	if (m_ConfData.m_nMeasPeriod > 14) 
+	if (m_ConfDataTemp.m_nMeasPeriod > 14) 
 	{
-	    m_ConfData.m_nMeasPeriod = 14;
+	    m_ConfDataTemp.m_nMeasPeriod = 14;
 	    CmpIntervallSpinBox->setValue(14);
 	}
     }
     
-    m_ConfData.m_nIntegrationTime=TIntegrationSpinBox->value();
+    m_ConfDataTemp.m_nIntegrationTime=TIntegrationSpinBox->value();
     //  MessungMenu gescannt
     
     Actualize();
@@ -344,37 +363,38 @@ void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen,
 
 void ConfDialogBase::SetnConventMenu()
 {
-    MacSLineEdit6->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[5],2,16).replace(' ','0').upper() );
-    MacSLineEdit5->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[4],2,16).replace(' ','0').upper() );
-    MacSLineEdit4->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[3],2,16).replace(' ','0').upper());
-    MacSLineEdit3->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[2],2,16).replace(' ','0').upper() );
-    MacSLineEdit2->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[1],2,16).replace(' ','0').upper() );
-    MacSLineEdit1->setText( QString("%1").arg(m_ConfData.m_MacSourceAdr.MacAdrByte[0],2,16).replace(' ','0').upper() );
+    MacSLineEdit6->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[5],2,16).replace(' ','0').upper() );
+    MacSLineEdit5->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[4],2,16).replace(' ','0').upper() );
+    MacSLineEdit4->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[3],2,16).replace(' ','0').upper());
+    MacSLineEdit3->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[2],2,16).replace(' ','0').upper() );
+    MacSLineEdit2->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[1],2,16).replace(' ','0').upper() );
+    MacSLineEdit1->setText( QString("%1").arg(m_ConfDataTemp.m_MacSourceAdr.MacAdrByte[0],2,16).replace(' ','0').upper() );
     
-    MacDLineEdit6->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[5],2,16).replace(' ','0').upper() );
-    MacDLineEdit5->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[4],2,16).replace(' ','0').upper() );
-    MacDLineEdit4->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[3],2,16).replace(' ','0').upper() );
-    MacDLineEdit3->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[2],2,16).replace(' ','0').upper() );
-    MacDLineEdit2->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[1],2,16).replace(' ','0').upper() );
-    MacDLineEdit1->setText( QString("%1").arg(m_ConfData.m_MacDestAdr.MacAdrByte[0],2,16).replace(' ','0').upper() );
+    MacDLineEdit6->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[5],2,16).replace(' ','0').upper() );
+    MacDLineEdit5->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[4],2,16).replace(' ','0').upper() );
+    MacDLineEdit4->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[3],2,16).replace(' ','0').upper() );
+    MacDLineEdit3->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[2],2,16).replace(' ','0').upper() );
+    MacDLineEdit2->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[1],2,16).replace(' ','0').upper() );
+    MacDLineEdit1->setText( QString("%1").arg(m_ConfDataTemp.m_MacDestAdr.MacAdrByte[0],2,16).replace(' ','0').upper() );
     
-    ASDUSpinBox->setValue(m_ConfData.ASDU);
-    SetSpinBox->setValue(m_ConfData.DataSet);
+    FirstASDUlineEdit->setText(QString("%1").arg(m_ConfDataTemp.FirstASDU));
+    LastASDUlineEdit->setText(QString("%1").arg(m_ConfDataTemp.LastASDU));
+    SetlineEdit->setText(QString("%1").arg(m_ConfDataTemp.DataSet));
     
-    TPIDlineEdit->setText(QString("%1").arg((m_ConfData.m_nPriorityTagged >> 16) & 0xFFFF,4,16).replace(' ','0').upper() );
-    UPrioritylineEdit->setText(QString("%1").arg((m_ConfData.m_nPriorityTagged >> 13) & 7,1,10));
-    CFIlineEdit->setText(QString("%1").arg((m_ConfData.m_nPriorityTagged >> 12) & 1,1,10));
-    VIDlineEdit->setText(QString("%1").arg(m_ConfData.m_nPriorityTagged & 0xFFF,3,16).replace(' ','0').upper() );
+    TPIDlineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 16) & 0xFFFF,4,16).replace(' ','0').upper() );
+    UPrioritylineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 13) & 7,1,10));
+    CFIlineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nPriorityTagged >> 12) & 1,1,10));
+    VIDlineEdit->setText(QString("%1").arg(m_ConfDataTemp.m_nPriorityTagged & 0xFFF,3,16).replace(' ','0').upper() );
     
-    EthTypelineEdit->setText(QString("%1").arg((m_ConfData.m_nEthTypeHeader >> 16) & 0xFFFF,4,16).replace(' ','0').upper() );
-    APPIDlineEdit->setText(QString("%1").arg(m_ConfData.m_nEthTypeHeader & 0xFFFF,4,16).replace(' ','0').upper() );
+    EthTypelineEdit->setText(QString("%1").arg((m_ConfDataTemp.m_nEthTypeHeader >> 16) & 0xFFFF,4,16).replace(' ','0').upper() );
+    APPIDlineEdit->setText(QString("%1").arg(m_ConfDataTemp.m_nEthTypeHeader & 0xFFFF,4,16).replace(' ','0').upper() );
     
 }
 
 
 void ConfDialogBase::SetMessungMenu()
 {
-    switch (m_ConfData.m_nSFreq) {
+    switch (m_ConfDataTemp.m_nSFreq) {
     case F16:
 	F16RadioButton->setChecked(true);
 	break;
@@ -386,7 +406,7 @@ void ConfDialogBase::SetMessungMenu()
 	break;
     }
     
-    switch (m_ConfData.m_nSRate) {
+    switch (m_ConfDataTemp.m_nSRate) {
     case S80:
 	S80RadioButton->setChecked(true);
 	CmpIntervallSpinBox->setMaxValue(40);
@@ -397,8 +417,8 @@ void ConfDialogBase::SetMessungMenu()
 	break;
     }
     
-    CmpIntervallSpinBox->setValue(m_ConfData.m_nMeasPeriod);
-    TIntegrationSpinBox->setValue(m_ConfData.m_nIntegrationTime);
+    CmpIntervallSpinBox->setValue(m_ConfDataTemp.m_nMeasPeriod);
+    TIntegrationSpinBox->setValue(m_ConfDataTemp.m_nIntegrationTime);
 }
 
 
@@ -528,3 +548,27 @@ const QString& ConfDialogBase::genRatioText(QString s, QRadioButton *qrb_3, QRad
     return m_sText;
 }
 
+
+
+void ConfDialogBase::S80RadioButtonChecked()
+{
+    if (S80RadioButton->isChecked())
+    {
+	m_ConfDataTemp.FirstASDU = 1;
+	m_ConfDataTemp.LastASDU = 1;
+	SetnConventMenu();
+	ApplyDataSlot();
+    }
+}
+
+
+void ConfDialogBase::S256RadioButtonChecked()
+{
+    if (S256RadioButton->isChecked())
+    {
+	m_ConfDataTemp.FirstASDU = 1;
+	m_ConfDataTemp.LastASDU = 8;
+	SetnConventMenu();
+	ApplyDataSlot();
+    }
+}

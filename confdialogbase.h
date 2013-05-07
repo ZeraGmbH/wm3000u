@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'confdialogbase.ui'
 **
-** Created: Mi Feb 15 08:22:05 2012
+** Created: Mo Mai 6 15:16:48 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -149,10 +149,12 @@ public:
     QLineEdit* EthTypelineEdit;
     QLineEdit* APPIDlineEdit;
     QGroupBox* groupBox9;
-    QLabel* ASDUTextLabel;
+    QLabel* FirstASDUTextLabel;
     QLabel* DatasetTextLabel;
-    QSpinBox* ASDUSpinBox;
-    QSpinBox* SetSpinBox;
+    QLabel* LastASDUtextLabel;
+    QLineEdit* LastASDUlineEdit;
+    QLineEdit* SetlineEdit;
+    QLineEdit* FirstASDUlineEdit;
     QWidget* LogPage;
     QGroupBox* LogfileSizeGroupBox;
     QLabel* LogfileSizeTextLabel;
@@ -170,6 +172,7 @@ public slots:
     virtual void accept();
     virtual void SetnConventMenu();
     virtual void RemoteCtrlInfoSlot( bool remote );
+    virtual void S256RadioButtonChecked();
 
 signals:
     void SendConfDataSignal(cConfData*);
@@ -183,7 +186,6 @@ protected:
     virtual void SetMessungMenu();
 
     QVBoxLayout* ConfDialogBaseLayout;
-    QSpacerItem* spacer45;
     QVBoxLayout* Widget9Layout;
     QSpacerItem* spacer13_3;
     QHBoxLayout* layout46;
@@ -222,8 +224,7 @@ protected:
     QSpacerItem* spacer22;
     QSpacerItem* spacer21;
     QGridLayout* XTRatioGroupBoxLayout;
-    QHBoxLayout* TabPageLayout_4;
-    QVBoxLayout* layout23;
+    QVBoxLayout* TabPageLayout_4;
     QHBoxLayout* groupBox7Layout;
     QSpacerItem* spacer51;
     QVBoxLayout* layout69;
@@ -232,9 +233,11 @@ protected:
     QSpacerItem* spacer47;
     QHBoxLayout* layout66;
     QSpacerItem* spacer46;
-    QHBoxLayout* layout47;
+    QHBoxLayout* layout33;
     QGridLayout* groupBox11Layout;
+    QSpacerItem* spacer45;
     QGridLayout* groupBox12Layout;
+    QSpacerItem* spacer46_2;
     QGridLayout* groupBox9Layout;
     QVBoxLayout* LogPageLayout;
     QSpacerItem* spacer50;
@@ -251,6 +254,7 @@ private:
     cConfData m_ConfData;
     bool m_bRemoteCtrl;
     QString m_sText;
+    cConfData m_ConfDataTemp;
 
     void init();
     void Actualize();
@@ -258,6 +262,7 @@ private:
     virtual const QString & genRatioText( QString s, QRadioButton * qrb_3, QRadioButton * qrb_w3 );
 
 private slots:
+    virtual void abortSlot();
     void ApplyDataSlot();
     virtual void nPrim_3radioButtonChecked();
     virtual void nPrim_w3radioButtonChecked();
@@ -271,6 +276,7 @@ private slots:
     virtual void evtPrim_w3radioButtonChecked();
     virtual void evtSek_3radioButtonChecked();
     virtual void evtSek_w3radioButtonChecked();
+    virtual void S80RadioButtonChecked();
 
 };
 
