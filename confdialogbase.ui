@@ -2305,6 +2305,12 @@
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
                                         </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
                                         <property name="maximumSize">
                                             <size>
                                                 <width>40</width>
@@ -2321,6 +2327,12 @@
                                     <widget class="QLineEdit" row="1" column="3">
                                         <property name="name">
                                             <cstring>VIDlineEdit</cstring>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>30</width>
+                                                <height>20</height>
+                                            </size>
                                         </property>
                                         <property name="maximumSize">
                                             <size>
@@ -2385,6 +2397,12 @@
                                         <property name="enabled">
                                             <bool>false</bool>
                                         </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
                                         <property name="maximumSize">
                                             <size>
                                                 <width>40</width>
@@ -2401,6 +2419,12 @@
                                     <widget class="QLineEdit" row="1" column="1">
                                         <property name="name">
                                             <cstring>APPIDlineEdit</cstring>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
                                         </property>
                                         <property name="maximumSize">
                                             <size>

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'confdialogbase.ui'
 **
-** Created: Mo Mai 6 15:16:48 2013
+** Created: Mo Mai 13 10:38:22 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!

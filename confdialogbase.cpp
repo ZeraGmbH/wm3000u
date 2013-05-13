@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'confdialogbase.ui'
 **
-** Created: Mo Mai 6 15:16:58 2013
+** Created: Mo Mai 13 10:38:35 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -725,12 +725,14 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
     TPIDlineEdit = new QLineEdit( groupBox11, "TPIDlineEdit" );
     TPIDlineEdit->setEnabled( FALSE );
     TPIDlineEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 0, TPIDlineEdit->sizePolicy().hasHeightForWidth() ) );
+    TPIDlineEdit->setMinimumSize( QSize( 40, 20 ) );
     TPIDlineEdit->setMaximumSize( QSize( 40, 20 ) );
     TPIDlineEdit->setAlignment( int( QLineEdit::AlignLeft ) );
 
     groupBox11Layout->addWidget( TPIDlineEdit, 0, 3 );
 
     VIDlineEdit = new QLineEdit( groupBox11, "VIDlineEdit" );
+    VIDlineEdit->setMinimumSize( QSize( 30, 20 ) );
     VIDlineEdit->setMaximumSize( QSize( 40, 20 ) );
 
     groupBox11Layout->addWidget( VIDlineEdit, 1, 3 );
@@ -755,12 +757,14 @@ ConfDialogBase::ConfDialogBase( QWidget* parent, const char* name, bool modal, W
 
     EthTypelineEdit = new QLineEdit( groupBox12, "EthTypelineEdit" );
     EthTypelineEdit->setEnabled( FALSE );
+    EthTypelineEdit->setMinimumSize( QSize( 40, 20 ) );
     EthTypelineEdit->setMaximumSize( QSize( 40, 20 ) );
     EthTypelineEdit->setAlignment( int( QLineEdit::AlignLeft ) );
 
     groupBox12Layout->addWidget( EthTypelineEdit, 0, 1 );
 
     APPIDlineEdit = new QLineEdit( groupBox12, "APPIDlineEdit" );
+    APPIDlineEdit->setMinimumSize( QSize( 40, 20 ) );
     APPIDlineEdit->setMaximumSize( QSize( 40, 20 ) );
     APPIDlineEdit->setAlignment( int( QLineEdit::AlignLeft ) );
 
