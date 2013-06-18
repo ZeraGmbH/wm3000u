@@ -218,7 +218,7 @@ void cWM3000U::ActionHandler(int entryAHS)
         AHSFifo.clear();
         if (m_pProgressDialog)
             delete m_pProgressDialog;
-
+        m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren
         AHS = wm3000Idle;
         return;
     }
