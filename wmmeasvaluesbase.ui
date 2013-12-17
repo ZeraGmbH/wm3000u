@@ -82,7 +82,7 @@
       </widget>
      </item>
      <item>
-      <widget class="CBigLetter" name="cBigLetter2" native="true">
+      <widget class="CBigLetter" name="mBigErrorName" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -315,7 +315,7 @@
   <customwidget>
    <class>CBigLetter</class>
    <extends>QWidget</extends>
-   <header location="local">bigletter.h</header>
+   <header>bigletter.h</header>
   </customwidget>
  </customwidgets>
  <includes>

@@ -3,6 +3,8 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
+#include <QTimer>
+
 #include "wmglobal.h"
 #include "widgeom.h"
 #include "wmrawactualconfigbase.h"
@@ -33,6 +35,8 @@ signals:
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
+    virtual void resizeEvent ( QResizeEvent *);
+    virtual void moveEvent( QMoveEvent *);
     virtual void contextMenuEvent( QContextMenuEvent * );
 
 private:
@@ -43,9 +47,13 @@ private:
     int AmplDispMode;
     int WinkelDispMode;
     WMRawActualConfigBase* m_pContextMenu;
+    QTimer m_Timer;
 
     void init();
     void destroy();
+
+private slots:
+    void saveConfiguration();
 
 };
 

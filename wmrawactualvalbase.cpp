@@ -25,12 +25,14 @@ WMRawActualValBase::~WMRawActualValBase()
 
 void WMRawActualValBase::init()
 {
+    m_Timer.setSingleShot(true);
     AmplDispMode = x1;
     AmplPrimSekMode = prim;
     WinkelDispMode = mathpos;
     m_pContextMenu = new WMRawActualConfigBase(this);
     connect(this,SIGNAL(SendVektorDispFormat(int,int,int)),m_pContextMenu,SLOT(ReceiveDisplayConfSlot(int,int,int)));
     connect(m_pContextMenu,SIGNAL(SendVektorDisplayFormat(int,int,int)),this,SLOT(ReceiveVektorDispFormat(int,int,int)));
+    connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
     LoadSession(".ses");
 }
 
@@ -46,7 +48,20 @@ void WMRawActualValBase::closeEvent(QCloseEvent* ce)
     m_widGeometry.SetGeometry(pos(),size()); // wir halten visible und geometrie nach
     m_widGeometry.SetVisible(0);
     emit isVisibleSignal(false);
+    m_Timer.start(500);
     ce->accept();
+}
+
+
+void WMRawActualValBase::resizeEvent ( QResizeEvent *)
+{
+    m_Timer.start(500);
+}
+
+
+void WMRawActualValBase::moveEvent( QMoveEvent *)
+{
+    m_Timer.start(500);
 }
 
 
@@ -194,3 +209,7 @@ void WMRawActualValBase::ReceiveVektorDispFormat( int m, int m2, int m3)
 }
 
 
+void WMRawActualValBase::saveConfiguration()
+{
+    SaveSession(".ses");
+}

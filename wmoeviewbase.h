@@ -3,6 +3,8 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
+#include <QTimer>
+
 #include "ownerror.h"
 #include "widgeom.h"
 
@@ -30,14 +32,19 @@ signals:
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
+    virtual void resizeEvent ( QResizeEvent *);
+    virtual void moveEvent( QMoveEvent *);
 
 private:
     Ui::WMOeViewBase *ui;
     cWidgetGeometry m_widGeometry;
     cOwnErrorViewData m_OwnErrorView;
-
+    QTimer m_Timer;
     void init();
     void destroy();
+
+private slots:
+    void saveConfiguration();
 
 };
 

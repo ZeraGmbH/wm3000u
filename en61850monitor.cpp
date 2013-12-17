@@ -23,6 +23,7 @@ EN61850monbase::~EN61850monbase()
 
 void EN61850monbase::init()
 {
+    m_Timer.setSingleShot(true);
     ETHStatus.ByteCount[0] = 0;
     ETHStatus.ByteCount[1] = 0;
     ETHStatus.SyncLostCount = 0;
@@ -30,6 +31,7 @@ void EN61850monbase::init()
         
     m_pTimer = new QTimer();
     QObject::connect(m_pTimer,SIGNAL(timeout()),this,SLOT(TimerSlot()));
+    connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
     LoadSession(".ses");
 }
 
@@ -44,13 +46,13 @@ void EN61850monbase::destroy()
 void EN61850monbase::ShowHideSlot(bool b)
 {
     if (b) {
-	show();
-	emit InformationRequest(); // anfrage an wm3000 die status infos zu besorgen
-	m_pTimer->start(2000); // wenn sichtbar -> timer läuft
+        show();
+        emit InformationRequest(); // anfrage an wm3000 die status infos zu besorgen
+        m_pTimer->start(2000); // wenn sichtbar -> timer läuft
     }
     else {
-	close();
-	m_pTimer->stop();
+        close();
+        m_pTimer->stop();
     }
 }
 
@@ -60,13 +62,32 @@ void EN61850monbase::closeEvent( QCloseEvent * ce )
     m_widGeometry.SetGeometry(pos(),size());
     m_widGeometry.SetVisible(0);
     emit isVisibleSignal(false);
+    m_Timer.start(500);
     ce->accept();
+}
+
+
+void EN61850monbase::resizeEvent ( QResizeEvent *)
+{
+    m_Timer.start(500);
+}
+
+
+void EN61850monbase::moveEvent( QMoveEvent *)
+{
+    m_Timer.start(500);
 }
 
 
 void EN61850monbase::TimerSlot()
 {
     emit InformationRequest(); // anfrage an wm3000 die status infos zu besorgen
+}
+
+
+void EN61850monbase::saveConfiguration()
+{
+    SaveSession(".ses");
 }
 
 

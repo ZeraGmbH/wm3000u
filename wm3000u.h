@@ -333,7 +333,8 @@ signals:
     void SendVersionInfo(tVersSerial*); // wir versenden die versions , serial , chksum info 
     void AffectStatus(uchar, ushort); // zum setzen, rücksetzen der scpi status systeme
     void SelftestDone(int); // 0 ok  -1 fehler
-    
+    void FreqQuestionable(bool);
+
 protected:
     tVersSerial SerialVersions; // serien nummer und version
     

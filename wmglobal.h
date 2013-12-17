@@ -55,8 +55,14 @@
 // V2.16 11.04.2013 en61850-9-2 decoder: ethernetframe sendet 8 samples/frame wenn 256samples/periode. 2 eingabefelder erforderlich
 //                  für asdu nummern. first asdu, last asdu. es wird versucht von der 1. bis zur letzten asdu alles zuzuordnen.
 //                  sync. überwachung läuft auch mit. es ist dsp version ab 3.09 erforderlich für diese funktion.
+// v2.17 11.12.2013 nach jeder "umkonfiguration" wird der fehlermesswertund der phasenwinkel
+//                  "inaktiv" und erst wieder aktiviert wenn ein neuer messwert da ist
+//                  wenn |samplefrequenz - signalfrequenz| > 1.0 dann hinweis in statuszeile
+//                  nicht justiert rot in statuszeile
+//                  jede änderung in der konfiguration oder der anzeigefenster wird sofort
+//                  gespeichert, damit die letzte konf. auch nach abschalten erhalten wird
 
-#define WMVersion "V2.16"
+#define WMVersion "V2.17"
 
 #define wm3000uHome QDir::homePath()
 #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
@@ -131,6 +137,7 @@ struct cwmActValues {  // wird an andere objekte gesendet
     double AngleError;
     double PHIN;
     double PHIX;
+    bool bvalid;
 };
     
 

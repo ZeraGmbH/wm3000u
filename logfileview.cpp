@@ -17,6 +17,7 @@
 CLogFileView::CLogFileView(const QString cap,const long max,QWidget * parent, const char * wname)
     :	QDialog(parent,wname)
 {
+    m_Timer.setSingleShot(true);
     setCaption(cap);
     m_pText=new Q3TextEdit(this);
     m_pText->setTextFormat(Qt::LogText);
@@ -25,6 +26,7 @@ CLogFileView::CLogFileView(const QString cap,const long max,QWidget * parent, co
     LoadSession(".ses");
     showT.start(2000);
     QObject::connect(&showT,SIGNAL(timeout()),this,SLOT(showList())); 
+    connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
 }
 
 
@@ -61,6 +63,12 @@ void CLogFileView::showList()
 }
 
 
+void CLogFileView::saveConfiguration()
+{
+    SaveSession(".ses");
+}
+
+
 void CLogFileView::SaveSession(QString session)
 {
   cSessionHelper::writeSession(this, m_widGeometry, session);
@@ -87,15 +95,24 @@ bool CLogFileView::LoadSession(QString session)
 void CLogFileView::resizeEvent (QResizeEvent * ) 
 {
     m_pText->resize(size());
+    m_Timer.start(500);
 }   
+
 
 void CLogFileView::closeEvent (QCloseEvent* ce)
 {
     m_widGeometry.SetGeometry(pos(),size());
     m_widGeometry.SetVisible(0);
     emit isVisibleSignal(false);
+    m_Timer.start(500);
     ce->accept();
 }   
+
+
+void CLogFileView::moveEvent( QMoveEvent *)
+{
+    m_Timer.start(500);
+}
 
 
 void CLogFileView::show()

@@ -153,6 +153,7 @@ int main(int argc, char *argv[])
 
   QObject::connect(g_WMDevice,SIGNAL(SendConfDataSignal(cConfData*)),g_WMView,SLOT(SetViewConfDataInfoSlot(cConfData*))); //  device sendet configurationsdaten an das hauptfenster
   QObject::connect(g_WMDevice,SIGNAL(JustifiedSignal(bool)),g_WMView,SLOT(SetJustifiedSlot(bool))); //  device sendet info ob justiert oder nicht an das hauptfenster
+  QObject::connect(g_WMDevice,SIGNAL(FreqQuestionable(bool)),g_WMView,SLOT(SetFreqStatSlot(bool))); //  device sendet info ob freq ok oder nicht an das hauptfenster
   QObject::connect(g_WMView,SIGNAL(SendConfDataSignal(cConfData*)),g_WMDevice,SLOT(SetConfDataSlot(cConfData*))); // hauptfenster sendet neue ergebnisdatei an device
   QObject::connect(g_WMView,SIGNAL(SaveSessionSignal(QString)),g_WMDevice,SLOT(WriteSettings(QString))); // fenster grösse und position einrichten
   QObject::connect(g_WMView,SIGNAL(LoadSessionSignal(QString)),g_WMDevice,SLOT(LoadSettings(QString))); // fenster grösse und position einrichten

@@ -3292,6 +3292,8 @@ void cWM3000U::StopMeasurement()
     AHSFifo.remove(RangeObsermaticStart); // alle events zur bereichüberwachung löschen
     m_bStopped = true;
     m_bDspMeasureIgnore = true; // m_bDspMeasureTriggerActive; // wenn der trigger schon raus ist ignorieren wir die ergebnisse
+    ActValues.bvalid = false; // wir schalten die fehleranzeige inaktiv
+    emit SendActValuesSignal(&ActValues);
 }
 
 // simulationsdaten werden so generiert dass der benutzer und damit der programmierer feststellen kann
@@ -3358,16 +3360,23 @@ void cWM3000U::SimulatedMeasurement()
 
 void cWM3000U::CmpActFrequency()
 {
-/*
-    double f;
+
+    double fsoll;
     switch (m_ConfData.m_nSFreq)
     {
-	    case F16 : f = 50.0/3.0;break;
-	    case F50 : f = 50.0;break;
-                  case F60 : f = 60.0;	   
+        case F16 : fsoll = 50.0/3.0;break;
+        case F50 : fsoll = 50.0;break;
+        case F60 : fsoll = 60.0;
     }
-*/    
+
     ActValues.Frequenz = m_ConfData.m_fSFreq * ActValues.dspActValues.kfkorrf;
+
+    bool bFreqQuestionable = (fabs(ActValues.Frequenz-fsoll) > 1.0);
+    emit FreqQuestionable(bFreqQuestionable);
+    if (bFreqQuestionable)
+        emit AffectStatus(SetQuestStat, QuestFrequency); // questionable status setzen
+    else
+        emit AffectStatus(ResetQuestStat, QuestFrequency);
 }
 
 

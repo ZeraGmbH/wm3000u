@@ -5,6 +5,8 @@
 #include <qpixmap.h>
 #include <qdialog.h>
 #include <qlabel.h>
+#include <QTimer>
+
 #include "bigletter.h"
 #include "wmglobal.h"
 #include "widgeom.h"
@@ -40,6 +42,7 @@ signals:
 protected:
     virtual void closeEvent( QCloseEvent * ce );
     virtual void resizeEvent( QResizeEvent * e );
+    virtual void moveEvent( QMoveEvent *);
     virtual void contextMenuEvent( QContextMenuEvent * );
 
 private:
@@ -53,10 +56,14 @@ private:
     int m_nLPDisplayMode;
 
     QPixmap image0;
+    QTimer m_Timer;
 
     void init();
     void destroy();
     virtual void ActualizeDisplay();
+
+private slots:
+    void saveConfiguration();
 
 };
 
