@@ -257,6 +257,7 @@ void WMViewBase::CreateStatusBar()
     statusBar()->addWidget(m_pSimulationLabel,0);
     m_pStatusLabel=new QLabel("",this); // normaler ablauf oder fehlerausgaben in statuszeile
     statusBar()->addWidget(m_pStatusLabel,0);
+    m_pStatusLabel->setStyleSheet("QLabel {color:red;}");
     m_pFreqLabel=new QLabel("",this); // erstmal kein fehler
     m_pFreqLabel->setStyleSheet("QLabel {color:red;}");
     statusBar()->addWidget(m_pFreqLabel,0);

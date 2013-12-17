@@ -1172,6 +1172,7 @@ case ConfigurationTestTMode:
 	    // wenn's keine probleme gab sind wir hier angekommen und initialisiert
 	    emit ConfigReady(); // wir sync. eine ev. laufenden justage prozess
 	    emit AffectStatus(ResetOperStat, OperConfiguring);
+        WriteSettings(".ses");
 	}
     
 	AHS = wm3000Idle;
@@ -3500,6 +3501,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     ActValues.AmplErrorIEC = 100.0 * (fabs(ActValues.VekX) -absN) / absN;
     ActValues.AmplErrorANSI = (ActValues.AmplErrorIEC/100.0 - ( (1.0+ActValues.AmplErrorIEC/100.0) * (4.0 / 3.0) * ActValues.AngleError ))*100.0;
  
+    ActValues.bvalid = true; // aktivieren der fehleranzeige
 }
 
 
