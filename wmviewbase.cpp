@@ -43,32 +43,32 @@ void WMViewBase::init()
     wmEdit2 = new wmEditor();
     connect(wmEdit,SIGNAL(textMessage(QString)),this,SLOT(ReceiveOETFileSlot(QString)));
     connect(wmEdit2,SIGNAL(textMessage(QString)),this,SLOT(ReceiveResultFileSlot(QString)));
-    ui->ansichtFehlerMessungAction->setOn(false);
-    ui->ansichtIstwerteAction->setOn(false);
-    ui->ansichtDialogAction->setOn(false);
-    ui->ansichtEigenfehlerAction->setOn(false);
-    ui->ansichtEN61850Action->setOn(false);
+    ui->ansichtFehlerMessungAction->setChecked(false);
+    ui->ansichtIstwerteAction->setChecked(false);
+    ui->ansichtDialogAction->setChecked(false);
+    ui->ansichtEigenfehlerAction->setChecked(false);
+    ui->ansichtEN61850Action->setChecked(false);
 
     LoadSession(".ses");
 
     connect(ui->ansichtFehlerMessungAction,SIGNAL(toggled(bool)),this,SIGNAL(UIansichtFehlerMessungActionToggled(bool))); // öffnen der fehlermesswert anzeige
-    connect(this,SIGNAL(UIansichtFehlerMessungActionSet(bool)),ui->ansichtFehlerMessungAction,SLOT(setOn(bool)));
+    connect(this,SIGNAL(UIansichtFehlerMessungActionSet(bool)),ui->ansichtFehlerMessungAction,SLOT(setChecked(bool)));
     connect(this,SIGNAL(UIansichtFehlerMessungActionSet(bool)),this,SLOT(SaveDefaultSessionSlot(bool)));
 
     connect(ui->ansichtEigenfehlerAction,SIGNAL(toggled(bool)),this,SIGNAL(UIansichtEigenfehlerActionToggled(bool))); // öffnen der eigenfehler anzeige
-    connect(this,SIGNAL(UIansichtEigenfehlerActionSet(bool)),ui->ansichtEigenfehlerAction,SLOT(setOn(bool)));
+    connect(this,SIGNAL(UIansichtEigenfehlerActionSet(bool)),ui->ansichtEigenfehlerAction,SLOT(setChecked(bool)));
     connect(this,SIGNAL(UIansichtEigenfehlerActionSet(bool)),this,SLOT(SaveDefaultSessionSlot(bool)));
 
     connect(ui->ansichtIstwerteAction,SIGNAL(toggled(bool)),this,SIGNAL(UIansichtIstwerteActionToggled(bool))); // öffnen der eigenfehler anzeige
-    connect(this,SIGNAL(UIansichtIstwerteActionSet(bool)),ui->ansichtIstwerteAction,SLOT(setOn(bool)));
+    connect(this,SIGNAL(UIansichtIstwerteActionSet(bool)),ui->ansichtIstwerteAction,SLOT(setChecked(bool)));
     connect(this,SIGNAL(UIansichtIstwerteActionSet(bool)),this,SLOT(SaveDefaultSessionSlot(bool)));
 
     connect(ui->ansichtDialogAction,SIGNAL(toggled(bool)),this,SIGNAL(UIansichtDialogActionToggled(bool))); // öffnen der eigenfehler anzeige
-    connect(this,SIGNAL(UIansichtDialogActionSet(bool)),ui->ansichtDialogAction,SLOT(setOn(bool)));
+    connect(this,SIGNAL(UIansichtDialogActionSet(bool)),ui->ansichtDialogAction,SLOT(setChecked(bool)));
     connect(this,SIGNAL(UIansichtDialogActionSet(bool)),this,SLOT(SaveDefaultSessionSlot(bool)));
 
     connect(ui->ansichtEN61850Action,SIGNAL(toggled(bool)),this,SIGNAL(UIansichtEN61850ActionToggled(bool))); // öffnen der eigenfehler anzeige
-    connect(this,SIGNAL(UIansichtEN61850ActionSet(bool)),ui->ansichtEN61850Action,SLOT(setOn(bool)));
+    connect(this,SIGNAL(UIansichtEN61850ActionSet(bool)),ui->ansichtEN61850Action,SLOT(setChecked(bool)));
     connect(this,SIGNAL(UIansichtEN61850ActionSet(bool)),this,SLOT(SaveDefaultSessionSlot(bool)));
 
     connect(ui->hilfeManualAction,SIGNAL(activated()),this,SIGNAL(UIhilfeManualActionActivated()));
@@ -412,11 +412,11 @@ bool WMViewBase::LoadSession(QString session)
 	stream >> m_widGeometry;
 	file.close();
 	
-        ui->ansichtFehlerMessungAction->setOn(mA);
-        ui->ansichtIstwerteAction->setOn(iA);
-        ui->ansichtDialogAction->setOn(dA);
-        ui->ansichtEigenfehlerAction->setOn(eA);
-        ui->ansichtEN61850Action->setOn(enA);
+        ui->ansichtFehlerMessungAction->setChecked(mA);
+        ui->ansichtIstwerteAction->setChecked(iA);
+        ui->ansichtDialogAction->setChecked(dA);
+        ui->ansichtEigenfehlerAction->setChecked(eA);
+        ui->ansichtEN61850Action->setChecked(enA);
 
 	hide();
 	resize(m_widGeometry.m_Size);
@@ -450,11 +450,11 @@ void WMViewBase::SaveSession(QString session)
 	m_widGeometry.SetVisible(vi);
 	
 	QDataStream stream( &file );
-        stream << (int)ui->ansichtFehlerMessungAction->isOn()
-                   << (int)ui->ansichtIstwerteAction->isOn()
-                   << (int)ui->ansichtDialogAction->isOn()
-                   << (int)ui->ansichtEigenfehlerAction->isOn()
-                   << (int)ui->ansichtEN61850Action->isOn();
+        stream << (int)ui->ansichtFehlerMessungAction->isChecked()
+                   << (int)ui->ansichtIstwerteAction->isChecked()
+                   << (int)ui->ansichtDialogAction->isChecked()
+                   << (int)ui->ansichtEigenfehlerAction->isChecked()
+                   << (int)ui->ansichtEN61850Action->isChecked();
 
 	stream << m_widGeometry;
 	file.close();
