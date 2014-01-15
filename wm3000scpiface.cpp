@@ -4,8 +4,9 @@
 #include "confdata.h"
 #include "eparameter.h"
 #include "wm3000scpiface.h"
+#include "wm3000u.h"
 
-
+extern cWM3000U* g_WMDevice;
 extern  scpiErrorType SCPIError[];
 char* MModeName[maxMMode] = {(char*)"Un/Ux",(char*)"Un/EVT",(char*)"Un/nConvent"};
 char* FreqName[MaxFreq] = {(char*)"16.67",(char*)"50.0",(char*)"60.0"};
@@ -1062,9 +1063,12 @@ char* cWM3000SCPIFace::mGetConfOperModeCatalog()
     QString rs;
  
     m_ConfDataTarget = m_ConfDataActual;
-    rs = QString("%1,%2").arg(0).arg(MModeName[0]);
-    for (int i = 1; i < maxMMode; i++)
-	rs = rs + ";" + QString("%1,%2").arg(i).arg(MModeName[i]);
+
+    rs = QString("%1,%2").arg(Un_UxAbs).arg(MModeName[Un_UxAbs]);
+
+    if (!g_WMDevice->isConventional())
+        for (int i = Un_UxAbs+1; i < maxMMode; i++)
+            rs = rs + ";" + QString("%1,%2").arg(i).arg(MModeName[i]);
      
     return sAlloc(rs);
 }
@@ -1075,9 +1079,22 @@ void cWM3000SCPIFace::mSetConfOperMode(char* s)
     int m;
     if ( SearchEntry(&s,MModeName,maxMMode,m,true) )
     {
-	m_ConfDataTarget.m_nMeasMode = m;
+        if (g_WMDevice->isConventional())
+        {
+            if (m == Un_UxAbs)
+            {
+                m_ConfDataTarget.m_nMeasMode = m;
+                return;
+            }
+        }
+        else
+        {
+            m_ConfDataTarget.m_nMeasMode = m;
+            return;
+        }
 //	emit SendConfiguration(&m_ConfData);
     }
+    AddEventError(ParameterNotAllowed);
 }
 
 

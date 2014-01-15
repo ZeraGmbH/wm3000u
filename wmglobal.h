@@ -61,8 +61,9 @@
 //                  nicht justiert rot in statuszeile
 //                  jede änderung in der konfiguration oder der anzeigefenster wird sofort
 //                  gespeichert, damit die letzte konf. auch nach abschalten erhalten wird
+// v2.18 19.12.2013 programm erweitert für wm1000u (nur conventional und ect)
 
-#define WMVersion "V2.17"
+#define WMVersion "V2.18"
 
 #define wm3000uHome QDir::homePath()
 #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"

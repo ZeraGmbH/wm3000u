@@ -34,6 +34,7 @@ WMViewBase *g_WMView;
 
 int main(int argc, char *argv[])
 {
+  bool bconvent;
   QApplication::setDesktopSettingsAware(true);
   g_app = new QApplication (argc, argv);
   QFont f = g_app->font();
@@ -75,6 +76,15 @@ int main(int argc, char *argv[])
   if (option != "-justage")
     g_WMView->removeJustageItem();
 
+  bconvent = (option == "-convent");
+  if (bconvent)
+  {
+      g_WMDevice->setConventional(true);
+      g_WMView->configureWM1000Items();
+  }
+  else
+      g_WMDevice->setConventional(false);
+
   cZeraInfo *g_WMInfo = new cZeraInfo; // info slots
 
   WMMeasValuesBase *g_WMErrMeasValView = new WMMeasValuesBase(g_WMView); // fehlermesswerte anzeige erzeugen
@@ -102,8 +112,12 @@ int main(int argc, char *argv[])
   QObject::connect(g_WMView,SIGNAL(LoadSessionSignal(QString)),g_WMActValView,SLOT(LoadSession(QString))); // fenster grösse und position einrichten
   QObject::connect(g_WMDevice,SIGNAL(SendActValuesSignal(cwmActValues*)),g_WMActValView,SLOT(ReceiveAVDataSlot( cwmActValues*))); // senden von istwerten
 
+  CLogFileView* g_WMSCPILogFileView;
+  if (bconvent)
+      g_WMSCPILogFileView = new CLogFileView(QObject::tr("WM1000U SCPI Kommunikation"),100,g_WMView,"WMSCPILogView"); // kommunikation anzeige erzeugen
+  else
+      g_WMSCPILogFileView = new CLogFileView(QObject::tr("WM3000U SCPI Kommunikation"),100,g_WMView,"WMSCPILogView"); // kommunikation anzeige erzeugen
 
-  CLogFileView* g_WMSCPILogFileView = new CLogFileView(QObject::tr("WM3000U SCPI Kommunikation"),100,g_WMView,"WMSCPILogView"); // kommunikation anzeige erzeugen
   QObject::connect(g_WMView,SIGNAL(UIansichtDialogActionToggled(bool)),g_WMSCPILogFileView,SLOT(ShowHideLogFileSlot(bool))); // öffnen der kommunikation anzeige
   QObject::connect(g_WMView,SIGNAL(SaveSessionSignal(QString)),g_WMSCPILogFileView,SLOT(SaveSession(QString))); // fenster grösse und position einrichten
   QObject::connect(g_WMView,SIGNAL(LoadSessionSignal(QString)),g_WMSCPILogFileView,SLOT(LoadSession(QString))); // fenster grösse und position einrichten
@@ -117,6 +131,7 @@ int main(int argc, char *argv[])
   QObject::connect(g_ETHMonitor,SIGNAL(ResetETHStatus()),(QObject*)g_WMDevice,SLOT(EN61850ResetStatusSlot())); // rücksetzen eth status info
 
   CLogFile *g_WMSCPILogFile = new CLogFile(QDir(ServerCommLogFilePath).absPath(),g_WMDevice->m_ConfData.m_nLogFileMax); // kommunikation logfile erzeugen
+
   QObject::connect(g_WMSCPILogFile,SIGNAL(SendLogDataSignal(const QString&)),g_WMSCPILogFileView,SLOT(AddLogTextSlot(const QString&))); // logfile sendet logdaten an logfileview
   QObject::connect(g_WMDevice->PCBIFace->iFaceSock,SIGNAL(SendLogData(const QString&)),g_WMSCPILogFile,SLOT(AddLogTextSlot(const QString&))); // der socket sendet output/input an das logfile
   QObject::connect(g_WMDevice->DspIFace->iFaceSock,SIGNAL(SendLogData(const QString&)),g_WMSCPILogFile,SLOT(AddLogTextSlot(const QString&))); // der auch

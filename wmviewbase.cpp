@@ -31,6 +31,16 @@ void WMViewBase::removeJustageItem()
     ui->MenuBarEditor->removeAction(ui->Justage->menuAction());
 }
 
+
+void WMViewBase::configureWM1000Items()
+{
+    ui->Ansicht->removeAction(ui->ansichtEN61850Action);
+    QString s;
+    s = QObject::tr("Wandlermesseinrichtung WM1000U");
+    setWindowTitle(s);
+}
+
+
 void WMViewBase::init()
 {
     m_bJustified = false;

@@ -271,7 +271,9 @@ public:
     cDspIFace* DspIFace;
     cPCBIFace* PCBIFace;
     void InitWM3000(); // einmal komplett initialisieren
-    
+    void setConventional(bool b);
+    bool isConventional();
+
 public slots:
      // slots, die vom hauptfenster aus aktiviert werden
     void GetOETAnalizeDone(void); // eigenfehler object hat seine arbeit erledigt (synchronisation)
@@ -409,6 +411,7 @@ private:
     QFile m_SelftestLogfile;
     QFile m_PhaseJustLogfile;
     cWMessageBox *m_OVLMsgBox;
+    bool m_bConventional;
 };
 
 #endif    

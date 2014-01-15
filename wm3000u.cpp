@@ -61,7 +61,6 @@ void cWMessageBox::done(int r)
 
 cWM3000U::cWM3000U()
 {
-    SerialVersions.DeviceName  = tr("Wandlermesseinrichtung WM3000U");
     SerialVersions.DeviceVersion = WMVersion;
     SerialVersions.PCBSerialNr = "Unknown"; // wird ggf. später aus hardware gelesen
     SerialVersions.PCBVersion = "Unknown";
@@ -845,7 +844,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 		s = tr("Achtung !");
 		s+="\n";
 		if (stat & 7) 
-		    s += tr("WM3000U ist nicht justiert !");
+            s += tr("Gerät ist nicht justiert !");
 		if (stat & 2)
 		    s += tr("\nNicht identische Versionsnummer !");
 		if (stat & 4)
@@ -2308,6 +2307,11 @@ void cWM3000U::ServerIFaceErrorHandling(int error, QString host, int port)
 
 void cWM3000U::InitWM3000()
 {
+    if (m_bConventional)
+        SerialVersions.DeviceName  = tr("Wandlermesseinrichtung WM1000U");
+    else
+        SerialVersions.DeviceName  = tr("Wandlermesseinrichtung WM3000U");
+
     float f;
     switch (m_ConfData.m_nSFreq) {  // wir setzen den realen frequenzwert
       case F16: f = 50.0/3;break;
@@ -2320,6 +2324,18 @@ void cWM3000U::InitWM3000()
     m_ActTimer->start(0,InitializationStart);
 }
     
+
+void cWM3000U::setConventional(bool b)
+{
+    m_bConventional = b;
+}
+
+
+bool cWM3000U::isConventional()
+{
+    return m_bConventional;
+}
+
 //------------------------------------------- ab hier stehen alle SLOTs--------------------------------------------------------
 
 void cWM3000U::GetOETAnalizeDone(void)
@@ -3356,7 +3372,7 @@ void cWM3000U::SimulatedMeasurement()
     CmpActValues(true);
     emit SendActValuesSignal(&ActValues);
     emit SendLPSignal(&ActValues);
-};
+}
 
 
 void cWM3000U::CmpActFrequency()
