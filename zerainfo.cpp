@@ -34,7 +34,7 @@ void cZeraInfo::AboutWM3000Slot()
         pAboutWM=new QMessageBox(QString("About WM1000U"),
                      tr("<h3>About WM1000U</h3>"
                         "<p>WM1000U is the new voltage transformer test<br>device developed by ZERA.</p>"
-                        "<p>It provides abilities of testing conventional<br>transformers as well as EVT.</p>"),
+                        "<p>It provides abilities of testing conventional<br>transformers.</p>"),
                         QMessageBox::NoIcon,
                         Qt::NoButton,
                         Qt::NoButton,
