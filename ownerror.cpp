@@ -76,7 +76,7 @@ complex cOwnError::CmpOECorrVector()
 		int n = OEKoefficientList.count();
 		if (n > 1) { // wenn mehr als 1 eintrag -> sortieren wir die liste nach lastpunkt
 		    for (int i=0; i < (n-1); i++)
-			for (int j=1; j<n; j++)
+            for (int j=i+1; j<n; j++)
 			    if (OEKoefficientList[j].OELP < OEKoefficientList[i].OELP ) {
 			             OEKoefficient = OEKoefficientList[j];
 			             OEKoefficientList[j] = OEKoefficientList[i];
