@@ -18,7 +18,7 @@
 
 #define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.50"
+//#define TheDevice "192.168.6.129"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -62,8 +62,10 @@
 //                  jede änderung in der konfiguration oder der anzeigefenster wird sofort
 //                  gespeichert, damit die letzte konf. auch nach abschalten erhalten wird
 // v2.18 19.12.2013 programm erweitert für wm1000u (nur conventional und ect)
+// v2.19 28.05.2014 fehler in eigenfehlerkorrektur beseitigt. die einträge in der tabelle wurden falsch soriert
+//                  wodurch die interpolation im anschluss falsche werte lieferte
 
-#define WMVersion "V2.18"
+#define WMVersion "V2.19"
 
 #define wm3000uHome QDir::homePath()
 #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
