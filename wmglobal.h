@@ -16,9 +16,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.129"
+#define TheDevice "192.168.6.142"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -73,9 +73,9 @@
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
-#define ServerCommLogFilePath QDir::homePath()+"wm3000u/log/ServerComm.log"
+#define ServerCommLogFilePath QDir::homePath()+"/wm3000u/log/ServerComm.log"
 //#define SelftestLogFilePath "/usr/share/wm3000u/log/Selftest.log"
-#define SelftestLogFilePath QDir::homePath()+"wm3000u/log/Selftest.log"
+#define SelftestLogFilePath QDir::homePath()+"/wm3000u/log/Selftest.log"
 //#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
 #define PhaseJustLogFilePath QDir::homePath()+"/wm3000u/log/PhaseJust.log"
 
