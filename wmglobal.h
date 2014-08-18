@@ -67,13 +67,17 @@
 // v2.20 13.06.2014 fehler in scpi interface beseitigt, es wurde die signalfrequenz nicht umgeschaltet.
 //                  im confmenu source und destination adressen für nconvent umbenannt
 //                  selbsttest inaktiv gesetzt wenn simulator betrieb
+//                  pfad angaben für log files geändert.
 
 #define WMVersion "V2.20"
 
 #define wm3000uHome QDir::homePath()
-#define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
-#define SelftestLogFilePath "/usr/share/wm3000u/log/Selftest.log"
-#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
+// #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
+#define ServerCommLogFilePath QDir::homePath()+"wm3000u/log/ServerComm.log"
+//#define SelftestLogFilePath "/usr/share/wm3000u/log/Selftest.log"
+#define SelftestLogFilePath QDir::homePath()+"wm3000u/log/Selftest.log"
+//#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
+#define PhaseJustLogFilePath QDir::homePath()+"/wm3000u/log/PhaseJust.log"
 
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;
