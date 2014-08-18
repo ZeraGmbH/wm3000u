@@ -78,7 +78,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="Widget8">
       <attribute name="title">
@@ -108,10 +108,7 @@
        <property name="alignment">
         <set>Qt::AlignTop</set>
        </property>
-       <property name="frameShadow">
-        <enum>Q3GroupBox::Sunken</enum>
-       </property>
-       <property name="margin">
+       <property name="margin" stdset="0">
         <number>0</number>
        </property>
        <widget class="QRadioButton" name="Mode0RadioButton">
@@ -604,10 +601,10 @@
            <property name="title">
             <string>PPS-Signal</string>
            </property>
-           <property name="exclusive">
+           <property name="exclusive" stdset="0">
             <bool>false</bool>
            </property>
-           <property name="radioButtonExclusive">
+           <property name="radioButtonExclusive" stdset="0">
             <bool>true</bool>
            </property>
            <layout class="QHBoxLayout">
@@ -1346,7 +1343,7 @@
             <item>
              <widget class="QLabel" name="MacMULabel">
               <property name="text">
-               <string>Merging unit:</string>
+               <string>Source:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1359,7 +1356,7 @@
             <item>
              <widget class="QLabel" name="MacWMLabel">
               <property name="text">
-               <string>WM3000:</string>
+               <string>Destination:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
