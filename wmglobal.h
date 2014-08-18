@@ -65,6 +65,8 @@
 // v2.19 28.05.2014 fehler in eigenfehlerkorrektur beseitigt. die einträge in der tabelle wurden falsch soriert
 //                  wodurch die interpolation im anschluss falsche werte lieferte
 // v2.20 13.06.2014 fehler in scpi interface beseitigt, es wurde die signalfrequenz nicht umgeschaltet.
+//                  im confmenu source und destination adressen für nconvent umbenannt
+//                  selbsttest inaktiv gesetzt wenn simulator betrieb
 
 #define WMVersion "V2.20"
 
