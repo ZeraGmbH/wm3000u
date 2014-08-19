@@ -14,7 +14,7 @@
 
 #define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-
+//#define TheDevice "192.168.6.215"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -47,9 +47,11 @@
 //                  bei ergebnisdatei, eigenfehlerdatei solte open anstatt save beim öffnen verwendet werden, nicht machbar unter qt3 wenn man default selection verwenden möchte.
 // v1.14 19.09.2012 in eparameter falls keine einheit angegeben unit gesetzt auf curra (1/1)
 // v1.15 06.05.2013 neues dsp programm version v3.09, mit neuem ethernet decoder für 256 samples, es war ebenfalls ein neuer dsp-server erforderlich(v1.09) . im nConvent menu wurde ein zusätzliches feld für die asdu eingebaut. es gibt jetzt die beiden felder first asdu und last adsu. eine apdu kann jetzt mehrere samples liefern was bei 256 samples standardmäßig genutzt wird. in eparamter scalefactors eingeführt weilsonst fehler wenn /3 oder /w3 und keine einheit vorhanden 
+// v1.16 19.08.2014 fehler in scpi interface beseitigt, es wurde die signalfrequenz nicht umgeschaltet
+//                                 selbst test button inaktive wenn simulationsbetrieb
+// 	                 nconvent menu source , destination namen geändert
 
-
-#define WMVersion "V1.15"
+#define WMVersion "V1.16"
 
 #define ServerCommLogFilePath "./log/ServerComm.log"
 #define SelftestLogFilePath "./log/Selftest.log"

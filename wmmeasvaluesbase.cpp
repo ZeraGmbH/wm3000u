@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'wmmeasvaluesbase.ui'
 **
-** Created: Mo Mai 13 10:40:05 2013
+** Created: Di Aug 19 11:14:17 2014
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!

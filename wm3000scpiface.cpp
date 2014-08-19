@@ -933,6 +933,7 @@ void cWM3000SCPIFace::mSetConfMeasSFreq(char* s)
     if ( SearchEntry(&s, SFrequency, MaxFreq, fc, true) )
     {
 	m_ConfDataTarget.m_nSFreq = fc;
+	m_ConfDataTarget.m_fSFreq = SFrequency[fc];
 //	emit SendConfiguration(&m_ConfData);
     }
 }

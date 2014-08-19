@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'wmmeasconfigbase.ui'
 **
-** Created: Mo Mai 6 13:10:00 2013
+** Created: Di Jun 18 12:04:30 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!

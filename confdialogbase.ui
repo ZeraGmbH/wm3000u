@@ -1563,7 +1563,7 @@
                                             <cstring>MacMULabel</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Merging unit:</string>
+                                            <string>Source:</string>
                                         </property>
                                         <property name="alignment">
                                             <set>AlignVCenter|AlignLeft</set>
@@ -1574,7 +1574,7 @@
                                             <cstring>MacWMLabel</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>WM3000:</string>
+                                            <string>Destination:</string>
                                         </property>
                                         <property name="alignment">
                                             <set>AlignVCenter|AlignLeft</set>

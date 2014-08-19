@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'wmrawactualconfigbase.ui'
 **
-** Created: Mi Sep 19 07:38:13 2012
+** Created: Di Jun 18 12:04:39 2013
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!

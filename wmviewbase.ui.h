@@ -58,6 +58,7 @@ void WMViewBase::ActualizeStates()
     }
     
     messungSimulationAction->setOn(m_ConfData.m_bSimulation); 
+    hilfeSelbsttestAction->setDisabled(m_ConfData.m_bSimulation);
     
     m_pRunningLabel->setText( QString (( m_ConfData.m_bRunning) ? tr("Gestartet") : tr("Gestoppt")));
     m_pSimulationLabel->setText( QString (( m_ConfData.m_bSimulation) ? tr("Simulation") : tr("Reale Messung")));

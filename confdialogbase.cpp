@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'confdialogbase.ui'
 **
-** Created: Mo Mai 13 10:38:35 2013
+** Created: Di Aug 19 11:12:45 2014
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -979,8 +979,8 @@ void ConfDialogBase::languageChange()
     xSek_w3radioButton->setText( tr( "/sqrt(3)" ) );
     ConfTabWidget->changeTab( TabPage_3, trUtf8( "\x54\x65\x69\x6c\x65\x72\x76\x65\x72\x68\xc3\xa4\x6c\x74\x6e\x69\x73\x73\x65" ) );
     groupBox7->setTitle( tr( "MAC adresses 61850-9-2" ) );
-    MacMULabel->setText( tr( "Merging unit:" ) );
-    MacWMLabel->setText( tr( "WM3000:" ) );
+    MacMULabel->setText( tr( "Source:" ) );
+    MacWMLabel->setText( tr( "Destination:" ) );
     MacSLineEdit1->setText( tr( "FF" ) );
     textLabel4->setText( tr( "-" ) );
     MacSLineEdit2->setText( tr( "FF" ) );

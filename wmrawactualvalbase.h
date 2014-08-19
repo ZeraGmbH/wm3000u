@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'wmrawactualvalbase.ui'
 **
-** Created: Mo Mai 6 14:50:12 2013
+** Created: Di Aug 19 11:06:40 2014
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
 **
 ** WARNING! All changes made in this file will be lost!
