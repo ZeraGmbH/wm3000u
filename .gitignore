@@ -12,7 +12,6 @@
 *.so
 *_pch.h.cpp
 *_resource.rc
-*.ts
 .#*
 *.*#
 .DS_Store
