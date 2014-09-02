@@ -188,8 +188,7 @@ cWM3000U::cWM3000U()
     ActValues.RMSXSek = 0.0; // lesen können
     m_OVLMsgBox = new cWMessageBox ( trUtf8("Übersteuerung"), trUtf8("Es ist eine Übersteuerung im grössten Bereich\naufgetreten. Bitte überprüfen Sie die Messgrössen"), QMessageBox::Critical, QMessageBox::Ok, Qt::NoButton, Qt::NoButton, 0, 0, false ) ;
     connect(m_OVLMsgBox,SIGNAL(WMBoxClosed()),this,SLOT(OverLoadMaxQuitSlot()));
-
-
+    m_SelftestMsgBox = new cWMessageBox ( trUtf8("Selbstest"), trUtf8("Test beendet\nDetails stehen im Logfile"), QMessageBox::Information, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, 0, 0, false ) ;
 }
 
 
@@ -2216,6 +2215,7 @@ case ConfigurationTestTMode:
               }
 	case SelftestFinished:
 	    delete m_pProgressDialog; // progress dialog schliessen
+        m_SelftestMsgBox->show();
 	    AHS = wm3000Idle;
 	    break; // SelftestFinished	     
 	    

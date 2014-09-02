@@ -411,6 +411,7 @@ private:
     QFile m_SelftestLogfile;
     QFile m_PhaseJustLogfile;
     cWMessageBox *m_OVLMsgBox;
+    cWMessageBox *m_SelftestMsgBox;
     bool m_bConventional;
 };
 
