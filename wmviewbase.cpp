@@ -4,6 +4,8 @@
 #include <Q3FileDialog>
 #include <QStatusBar>
 #include <QDebug>
+#include <QTextEdit>
+
 #include "wmglobal.h"
 #include "wmeditor.h"
 #include "widgeom.h"
@@ -93,6 +95,8 @@ void WMViewBase::init()
     connect(ui->hilfeSelbsttestAction,SIGNAL(activated()),this,SIGNAL(UIhilfeSelbsttestActionActivated()));
     connect(ui->dateiBeendenAction,SIGNAL(activated()),this,SIGNAL(UIdateiBeendenActionActivated()));
     connect(ui->hilfeVersionAction,SIGNAL(activated()),this,SIGNAL(UIhilfeVersionActionActivated()));
+    connect(ui->hilfeReleaseInfoAction,SIGNAL(activated()),this,SIGNAL(UIhilfeReleaseInfoActionActivated()));
+
 }
 
 
@@ -644,3 +648,4 @@ void WMViewBase::SetFreqStatSlot(bool b)
     m_bFreqQuestionable = b;
     ActualizeStates();
 }
+

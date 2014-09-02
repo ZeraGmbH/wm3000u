@@ -34,7 +34,7 @@
   <property name="windowTitle">
    <string>Wandlermesseinrichtung WM3000U</string>
   </property>
-  <widget class="QWidget" name="widget">
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -145,6 +145,7 @@
     <addaction name="hilfeInfo_ber_QtAction"/>
     <addaction name="separator"/>
     <addaction name="hilfeVersionAction"/>
+    <addaction name="hilfeReleaseInfoAction"/>
     <addaction name="separator"/>
     <addaction name="hilfeSelbsttestAction"/>
    </widget>
@@ -779,6 +780,11 @@
    </property>
    <property name="name" stdset="0">
     <cstring>hilfeSelbsttestAction</cstring>
+   </property>
+  </action>
+  <action name="hilfeReleaseInfoAction">
+   <property name="text">
+    <string>&amp;Release Info</string>
    </property>
   </action>
  </widget>

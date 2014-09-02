@@ -80,6 +80,7 @@ signals:
     void UIhilfeSelbsttestActionActivated();
     void UIdateiBeendenActionActivated();
     void UIhilfeVersionActionActivated();
+    void UIhilfeReleaseInfoActionActivated();
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
