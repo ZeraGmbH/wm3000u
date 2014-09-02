@@ -68,6 +68,8 @@
 //                  im confmenu source und destination adressen für nconvent umbenannt
 //                  selbsttest inaktiv gesetzt wenn simulator betrieb
 //                  pfad angaben für log files geändert.
+//                  nach selbsttest erscheint eine messagebox mit info dass Test beendet
+//                  releaseinfo file path hinzugefügt für releaseausgabe
 
 #define WMVersion "V2.20"
 
@@ -78,6 +80,7 @@
 #define SelftestLogFilePath QDir::homePath()+"/wm3000u/log/Selftest.log"
 //#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
 #define PhaseJustLogFilePath QDir::homePath()+"/wm3000u/log/PhaseJust.log"
+#define ReleaseInfoFilePath "opt/zera/conf/CHANGELOG"
 
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;
