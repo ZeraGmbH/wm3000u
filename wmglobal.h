@@ -80,7 +80,7 @@
 #define SelftestLogFilePath QDir::homePath()+"/wm3000u/log/Selftest.log"
 //#define PhaseJustLogFilePath "/usr/share/wm3000u/log/PhaseJust.log"
 #define PhaseJustLogFilePath QDir::homePath()+"/wm3000u/log/PhaseJust.log"
-#define ReleaseInfoFilePath "opt/zera/conf/CHANGELOG"
+#define ReleaseInfoFilePath "/opt/zera/conf/CHANGELOG"
 
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;
