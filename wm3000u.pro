@@ -47,7 +47,8 @@ HEADERS	+= logfile.h \
     versionviewbase.h \
     csessionhelper.h \
     dbushelper.h \
-    dbushelperadapter.h
+    dbushelperadapter.h \
+    releaseinfo.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
@@ -88,7 +89,8 @@ SOURCES	+= Logfile.cpp \
     wmrawactualconfigbase.cpp \
     csessionhelper.cpp \
     dbushelper.cpp \
-    dbushelperadapter.cpp
+    dbushelperadapter.cpp \
+    releaseinfo.cpp
 
 FORMS	= wmviewbase.ui \
 	rangedialogbase.ui \
