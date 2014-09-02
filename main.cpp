@@ -27,6 +27,8 @@
 #include "wm3000scpiface.h"
 #include "versionviewbase.h"
 #include "wmmeasconfigbase.h"
+#include "releaseinfo.h"
+
 
 QApplication *g_app;
 cWM3000U* g_WMDevice;
@@ -84,6 +86,10 @@ int main(int argc, char *argv[])
   }
   else
       g_WMDevice->setConventional(false);
+
+
+  cReleaseInfo *g_ReleaseView = new cReleaseInfo(g_app);
+  QObject::connect(g_WMView, SIGNAL(UIhilfeReleaseInfoActionActivated()),g_ReleaseView,SLOT(show()));
 
   cZeraInfo *g_WMInfo = new cZeraInfo; // info slots
 
