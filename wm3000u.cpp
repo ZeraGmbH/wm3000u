@@ -850,11 +850,11 @@ void cWM3000U::ActionHandler(int entryAHS)
 		s = tr("Achtung !");
 		s+="\n";
 		if (stat & 7) 
-            s += tr("Gerät ist nicht justiert !");
+            s += trUtf8("Gerät ist nicht justiert !");
 		if (stat & 2)
-		    s += tr("\nNicht identische Versionsnummer !");
+            s += trUtf8("\nNicht identische Versionsnummer !");
 		if (stat & 4)
-		    s += tr("\nNicht identische Seriennummer !");
+            s += trUtf8("\nNicht identische Seriennummer !");
 			    
 		QMessageBox::critical( 0, "Justage", s);
 	    }
