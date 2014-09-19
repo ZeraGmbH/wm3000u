@@ -71,7 +71,7 @@
 //                  nach selbsttest erscheint eine messagebox mit info dass Test beendet
 //                  releaseinfo file path hinzugefügt für releaseausgabe
 
-#define WMVersion "V2.20"
+#define WMVersion "V2.21"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
