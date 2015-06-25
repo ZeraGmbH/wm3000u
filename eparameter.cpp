@@ -63,12 +63,22 @@ void eParameter::operator =(QString s) {
   Unit = 0;
 }
 
-bool eParameter::Test(eUnit* eu, int n) {
-    for (int i=0; i<n; i++,eu++) {
-	if (eP.contains(eu->Name)) {
-	    Unit = eu;
-	    return true;
-	}
+bool eParameter::Test(eUnit* eu, int n)
+{
+    for (int i=0; i<n; i++,eu++)
+    {
+        if (eP.contains(eu->Name))
+        {
+            bool ok;
+            QString teststr = eP;
+            teststr.remove(eu->Name);
+            teststr.toDouble(&ok);
+            if (ok)
+            {
+                Unit = eu;
+                return true;
+            }
+        }
     }
     return false;
 }
