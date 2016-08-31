@@ -580,6 +580,14 @@ void WMViewBase::SetEnglishSlot()
 }
 
 
+void WMViewBase::SetPolishSlot()
+{
+    m_ConfData.Language = pl;
+    emit SendConfDataSignal(&m_ConfData);
+    g_app->exit(10);
+}
+
+
 void WMViewBase::JustFlashProgSlot()
 {
     emit JustFlashProgSignal(); // signal an wm3000 das flash zu prograsmmieren

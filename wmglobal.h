@@ -101,7 +101,7 @@ enum SampleRates {S80,S256,MaxSRate}; // abtastraten
 enum tsmode {sensNsensX, adcNadcX, sensNadcX, sensXadcN, adcXadcN = 5}; // testmodi innerhalb der hardware 
 enum MeasModes {Un_UxAbs,Un_EVT,Un_nConvent,maxMMode}; // messmodi
 enum UserDecisions {AbortProgram,Stop,Retry,SimulationMode}; // benutzer entscheidungen
-enum Languages {de,gb}; 
+enum Languages {de,gb,pl};
 
 
 class cTCPConfig 

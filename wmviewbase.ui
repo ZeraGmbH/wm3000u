@@ -155,6 +155,7 @@
     </property>
     <addaction name="spracheDeutschAction"/>
     <addaction name="spracheEnglischAction_2"/>
+    <addaction name="sprachePolnischAction"/>
    </widget>
    <widget class="QMenu" name="Justage">
     <property name="title">
@@ -671,7 +672,7 @@
   <action name="spracheDeutschAction">
    <property name="icon">
     <iconset>
-     <normaloff>de.png</normaloff>de.png</iconset>
+     <normaloff>images/Flags/de.png</normaloff>images/Flags/de.png</iconset>
    </property>
    <property name="text">
     <string>Deutsch</string>
@@ -701,7 +702,7 @@
   <action name="spracheEnglischAction_2">
    <property name="icon">
     <iconset>
-     <normaloff>gb.png</normaloff>gb.png</iconset>
+     <normaloff>images/Flags/gb.png</normaloff>images/Flags/gb.png</iconset>
    </property>
    <property name="text">
     <string>Englisch</string>
@@ -785,6 +786,15 @@
   <action name="hilfeReleaseInfoAction">
    <property name="text">
     <string>&amp;Release Info</string>
+   </property>
+  </action>
+  <action name="sprachePolnischAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>images/Flags/pl.png</normaloff>images/Flags/pl.png</iconset>
+   </property>
+   <property name="text">
+    <string>Polnisch</string>
    </property>
   </action>
  </widget>
@@ -1091,6 +1101,22 @@
     <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sprachePolnischAction</sender>
+   <signal>activated()</signal>
+   <receiver>WMViewBase</receiver>
+   <slot>SetPolishSlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>23</y>
     </hint>
    </hints>
   </connection>
