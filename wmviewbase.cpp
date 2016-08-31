@@ -259,25 +259,25 @@ void WMViewBase::StartSlot()
 void WMViewBase::CreateStatusBar()
 {
     m_pOETLabel=new QLabel("",this); // eigenfehlertabelle in statuszeile
-    statusBar()->addWidget(m_pOETLabel,0);
+    statusBar()->addPermanentWidget(m_pOETLabel,0);
     m_pResultLabel=new QLabel("",this); // ergebnisdatei in statuszeile
-    statusBar()->addWidget(m_pResultLabel,0);
+    statusBar()->addPermanentWidget(m_pResultLabel,0);
     m_pRangeNLabel=new QLabel("",this); // bereich N in statuszeile
-    statusBar()->addWidget(m_pRangeNLabel,0);
+    statusBar()->addPermanentWidget(m_pRangeNLabel,0);
     m_pRangeXLabel=new QLabel("",this); // bereich X in statuszeile
-    statusBar()->addWidget(m_pRangeXLabel,0);
+    statusBar()->addPermanentWidget(m_pRangeXLabel,0);
     m_pRunningLabel=new QLabel("",this); // gestartet bzw. gestoppt in statuszeile
-    statusBar()->addWidget(m_pRunningLabel,0);
+    statusBar()->addPermanentWidget(m_pRunningLabel,0);
     m_pSimulationLabel=new QLabel("",this); // simulation oder reale messung in statuszeile
-    statusBar()->addWidget(m_pSimulationLabel,0);
+    statusBar()->addPermanentWidget(m_pSimulationLabel,0);
     m_pStatusLabel=new QLabel("",this); // normaler ablauf oder fehlerausgaben in statuszeile
-    statusBar()->addWidget(m_pStatusLabel,0);
+    statusBar()->addPermanentWidget(m_pStatusLabel,0);
     m_pStatusLabel->setStyleSheet("QLabel {color:red;}");
     m_pFreqLabel=new QLabel("",this); // erstmal kein fehler
     m_pFreqLabel->setStyleSheet("QLabel {color:red;}");
-    statusBar()->addWidget(m_pFreqLabel,0);
+    statusBar()->addPermanentWidget(m_pFreqLabel,0);
     m_pDummyLabel=new QLabel("",this); // letztes feld ist bereich N in statuszeile
-    statusBar()->addWidget(m_pDummyLabel,1);
+    statusBar()->addPermanentWidget(m_pDummyLabel,1);
 }
 
 
