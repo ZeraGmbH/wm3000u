@@ -8,7 +8,8 @@
 
 extern cWM3000U* g_WMDevice;
 extern  scpiErrorType SCPIError[];
-char* MModeName[maxMMode] = {(char*)"Un/Ux",(char*)"Un/EVT",(char*)"Un/nConvent"};
+extern char* MModeName[];
+char* SModeName[maxSMode] = {(char*)"AC",(char*)"DC"};
 char* FreqName[MaxFreq] = {(char*)"16.67",(char*)"50.0",(char*)"60.0"};
 double SFrequency[MaxFreq] = {16.67, 50.0, 60.0};
 char* SRatesName[MaxSRate] = {(char*)"80",(char*)"256"}; // abtastraten
@@ -1082,11 +1083,10 @@ void cWM3000SCPIFace::mSetConfOperMode(char* s)
     {
         if (g_WMDevice->isConventional())
         {
-            if (m == Un_UxAbs)
-            {
-                m_ConfDataTarget.m_nMeasMode = m;
-                return;
-            }
+            m_ConfDataTarget.m_nMeasMode = Un_UxAbs;
+            if (m != Un_UxAbs)
+                AddEventError(ParameterNotAllowed);
+            return;
         }
         else
         {
@@ -1104,6 +1104,53 @@ char* cWM3000SCPIFace::mGetConfOperMode()
     QString rs;
     m_ConfDataTarget = m_ConfDataActual;
     rs = QString("%1,%2").arg(m_ConfDataActual.m_nMeasMode).arg(MModeName[m_ConfDataActual.m_nMeasMode]);
+    return sAlloc(rs);
+}
+
+
+char *cWM3000SCPIFace::mGetConfOperSignalCatalog()
+{
+    QString rs;
+
+    m_ConfDataTarget = m_ConfDataActual;
+
+    rs = QString("%1,%2;%3,%4").arg(AC).arg(SModeName[AC])
+                               .arg(DC).arg(SModeName[DC]);
+    return sAlloc(rs);
+}
+
+
+void cWM3000SCPIFace::mSetConfOperSignal(char *s)
+{
+    int m;
+    if ( SearchEntry(&s,SModeName,maxSMode,m,true) )
+    {
+        if (g_WMDevice->isDC())
+        {   // wir dürfen alle signal modi
+            m_ConfDataTarget.m_bDCmeasurement = (m == DC);
+            return;
+        }
+        else
+        {
+            m_ConfDataTarget.m_bDCmeasurement = false;
+            if (m != AC)
+               AddEventError(ParameterNotAllowed);
+            return;
+        }
+//	emit SendConfiguration(&m_ConfData);
+    }
+    AddEventError(ParameterNotAllowed);
+}
+
+
+char *cWM3000SCPIFace::mGetConfOperSignal()
+{
+    QString rs;
+    m_ConfDataTarget = m_ConfDataActual;
+    if (m_ConfDataActual.m_bDCmeasurement)
+        rs = QString("%1,%2").arg(DC).arg(SModeName[DC]);
+    else
+        rs = QString("%1,%2").arg(AC).arg(SModeName[AC]);
     return sAlloc(rs);
 }
 
@@ -1686,6 +1733,7 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 		  case SetConfCompOecOn: mSetConfCompOecOn(s);break;
 //		  case SetConfCompMode: mSetConfCompMode(s);break;
 		  case SetConfOperMode: mSetConfOperMode(s);break;
+          case SetConfOperSignal: mSetConfOperSignal(s);break;
 		  default: qDebug("ProgrammierFehler"); // hier sollten wir nie hinkommen
 		  }
 	      else
@@ -1738,6 +1786,7 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 	case SetConfCompOecOn: 
 //	case SetConfCompMode: 
 	case SetConfOperMode: 
+    case SetConfOperSignal:
 	    m_pSMachineTimer->start(0, ExecCmdPartFinished);
 	default: 
 	    break;
@@ -1814,6 +1863,9 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 //	case GetConfCompMode: an = mGetConfCompMode();break;
 	case GetConfOperModeCatalog: an = mGetConfOperModeCatalog();break;
 	case GetConfOperMode: an = mGetConfOperMode();break;
+    case GetConfOperSignalCatalog: an = mGetConfOperSignalCatalog();break;
+    case GetConfOperSignal: an = mGetConfOperSignal();break;
+
 	default:	qDebug("ProgrammierFehler"); // hier sollten wir nie hinkommen     
 	}
 	
@@ -1874,6 +1926,8 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 //	case GetConfCompMode:
 	case GetConfOperModeCatalog:
 	case GetConfOperMode:
+    case GetConfOperSignalCatalog:
+    case GetConfOperSignal:
 	    m_pSMachineTimer->start(0, ExecCmdPartFinished);	    
 	default:	
 	    break;
@@ -1897,7 +1951,9 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 cNodeSCPI* Configuration;
                     cNodeSCPI* ConfigurationOperation;
                                               cNodeSCPI* ConfigurationOperationMode;
-		                                     cNodeSCPI* ConfigurationOperationModeCatalog;
+                                              cNodeSCPI* ConfigurationOperationModeCatalog;
+                                              cNodeSCPI* ConfigurationOperationSignal;
+                                              cNodeSCPI* ConfigurationOperationSignalCatalog;
 	      cNodeSCPI* ConfigurationComputation;
 	                                cNodeSCPI* ConfigurationComputationMode;
 				          cNodeSCPI* ConfigurationComputationModeCatalog;	
@@ -2080,8 +2136,10 @@ cNode* cWM3000SCPIFace::InitScpiCmdTree(cNode* cn) {
 //    ConfigurationComputationMode=new cNodeSCPI("MODE",isNode | isCommand | isQuery,ConfigurationComputationOECorrection,ConfigurationComputationModeCatalog,SetConfCompMode,GetConfCompMode);
     
     ConfigurationComputation=new cNodeSCPI("COMPUTATION",isNode,ConfigurationMeasure,ConfigurationComputationOECorrection,nixCmd,nixCmd);
+    ConfigurationOperationSignalCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,GetConfOperSignalCatalog);
+    ConfigurationOperationSignal=new cNodeSCPI("SIGNAL",isNode | isQuery | isCommand,ConfigurationComputation,ConfigurationOperationSignalCatalog,SetConfOperSignal,GetConfOperSignal);
     ConfigurationOperationModeCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,GetConfOperModeCatalog);
-    ConfigurationOperationMode=new cNodeSCPI("MODE",isNode | isQuery | isCommand,ConfigurationComputation,ConfigurationOperationModeCatalog,SetConfOperMode,GetConfOperMode);
+    ConfigurationOperationMode=new cNodeSCPI("MODE",isNode | isQuery | isCommand,ConfigurationOperationSignal,ConfigurationOperationModeCatalog,SetConfOperMode,GetConfOperMode);
     ConfigurationOperation=new cNodeSCPI("OPERATION",isNode,ConfigurationComputation,ConfigurationOperationMode,nixCmd,nixCmd);
     Configuration=new cNodeSCPI("CONFIGURATION",isNode | isCommand,Measure,ConfigurationOperation,MeasurementConfigure,nixCmd);  
     

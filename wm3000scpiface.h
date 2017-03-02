@@ -123,7 +123,10 @@ enum wm3000SCPICmdType  { nixWCmd = LastCommonCommand, // 13
 //			  GetConfCompMode,
 			  GetConfOperModeCatalog,
 			  SetConfOperMode, // 103
-			  GetConfOperMode
+              GetConfOperMode,
+              GetConfOperSignalCatalog,
+              SetConfOperSignal,
+              GetConfOperSignal
     		      };
 
 
@@ -331,6 +334,9 @@ private:
     char* mGetConfOperModeCatalog();
     void mSetConfOperMode(char*);
     char* mGetConfOperMode();
+    char* mGetConfOperSignalCatalog();
+    void mSetConfOperSignal(char*s);
+    char* mGetConfOperSignal();
    
 };
 
