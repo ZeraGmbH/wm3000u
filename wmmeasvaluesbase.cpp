@@ -171,7 +171,7 @@ void WMMeasValuesBase::ActualizeDisplay()
    ui->mBigAngleError->display(QString("%1").arg(AnzeigeWert,m_Format[2].FieldWidth,'f',m_Format[2].Resolution));
    ui->mBigAngleUnit->display(m_Format[2].UnitInfo.Name);
    
-   if (m_nDisplayMode == ANSI || !m_ActValues.bvalid)
+   if (m_nDisplayMode == ANSI || !m_ActValues.bvalid  || m_ConfData.m_bDCmeasurement)
    {
        ui->mBigAngleName->setEnabled(false);
        ui->mBigAngleError->setEnabled(false);
