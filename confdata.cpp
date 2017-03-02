@@ -8,6 +8,7 @@
 void cConfData::serialize(QDataStream& ts)
 {
     ts << m_nVersion << (int)m_bSimulation << (int)m_bRunning << (int)m_bOECorrection << (int)m_bOENewLoad;
+    ts << (int)m_bDCmeasurement;
     ts << m_nMeasMode << m_nMeasPeriod << m_nIntegrationTime<< m_nSyncSource;
     ts << m_nTSync << m_nSFreq << m_nSRate << FirstASDU << LastASDU << DataSet;
     ts << m_nLogFileMax << m_fxPhaseShift << m_fxTimeShift;
@@ -33,9 +34,10 @@ bool cConfData::deserialize(QDataStream& ts)
     
     ts >> tmp;
     if ((ret = (tmp == ConfVersion))) {
-	int s,r,o,ol;
-	ts >> s >> r >> o >> ol;
-	m_bSimulation = s; m_bRunning = r; m_bOECorrection = o; m_bOENewLoad = ol;
+    int s,r,o,ol,dc;
+    ts >> s >> r >> o >> ol >> dc;
+    m_bSimulation = s; m_bRunning = r; m_bOECorrection = o; m_bOENewLoad = ol;
+    m_bDCmeasurement = dc;
 	ts >> m_nMeasMode >> m_nMeasPeriod >> m_nIntegrationTime>> m_nSyncSource;
     ts >> m_nTSync >> m_nSFreq >> m_nSRate >> FirstASDU >> LastASDU >> DataSet;
 	ts >> m_nLogFileMax >> m_fxPhaseShift >> m_fxTimeShift;

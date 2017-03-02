@@ -25,6 +25,7 @@ public:
     bool m_bRunning; // läuft oder läuft nicht
     bool m_bOECorrection; // eigenfehlerkorrektur ein/aus
     bool m_bOENewLoad; // true wenn eigenfehler geladen oder editiert wurden
+    bool m_bDCmeasurement; // true wenn dc messung
     int m_nMeasMode; // mess modus
     int m_nMeasPeriod; // wieviele perioden eine messung dauert
     int m_nIntegrationTime; // nach ablauf dieser zeit wird filter im dsp ausgekoppelt
@@ -33,7 +34,7 @@ public:
     int m_nSFreq; // abtastfrequenz 16 2/3, 50, 60 Hz enum
     float m_fSFreq; // signal frequenzwert float
     int m_nSRate; // abtastrate 80 bzw 256 samples /periode 
-    int m_nTMode; // der aktuelle testmode normal 0 !!! wird nicht gespeichert !!!!!!
+    int m_nSenseMode; // der aktuelle sense mode normal 0 !!! wird nicht gespeichert !!!!!!
     int FirstASDU; // logical node (61850-9-2)
     int LastASDU; // dito
     int DataSet; // data set in ASDU
