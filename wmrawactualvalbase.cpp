@@ -102,8 +102,13 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
 	    phi = PI2 - phi;
 	phi = normWinkelrad_PIPI(phi);
 	phi *= radgrad;
-        ui->XnPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
-	
+
+    ui->XnPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+
+    if (m_pConfData->m_bDCmeasurement)
+        ui->XnPhaseDisp->setEnabled(false);
+    else
+        ui->XnPhaseDisp->setEnabled(true);
 	
 	// amplitude der grundschwingung
 	if (AmplPrimSekMode == prim)
@@ -126,10 +131,22 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
 	    phi = PI2 - phi;
 	phi = normWinkelrad_PIPI(phi);
 	phi *= radgrad;
-        ui->XxPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
+
+    ui->XxPhaseDisp -> setText( QString("%1 %2").arg(phi,8,'f',4).arg( trUtf8("°")) );
 	
-        ui->FreqDisp -> setText( QString("%1 Hz").arg(ActValues->Frequenz,9,'f',5) );
+    if (m_pConfData->m_bDCmeasurement)
+        ui->XxPhaseDisp->setEnabled(false);
+    else
+        ui->XxPhaseDisp->setEnabled(true);
+
+    ui->FreqDisp -> setText( QString("%1 Hz").arg(ActValues->Frequenz,9,'f',5) );
     }
+}
+
+
+void WMRawActualValBase::SetConfInfoSlot( cConfData * cd )
+{
+    m_pConfData = cd;
 }
 
 
