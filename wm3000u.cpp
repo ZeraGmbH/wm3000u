@@ -35,6 +35,7 @@
 
 
 extern WMViewBase *g_WMView;
+extern char* MModeName[];
 
 const double PI = 3.141592654;
 const double PI_180 = 1.74532925e-2;
@@ -75,40 +76,57 @@ cWM3000U::cWM3000U()
     connect(this,SIGNAL(SendActValuesSignal(cwmActValues*)),m_pOwnError,SLOT(SetActualValuesSlot(cwmActValues*)));  
     connect(m_pOwnError,SIGNAL(SendAnalizeDone(void)),this,SLOT(GetOETAnalizeDone(void)));  
     
-     // n bzw. dut (x) kanäle anlegen
-    m_sNXRangeList.setAutoDelete( TRUE ); // the list owns the objects
-    m_sNXRangeList.append( new CWMRange("480V","480V",480.0,4730418,0.1) ); //name,selectname,wert,aussteuerung
-    m_sNXRangeList.append( new CWMRange("240V","240V",240.0,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("120V","120V",120.0,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("60V","60V",60.0,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("30V","30V",30.0,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("15V","15V",15.0,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("7.5V","7.5V",7.5,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("3.75V","3.75V",3.75,4730418,0.1) );
-    m_sNXRangeList.append( new CWMRange("Auto","Auto",-1.0,500000,0.1) ); // sonderfall
+    // !!!!! die bereiche in den kanälen n und x sind gleich und müssen gleich bleiben !!!!!
+    // bis auf die information welche offsetjustagedaten genutzt werden sollen
+    // es gab früher nur 1!!!! liste weil die bereiche wirklich gleich sind
+    // aber dadurch dass für jeden bereich in jedem kanal offsetabgleichwerte abgelegt werden müssen
+    // brauchen wir unabhängige listen. wenn die bereiche in den kanälen n und x unterschiedlich
+    // werden sollen....bedarf es mehr aufwand
+
+    // n kanal anlegen
+    m_sNRangeList.setAutoDelete( TRUE ); // the list owns the objects
+    m_sNRangeList.append( new CWMRange("480V","480V",480.0,4730418,0.1, "N480V") ); //name,selectname,wert,aussteuerung
+    m_sNRangeList.append( new CWMRange("240V","240V",240.0,4730418,0.1, "N240V") );
+    m_sNRangeList.append( new CWMRange("120V","120V",120.0,4730418,0.1, "N120V") );
+    m_sNRangeList.append( new CWMRange("60V","60V",60.0,4730418,0.1, "N60V") );
+    m_sNRangeList.append( new CWMRange("30V","30V",30.0,4730418,0.1, "N30V") );
+    m_sNRangeList.append( new CWMRange("15V","15V",15.0,4730418,0.1, "N15V") );
+    m_sNRangeList.append( new CWMRange("7.5V","7.5V",7.5,4730418,0.1, "N7.5V") );
+    m_sNRangeList.append( new CWMRange("3.75V","3.75V",3.75,4730418,0.1, "N3.75V") );
+    m_sNRangeList.append( new CWMRange("Auto","Auto",-1.0,500000,0.1, "N480V") ); // sonderfall
     
-    // ende n bzw. dut (x)  kanäle anlegen
+    // dut (x) kanal anlegen
+    m_sXRangeList.setAutoDelete( TRUE ); // the list owns the objects
+    m_sXRangeList.append( new CWMRange("480V","480V",480.0,4730418,0.1, "X480V") ); //name,selectname,wert,aussteuerung
+    m_sXRangeList.append( new CWMRange("240V","240V",240.0,4730418,0.1, "X240V") );
+    m_sXRangeList.append( new CWMRange("120V","120V",120.0,4730418,0.1, "X120V") );
+    m_sXRangeList.append( new CWMRange("60V","60V",60.0,4730418,0.1, "X60V") );
+    m_sXRangeList.append( new CWMRange("30V","30V",30.0,4730418,0.1, "X30V") );
+    m_sXRangeList.append( new CWMRange("15V","15V",15.0,4730418,0.1, "X15V") );
+    m_sXRangeList.append( new CWMRange("7.5V","7.5V",7.5,4730418,0.1, "X7.5V") );
+    m_sXRangeList.append( new CWMRange("3.75V","3.75V",3.75,4730418,0.1, "X3.75V") );
+    m_sXRangeList.append( new CWMRange("Auto","Auto",-1.0,500000,0.1, "X480V") ); // sonderfall
     
     // evt bereiche anlegen
     m_sEVTRangeList.setAutoDelete( TRUE ); // the list owns the objects
 //    m_sEVTRangeList.append( new CWMRange("SafetyRange","480V",480.0,4730418,0.03125) );
 //   safetyrange wurde entfernt da evt als gesonderter eingang realisiert wurde
-    m_sEVTRangeList.append( new CWMRange("15.0V","E15.0V",15.0,2831155,0.1) );
-    m_sEVTRangeList.append( new CWMRange("10.0V","E10.0V",10.0,4718592,0.1) );
-    m_sEVTRangeList.append( new CWMRange("5.0V","E5.0V",5.0,4718592,0.1) );
-    m_sEVTRangeList.append( new CWMRange("2.5V","E2.5V",2.5,4718592,0.1) );
-    m_sEVTRangeList.append( new CWMRange("1.0V","E1.0V",1.0,4718592,0.1) );
-    m_sEVTRangeList.append( new CWMRange("500mV","E500mV",0.5,2995931,0.1) );
-    m_sEVTRangeList.append( new CWMRange("250mV","E250mV",0.25,2995931,0.1) );
-    m_sEVTRangeList.append( new CWMRange("100mV","E100mV",0.1,2995931,0.1) );
-    m_sEVTRangeList.append( new CWMRange("50mV","E50mV",0.05,2995931,0.1) );
-    m_sEVTRangeList.append( new CWMRange("25mV","E25mV",0.025,2995931,0.1) );
-//    m_sEVTRangeList.append( new CWMRange("10mV","E10mV",0.01,2995931,0.1) );
-//    m_sEVTRangeList.append( new CWMRange("5mV","E5mV",0.005,2995931,0.1) );
-    m_sEVTRangeList.append( new CWMRange("Auto","Auto",-1.0,500000,0.1) ); // sonderfall
+    m_sEVTRangeList.append( new CWMRange("15.0V","E15.0V",15.0,2831155,0.1, "ECT15.0V") );
+    m_sEVTRangeList.append( new CWMRange("10.0V","E10.0V",10.0,4718592,0.1, "ECT10.0V") );
+    m_sEVTRangeList.append( new CWMRange("5.0V","E5.0V",5.0,4718592,0.1, "ECT5.0V") );
+    m_sEVTRangeList.append( new CWMRange("2.5V","E2.5V",2.5,4718592,0.1, "ECT2.5V") );
+    m_sEVTRangeList.append( new CWMRange("1.0V","E1.0V",1.0,4718592,0.1, "ECT1.0V") );
+    m_sEVTRangeList.append( new CWMRange("500mV","E500mV",0.5,2995931,0.1, "ECT500mV") );
+    m_sEVTRangeList.append( new CWMRange("250mV","E250mV",0.25,2995931,0.1, "ECT250mV") );
+    m_sEVTRangeList.append( new CWMRange("100mV","E100mV",0.1,2995931,0.1, "ECT100mV") );
+    m_sEVTRangeList.append( new CWMRange("50mV","E50mV",0.05,2995931,0.1, "ECT50mV") );
+    m_sEVTRangeList.append( new CWMRange("25mV","E25mV",0.025,2995931,0.1, "ECT25mV") );
+//    m_sEVTRangeList.append( new CWMRange("10mV","E10mV",0.01,2995931,0.1), "ECT15.0V" );
+//    m_sEVTRangeList.append( new CWMRange("5mV","E5mV",0.005,2995931,0.1), "ECT15.0V" );
+    m_sEVTRangeList.append( new CWMRange("Auto","Auto",-1.0,500000,0.1, "ECT15.0V") ); // sonderfall
     // ende evt bereiche anlegen
     
-    DummyRange = new CWMRange("Unknown","Unknown",-1.0,0,0.1);
+    DummyRange = new CWMRange("Unknown","Unknown",-1.0,0,0.1,"Dummy");
     
     // default konfiguration setzen
     DefaultSettings(m_ConfData);
@@ -177,6 +195,9 @@ cWM3000U::cWM3000U()
 
     m_SelftestLogfile.setName(QDir(SelftestLogFilePath).absPath());
     m_PhaseJustLogfile.setName(QDir(PhaseJustLogFilePath).absPath());
+    m_OffsetJustLogfile.setName(QDir(OffsetJustLogFilePath).absPath());
+    m_OffsetDatafile.setName(QDir(OffsetJustDataFilePath).absPath());
+    m_NSAOffsetDatafile.setName(QDir(NSAOffsetJustDataFilePath).absPath());
 
     ulong* pdata = (ulong*) ETHStatusResetHandle->data();
     *pdata = 0;
@@ -186,6 +207,15 @@ cWM3000U::cWM3000U()
     
     ActValues.RMSNSek = 0.0;  // wir benötigen definierte istwerte, damit wir die korrekturwerte
     ActValues.RMSXSek = 0.0; // lesen können
+    ActValues.VekN = 0.0;
+    ActValues.VekNSek = 0.0;
+    ActValues.VekX = 0.0;
+    ActValues.VekXSek = 0.0;
+    ActValues.PHIN = 0.0;
+    ActValues.PHIX = 0.0;
+    ActValues.Frequenz = 50.0;
+
+
     m_OVLMsgBox = new cWMessageBox ( trUtf8("Übersteuerung"), trUtf8("Es ist eine Übersteuerung im grössten Bereich\naufgetreten. Bitte überprüfen Sie die Messgrössen"), QMessageBox::Critical, QMessageBox::Ok, Qt::NoButton, Qt::NoButton, 0, 0, false ) ;
     connect(m_OVLMsgBox,SIGNAL(WMBoxClosed()),this,SLOT(OverLoadMaxQuitSlot()));
     m_SelftestMsgBox = new cWMessageBox ( trUtf8("Selbstest"), trUtf8("Test beendet\nDetails stehen im Logfile"), QMessageBox::Information, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, 0, 0, false ) ;
@@ -202,7 +232,8 @@ cWM3000U::~cWM3000U()
 
 void cWM3000U::ActionHandler(int entryAHS)
 {
-    const char* TModeText[6] = {"sensNsensX", "adcNadcX", "sensNadcX", "sensXadcN", "", " adcXadcN"};
+    const char* SenseModeText[anzSenseMode] = {"sensNsensX", "adcNadcX", "sensNadcX", "sensXadcN", "sensNsensX0V"};
+
     static int AHS = wm3000Idle; // action handler state
     static bool bOverloadMax = false;
     static bool bOverloadMaxOld = false;
@@ -210,9 +241,12 @@ void cWM3000U::ActionHandler(int entryAHS)
     static int lprogress;
     static int N; 
     static int mCount;
-    static cPhaseCalcInfo *PhaseCalcInfo;
-    static cPhaseNodeMeasInfo *PhaseNodeMeasInfo;
+    static cCalcInfo *PhaseCalcInfo;
+    static cCalcInfo *OffsetCalcInfo;
+    static cJustMeasInfo *PhaseNodeMeasInfo;
+    static cJustMeasInfo *OffsetMeasInfo;
     static float ph0,ph1;
+    static float offs0, offs1;
     static complex SenseVektor, ADCVektor;
       
 
@@ -251,7 +285,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 	StopMeasurement();
 	m_binitDone = false; // wir initialisieren !!
 	emit SendConfDataSignal(&m_ConfData);
-	emit SendRangeListSignal(m_sNXRangeList,m_sEVTRangeList);
+    emit SendRangeListSignal(m_sNRangeList,m_sEVTRangeList);
 	AHS++;
 	m_ActTimer->start(0,wm3000Continue); // wir starten uns selbst
 	break; // InitializationStart
@@ -339,12 +373,12 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    else
 	    {
 		rss = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
-		rng = Range(rss,m_sNXRangeList); // sucht den bereich über den selektor aus der liste
+        rng = Range(rss,m_sNRangeList); // sucht den bereich über den selektor aus der liste
 		m_ConfData.m_sRangeN = rng->Name(); // istbereich
 		if (m_ConfData.m_sRangeN != m_ConfData.m_sRangeNSoll)  // muss was getan werden?
 		{
 		    StopMeasurement(); // wir stoppen die messung wenn wir bereiche schalten
-		    PCBIFace->switchRange(0,Range(m_ConfData.m_sRangeNSoll,m_sNXRangeList)->Selector());
+            PCBIFace->switchRange(0,Range(m_ConfData.m_sRangeNSoll,m_sNRangeList)->Selector());
 		}
 		else
 		    m_ActTimer->start(0,wm3000Continue); // event, damit statemachine weiterläuft wenn wir nichts gesendet haben
@@ -394,12 +428,12 @@ void cWM3000U::ActionHandler(int entryAHS)
 		switch (m_ConfData.m_nMeasMode)
 		{
 		case Un_UxAbs:
-		    rng = Range(rss,m_sNXRangeList); // sucht den bereich über den selektor aus der liste
+            rng = Range(rss,m_sNRangeList); // sucht den bereich über den selektor aus der liste
 		    m_ConfData.m_sRangeX = rng->Name(); // istbereich
 		    if (m_ConfData.m_sRangeX != m_ConfData.m_sRangeXSoll)
 		    {
 			StopMeasurement(); // wir stoppen die messung wenn wir bereiche schalten
-			PCBIFace->switchRange(1,Range(m_ConfData.m_sRangeXSoll,m_sNXRangeList)->Selector());
+            PCBIFace->switchRange(1,Range(m_ConfData.m_sRangeXSoll,m_sNRangeList)->Selector());
 		    }
 		    else
 			m_ActTimer->start(0,wm3000Continue);
@@ -416,10 +450,10 @@ void cWM3000U::ActionHandler(int entryAHS)
 			m_ActTimer->start(0,wm3000Continue);
 		    break;
 		case Un_nConvent:
-		    if (rss != m_sNXRangeList.first()->Selector())
+            if (rss != m_sNRangeList.first()->Selector())
 		    {
 			StopMeasurement(); // wir stoppen die messung wenn wir bereiche schalten
-			PCBIFace->switchRange(1,m_sNXRangeList.first()->Selector());
+            PCBIFace->switchRange(1,m_sNRangeList.first()->Selector());
 		    }
 		    else
 			m_ActTimer->start(0,wm3000Continue);
@@ -580,34 +614,36 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    break; // InitializationSetSamplingPSamples
 	}
 
-    case ConfigurationSetTMode:
-    case InitializationSetTMode:
+    case ConfigurationSetSenseMode:
+    case InitializationSetSenseMode:
 	{
-	    int tm;
-	    if (m_ConfData.m_bSimulation) {
-		AHS = wm3000Idle;
+        int sm;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
 	    }
 	    else
 	    {
-		tm = m_ConfData.m_nTMode;
-		PCBIFace->setTMode(tm);
-		AHS++;
+            sm = m_ConfData.m_nSenseMode;
+            PCBIFace->setSenseMode(sm);
+            AHS++;
 	    }
-	    break; // InitializationSetTMode
+        break; // InitializationSetSenseMode
 	}
 	
     case ConfigurationSetSyncSource:
     case InitializationSetSyncSource:
 	{
 	    int sm;
-	    if (m_ConfData.m_bSimulation) {
-		AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
 	    }
 	    else
 	    {
-		sm = (m_ConfData.m_nSyncSource == Intern) ? 1 : 0;
-		PCBIFace->setSyncSource(sm);
-		AHS++;
+            sm = (m_ConfData.m_nSyncSource == Intern) ? 1 : 0;
+            PCBIFace->setSyncSource(sm);
+            AHS++;
 	    }
 	    break; // InitializationSetSyncSource
 	}
@@ -835,7 +871,8 @@ void cWM3000U::ActionHandler(int entryAHS)
 	 {
 	 QString s;
 	 int stat;
-	 if (m_ConfData.m_bSimulation) {
+     if (m_ConfData.m_bSimulation)
+     {
 	 }
 	else
 	{
@@ -843,26 +880,26 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    stat = s.toInt();
 	    if ( stat  > 0) // nicht justiert
 	    {
-		m_bJust = false;
-		emit JustifiedSignal(false);
-		emit AffectStatus(SetQuestStat, QuestNotJustified);
-		
-		s = tr("Achtung !");
-		s+="\n";
-		if (stat & 7) 
-            s += trUtf8("Gerät ist nicht justiert !");
-		if (stat & 2)
-            s += trUtf8("\nNicht identische Versionsnummer !");
-		if (stat & 4)
-            s += trUtf8("\nNicht identische Seriennummer !");
-			    
-		QMessageBox::critical( 0, "Justage", s);
+            m_bJust = false;
+            emit JustifiedSignal(false);
+            emit AffectStatus(SetQuestStat, QuestNotJustified);
+
+            s = tr("Achtung !");
+            s+="\n";
+            if (stat & 7)
+                s += trUtf8("Gerät ist nicht justiert !");
+            if (stat & 2)
+                s += trUtf8("\nNicht identische Versionsnummer !");
+            if (stat & 4)
+                s += trUtf8("\nNicht identische Seriennummer !");
+
+            QMessageBox::critical( 0, "Justage", s);
 	    }
 	    else
 	    {
-		m_bJust = true;
-		emit JustifiedSignal(true);
-		emit AffectStatus(ResetQuestStat, QuestNotJustified);
+            m_bJust = true;
+            emit JustifiedSignal(true);
+            emit AffectStatus(ResetQuestStat, QuestNotJustified);
 	    }
 		
 	    m_binitDone = true; // wir hatten keinen fehler
@@ -947,7 +984,9 @@ void cWM3000U::ActionHandler(int entryAHS)
 	    if ( (m_ConfDataCopy.m_nSRate != m_ConfData.m_nSRate) || 
 		 (m_ConfDataCopy.m_nMeasPeriod != m_ConfData.m_nMeasPeriod) ||  
 		 (m_ConfDataCopy.m_nMeasMode != m_ConfData.m_nMeasMode) ||
-		 (fabs(m_ConfDataCopy.m_fSFreq - m_ConfData.m_fSFreq) > 1e-6) )
+         (fabs(m_ConfDataCopy.m_fSFreq - m_ConfData.m_fSFreq) > 1e-6) ||
+         (m_ConfDataCopy.m_bDCmeasurement != m_ConfData.m_bDCmeasurement) )
+
 	    {
 		StopMeasurement();
 		AHS++; // dsp cmdlisten setzen und übersetzen
@@ -989,25 +1028,25 @@ void cWM3000U::ActionHandler(int entryAHS)
 		AHS++; // messplatine samples/periode
 	    }
 	    else
-		AHS = ConfigurationTestTMode;
+        AHS = ConfigurationTestSenseMode;
 	   
 	    m_ActTimer->start(0,wm3000Continue); 
 	}
 	break; // ConfigurationTestSRate
 	
-case ConfigurationTestTMode:
+case ConfigurationTestSenseMode:
 	if (m_ConfData.m_bSimulation) {
 	    AHS = wm3000Idle;
 	}
 	else
 	{
-	    if (m_ConfDataCopy.m_nTMode != m_ConfData.m_nTMode)
+        if (m_ConfDataCopy.m_nSenseMode != m_ConfData.m_nSenseMode)
 	    {
-		StopMeasurement();
-		AHS++; // messplatine test modus
+            StopMeasurement();
+            AHS++; // messplatine test modus
 	    }
 	    else
-		AHS = ConfigurationTestSyncMode;
+            AHS = ConfigurationTestSyncMode;
 	   
 	    m_ActTimer->start(0,wm3000Continue); 
 	}
@@ -1271,7 +1310,7 @@ case ConfigurationTestTMode:
 	}
 	else
 	{ 
-	    PCBIFace->readGainCorrection(0, Range(m_ConfData.m_sRangeN,m_sNXRangeList)->Selector(), ActValues.RMSNSek);
+        PCBIFace->readGainCorrection(0, Range(m_ConfData.m_sRangeN,m_sNRangeList)->Selector(), ActValues.RMSNSek);
 	    AHS++;
 	}
 	
@@ -1281,87 +1320,136 @@ case ConfigurationTestTMode:
     case TriggerMeasureGetGainCorrCh1:
 	{
 	    QString gcs;
-	    if (m_ConfData.m_bSimulation) {
-		AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
 	    }
 	    else
 	    { 
-		gcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
-		m_JustValues.GainCorrCh0 = gcs.toFloat();
-		
-		if ( m_ConfData.m_nMeasMode == Un_UxAbs)
-		    PCBIFace->readGainCorrection(1,  Range(m_ConfData.m_sRangeX,m_sNXRangeList)->Selector(), ActValues.RMSXSek);
-		else
-		    PCBIFace->readGainCorrection(1,  Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList)->Selector(), ActValues.RMSXSek);
-		
-		AHS++;
+            gcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.GainCorrCh0 = gcs.toFloat();
+
+            if ( m_ConfData.m_nMeasMode == Un_UxAbs)
+                PCBIFace->readGainCorrection(1,  Range(m_ConfData.m_sRangeX,m_sNRangeList)->Selector(), ActValues.RMSXSek);
+            else
+                PCBIFace->readGainCorrection(1,  Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList)->Selector(), ActValues.RMSXSek);
+
+            AHS++;
 	    }
 	
 	    break; // TriggerMeasureGetGainCorrCh1
-              }
+    }
 	
     case MeasureGetPhaseCorrCh0:
     case TriggerMeasureGetPhaseCorrCh0:
 	{
 	    QString gcs;
-	    if (m_ConfData.m_bSimulation) {
-		AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
 	    }
 	    else
 	    { 
-		gcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
-		m_JustValues.GainCorrCh1 = gcs.toFloat();
-		
-		PCBIFace->readPhaseCorrection(0, Range(m_ConfData.m_sRangeN,m_sNXRangeList)->Selector(), ActValues.Frequenz);
-		AHS++;
+            gcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.GainCorrCh1 = gcs.toFloat();
+
+            PCBIFace->readPhaseCorrection(0, Range(m_ConfData.m_sRangeN,m_sNRangeList)->Selector(), ActValues.Frequenz);
+            AHS++;
 	    }
 	    
-	break; // TriggerMeasureGetPhaseCorrCh0
-              }
+        break; // TriggerMeasureGetPhaseCorrCh0
+    }
 	
     case MeasureGetPhaseCorrCh1:
     case TriggerMeasureGetPhaseCorrCh1:
 	{
 	    QString pcs;
-	    if (m_ConfData.m_bSimulation) {
-		AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
 	    }
 	    else
 	    { 
-		pcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
-		m_JustValues.PhaseCorrCh0 = pcs.toFloat();
-	
-		if ( m_ConfData.m_nMeasMode == Un_UxAbs)
-		    PCBIFace->readPhaseCorrection(1, Range(m_ConfData.m_sRangeX,m_sNXRangeList)->Selector(), ActValues.Frequenz);
-		else
-		    PCBIFace->readPhaseCorrection(1, Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList)->Selector(), ActValues.Frequenz);
-	
-		AHS++;
+            pcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.PhaseCorrCh0 = pcs.toFloat();
+
+            if ( m_ConfData.m_nMeasMode == Un_UxAbs)
+                PCBIFace->readPhaseCorrection(1, Range(m_ConfData.m_sRangeX,m_sNRangeList)->Selector(), ActValues.Frequenz);
+            else
+                PCBIFace->readPhaseCorrection(1, Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList)->Selector(), ActValues.Frequenz);
+
+            AHS++;
 	    }
 	
-	break; // TriggerMeasureGetPhaseCorrCh1
-              }
+        break; // TriggerMeasureGetPhaseCorrCh1
+    }
+
+    case MeasureGetOffsetCorrCh0:
+    case TriggerMeasureGetOffsetCorrCh0:
+    {
+        QString pcs;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            pcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.PhaseCorrCh1 = pcs.toFloat();
+
+            PCBIFace->readOffsetCorrection(0, Range(m_ConfData.m_sRangeN,m_sNRangeList)->Selector(), ActValues.RMSNSek);
+            AHS++;
+        }
+
+        break; // TriggerMeasureGetOffsetCorrCh0
+    }
+
+
+    case MeasureGetOffsetCorrCh1:
+    case TriggerMeasureGetOffsetCorrCh1:
+    {
+        QString ocs;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            ocs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.OffsetCorrCh0 = ocs.toFloat();
+
+            if ( m_ConfData.m_nMeasMode == Un_UxAbs)
+                PCBIFace->readOffsetCorrection(1, Range(m_ConfData.m_sRangeX,m_sNRangeList)->Selector(), ActValues.RMSXSek);
+            else
+                PCBIFace->readOffsetCorrection(1, Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList)->Selector(), ActValues.RMSXSek);
+
+            AHS++;
+        }
+
+        break; // TriggerMeasureGetOffsetCorrCh1
+    }
 	
     case MeasureCorrection:	
     case TriggerMeasureCorrection:
 	{
-	    QString pcs;
-	    if (m_ConfData.m_bSimulation) {
+        QString ocs;
+        if (m_ConfData.m_bSimulation)
+        {
 	    }
 	    else
 	    { 
-		pcs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
-		m_JustValues.PhaseCorrCh1 = pcs.toFloat();
-	
-		CorrActValues();
-		CmpActValues(false);
-		emit SendActValuesSignal(&ActValues); 
-		emit MeasureReady();
+            ocs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            m_JustValues.OffsetCorrCh1 = ocs.toFloat();
+
+            CorrActValues();
+            CmpActValues(false);
+            emit SendActValuesSignal(&ActValues);
+            emit MeasureReady();
 	    }
 	
 	    AHS = wm3000Idle; // wir sind so oder so fertig
 	    break; // TriggerMeasureCorrection
-              }
+    }
 	
 	
     case RestartMeasurementStart:
@@ -1434,7 +1522,8 @@ case ConfigurationTestTMode:
 	
 	
     case MeasureLPComputation:
-	if (m_ConfData.m_bSimulation) {
+    if (m_ConfData.m_bSimulation)
+    {
 	    AHS = wm3000Idle; // wenn fehler war sind wir idle -> ok
 	}
 	else
@@ -1461,8 +1550,8 @@ case ConfigurationTestTMode:
 	    
 	    if (m_ConfData.m_nMeasMode != Un_nConvent) // für nconvent die korrektur nicht berücksichtigen
 	    {
-		tmpFloat[2] *= m_JustValues.GainCorrCh1; 
-		tmpFloat[3] *= m_JustValues.GainCorrCh1; 
+            tmpFloat[2] *= m_JustValues.GainCorrCh1;
+            tmpFloat[3] *= m_JustValues.GainCorrCh1;
 	    }
 	    
 	    ActValues.dspActValues.rmsxf = tmpFloat[2];
@@ -1497,16 +1586,16 @@ case ConfigurationTestTMode:
 		    
 		    bOverloadMaxOld = bOverloadMax;
 		    
-		    mustDo |= SelectRange(m_sNXRangeList,m_ConfData.m_sRangeN,m_ConfData.m_sRangeNSoll,m_ConfData.m_sRangeNVorgabe,MaxValues.maxn,bOvln);
+            mustDo |= SelectRange(m_sNRangeList,m_ConfData.m_sRangeN,m_ConfData.m_sRangeNSoll,m_ConfData.m_sRangeNVorgabe,MaxValues.maxn,bOvln);
 		    
-		    if ( bOvln && (m_ConfData.m_sRangeN == m_sNXRangeList.first()->Name()) )
+            if ( bOvln && (m_ConfData.m_sRangeN == m_sNRangeList.first()->Name()) )
 			bOverloadMax = true;
 
 		    switch (m_ConfData.m_nMeasMode)
 		    {
 		    case Un_UxAbs:
-			mustDo |= SelectRange(m_sNXRangeList,m_ConfData.m_sRangeX,m_ConfData.m_sRangeXSoll,m_ConfData.m_sRangeXVorgabe,MaxValues.maxx, bOvlx );
-			if ( bOvlx && (m_ConfData.m_sRangeX == m_sNXRangeList.first()->Name()) )
+            mustDo |= SelectRange(m_sNRangeList,m_ConfData.m_sRangeX,m_ConfData.m_sRangeXSoll,m_ConfData.m_sRangeXVorgabe,MaxValues.maxx, bOvlx );
+            if ( bOvlx && (m_ConfData.m_sRangeX == m_sNRangeList.first()->Name()) )
 			    bOverloadMax = true;
 			break;
 		    case Un_EVT:
@@ -1600,66 +1689,106 @@ case ConfigurationTestTMode:
 	
 	break;
 	
+
+    case CmpPhaseCoeffStart:
+        StopMeasurement(); // die kumulieren jetzt nur
+        m_pProgressDialog = new Q3ProgressDialog( trUtf8("Berechnung läuft ..."), 0, 4, g_WMView, 0, FALSE, 0 ); // ein progress dialog
+        m_pProgressDialog->setCaption("Phasenkorrekturkoeffizienten"); //überschrift
+        m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
+        lprogress = 0; // int. progress counter
+        AHS++;
+        m_ActTimer->start(0,wm3000Continue);
+        break; // CmpPhaseCoeffStart
 	
 	
-    case CmpPhCoeffStart:
-	StopMeasurement(); // die kumulieren jetzt nur
-	m_pProgressDialog = new Q3ProgressDialog( trUtf8("Berechnung läuft ..."), 0, 4/*m_PhaseCalcInfoList.count()*/, g_WMView, 0, FALSE, 0 ); // ein progress dialog 
-	m_pProgressDialog->setCaption("Phasenkorrekturkoeffizienten"); //überschrift
-	m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
-	lprogress = 0; // int. progress counter
-	AHS++;
-	m_ActTimer->start(0,wm3000Continue);
-	break; // CmpPhCoeffStart
+    case CmpPhaseCoeffCh0:
+    case CmpOffsetCoeffCh0:
+        lprogress++;
+        m_pProgressDialog->setProgress(lprogress);
+        AHS++;
+        m_ActTimer->start(3000,wm3000Continue);
+        break;
 	
+    case CmpPhaseCoeffCh1:
+        if (m_ConfData.m_bSimulation) { // fehler aufgetreten -> abbruch
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            PCBIFace->cmpPhaseCoefficient("ch0"); // phasenkorrektur koeffizienten berechnen lassen
+            AHS++;
+        }
+        break;
 	
-    case CmpPhCoeffCh0:	
-	lprogress++;
-	m_pProgressDialog->setProgress(lprogress);
-	AHS++;
-	m_ActTimer->start(3000,wm3000Continue);
-	break;
+    case CmpPhaseCoeffCh2:
+        if (m_ConfData.m_bSimulation)
+        {   // fehler aufgetreten -> abbruch
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            PCBIFace->cmpPhaseCoefficient("ch1"); // phasenkorrektur koeffizienten berechnen lassen
+            AHS++;
+        }
+        break;
 	
-    case CmpPhCoeffCh1:	
-	if (m_ConfData.m_bSimulation) { // fehler aufgetreten -> abbruch
-	    AHS = wm3000Idle;
-	}
-	else
-	{
-	    lprogress++;
-	    m_pProgressDialog->setProgress(lprogress);
-	    PCBIFace->cmpPhaseCoefficient("ch0"); // phasenkorrektur koeffizienten berechnen lassen
-	    AHS++;
-	}
-	break;	
+    case CmpPhaseCoeffFinished:
+    case CmpOffsetCoeffFinished:
+        if (m_ConfData.m_bSimulation)
+        { // fehler aufgetreten -> abbruch
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren
+            delete m_pProgressDialog;
+            AHS = wm3000Idle;
+        }
+        break; // CmpOffsetCoeffFinished
 	
-    case CmpPhCoeffCh2:	
-	if (m_ConfData.m_bSimulation) { // fehler aufgetreten -> abbruch
-	    AHS = wm3000Idle;
-	}
-	else
-	{
-	    lprogress++;
-	    m_pProgressDialog->setProgress(lprogress);
-	    PCBIFace->cmpPhaseCoefficient("ch1"); // phasenkorrektur koeffizienten berechnen lassen
-	    AHS++;
-	}
-	break;
-	
-    case CmpPhCoeffFinished:
-	if (m_ConfData.m_bSimulation) { // fehler aufgetreten -> abbruch
-	    AHS = wm3000Idle;
-	}
-	else
-	{
-	    lprogress++;
-	    m_pProgressDialog->setProgress(lprogress);
-	    m_ActTimer->start(0,RestartMeasurementStart); // messung reaktivieren 
-	    delete m_pProgressDialog;
-	    AHS = wm3000Idle;
-	}
-	break; // CmpPhCoeffFinished
-	
+    case CmpOffsetCoeffStart:
+        StopMeasurement(); // die kumulieren jetzt nur
+        m_pProgressDialog = new Q3ProgressDialog( trUtf8("Berechnung läuft ..."), 0, 4, g_WMView, 0, FALSE, 0 ); // ein progress dialog
+        m_pProgressDialog->setCaption("Offsetkorrekturkoeffizienten"); //überschrift
+        m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
+        lprogress = 0; // int. progress counter
+        AHS++;
+        m_ActTimer->start(0,wm3000Continue);
+        break; // CmpOffsetCoeffStart
+
+    case CmpOffsetCoeffCh1:
+        if (m_ConfData.m_bSimulation) { // fehler aufgetreten -> abbruch
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            PCBIFace->cmpOffsetCoefficient("ch0"); // offsetkorrektur koeffizienten berechnen lassen
+            AHS++;
+        }
+        break;
+
+    case CmpOffsetCoeffCh2:
+        if (m_ConfData.m_bSimulation)
+        {   // fehler aufgetreten -> abbruch
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            PCBIFace->cmpOffsetCoefficient("ch1"); // offsetkorrektur koeffizienten berechnen lassen
+            AHS++;
+        }
+        break;
+
     case PhaseNodeMeasStart:
 	m_PhaseJustLogfile.remove(); // beim starten wird das log file gelöscht
 	StopMeasurement(); // die kumulieren jetzt nur
@@ -1671,213 +1800,204 @@ case ConfigurationTestTMode:
 	m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
 	lprogress = 0; // int. progress counter
 	m_pProgressDialog->setProgress(lprogress);
-	QObject::connect(m_pAbortButton,SIGNAL(pressed()),this,SLOT(PhaseJustAbortSlot())); 
+    QObject::connect(m_pAbortButton,SIGNAL(pressed()),this,SLOT(JustAbortSlot()));
 	AHS++;
 	m_ActTimer->start(0,wm3000Continue);
 	N = 0; // durchlaufzähler
 	break; // PhaseNodeMeasStart
 	
     case PhaseNodeMeasCoefficientClearN:
-	PhaseCalcInfo = m_PhaseCalcInfoList.first();
-	PCBIFace->setPhaseNodeInfo(PhaseCalcInfo->m_sChannel, PhaseCalcInfo->m_sRange, 0, 0.0, 0.0); // wir setzen jeweils die 1. stützstelle und lassen im anschluss daran die koeffizienten berechnen
-	AHS++;
-	break; // PhaseCoefficientClearN
+        PhaseCalcInfo = m_CalcInfoList.first();
+        PCBIFace->setPhaseNodeInfo(PhaseCalcInfo->m_sChannel, PhaseCalcInfo->m_sRange, 0, 0.0, 0.0); // wir setzen jeweils die 1. stützstelle und lassen im anschluss daran die koeffizienten berechnen
+        AHS++;
+        break; // PhaseNodeMeasCoefficientClearN
 	
     case PhaseNodeMeasCoefficientClearN2:
-	if (m_ConfData.m_bSimulation)  // fehler oder abbruch
-	{	    
-	    AHS = wm3000Idle;
-	}
-	else
-	{
-	    m_PhaseCalcInfoList.removeFirst();
-	    if (m_PhaseCalcInfoList.isEmpty())
-	    {
-		if (m_pAbortButton->isEnabled())
-		{
-		    PCBIFace->cmpPhaseCoefficient("ch0"); // berechnung der koeffizienten 
-		    AHS++;
-		}
-		else
-		{
-		    m_ActTimer->start(0,RestartMeasurementStart); // die hatten wir gestoppt
-		    AHS = wm3000Idle;
-		    delete m_pProgressDialog;
-		    m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
-		}
-			 
-	    }
-	    else
-	    {
-		AHS--;
-		m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
-	    }
-	}
-	break;
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            m_CalcInfoList.removeFirst();
+            if (m_CalcInfoList.isEmpty())
+            {
+                if (m_pAbortButton->isEnabled())
+                {
+                    PCBIFace->cmpPhaseCoefficient("ch0"); // berechnung der koeffizienten
+                    AHS++;
+                }
+                else
+                {
+                    m_ActTimer->start(0,RestartMeasurementStart); // die hatten wir gestoppt
+                    AHS = wm3000Idle;
+                    delete m_pProgressDialog;
+                    m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
+                }
+            }
+            else
+            {
+                AHS--;
+                m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
+            }
+        }
+        break;
 	
     case PhaseNodeMeasCoefficientClearNFinished:
-	if (m_ConfData.m_bSimulation)  // fehler oder abbruch
-	{	    
-	    AHS = wm3000Idle;
-	}
-	else
-	{
-	    PCBIFace->cmpPhaseCoefficient("ch1"); // berechnung der koeffizienten 
-	    AHS++;
-	}
-	break;
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            PCBIFace->cmpPhaseCoefficient("ch1"); // berechnung der koeffizienten
+            AHS++;
+        }
+        break;
 	
     case PhaseNodeMeasBaseConfiguration:
-	if (m_ConfData.m_bSimulation)  // fehler oder abbruch
-	{	    
-	    AHS = wm3000Idle;
-	    break;
-	}
-	else
-	{
-	    lprogress++;
-	    m_pProgressDialog->setProgress(lprogress);
-	    NewConfData = m_ConfData; // zum umsetzen
-	    SaveConfData = m_ConfData; // wir haben eine kopie der aktuellen konfiguration
-	    NewConfData.m_bOECorrection = false; // nix korrigieren
-	    NewConfData.m_fxPhaseShift = 0.0; // auch hier keine korrekturen
-	    NewConfData.m_fxTimeShift = 0.0; // dito
-	    NewConfData.m_nSyncSource = Intern; // es muss intern synchronisiert sein 
-	    NewConfData.m_nTSync = 1000; // 1 sec. ist ok
-	    NewConfData.m_nIntegrationTime = 2; // 1 sec.
-	    NewConfData.m_nMeasPeriod = 16; // 
-	    N = 0; // 1. stützstelle
-	    AHS++;
-	    // kein break wir laufen einfach drüber
-	}
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+            break;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            NewConfData = m_ConfData; // zum umsetzen
+            SaveConfData = m_ConfData; // wir haben eine kopie der aktuellen konfiguration
+            NewConfData.m_bOECorrection = false; // nix korrigieren
+            NewConfData.m_fxPhaseShift = 0.0; // auch hier keine korrekturen
+            NewConfData.m_fxTimeShift = 0.0; // dito
+            NewConfData.m_nSyncSource = Intern; // es muss intern synchronisiert sein
+            NewConfData.m_nTSync = 1000; // 1 sec. ist ok
+            NewConfData.m_nIntegrationTime = 2; // 1 sec.
+            NewConfData.m_nMeasPeriod = 16; //
+            NewConfData.m_bDCmeasurement = false;
+            N = 0; // 1. stützstelle
+            AHS++;
+            // kein break wir laufen einfach drüber
+        }
     
     case PhaseNodeMeasNodeConfig: 
 	{
-	StopMeasurement(); // das kumuliert nur ....
-	m_pProgressDialog->setLabelText (trUtf8("Konfiguration setzen ..." ));
-	PhaseNodeMeasInfo = m_PhaseNodeMeasInfoList.first(); // info was zu tun ist
-	
-	if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
-	{
-	     Q3TextStream stream( &m_PhaseJustLogfile );
-	     stream << QString("RangeN=%1 RangeX=%2 Mode=").arg(PhaseNodeMeasInfo->m_srng0).arg(PhaseNodeMeasInfo->m_srng1);
-	     if (PhaseNodeMeasInfo->m_nmMode == 0) 
-		 stream << "Un/Ux ";
-	     else
-		 stream << "Un/EVT ";
-	     stream << QString("TestMode=%1 nS=").arg(TModeText[PhaseNodeMeasInfo->m_nTMode]);
-	     if (PhaseNodeMeasInfo->m_nnS == S80) 
-		 stream << "80\n";
-	     else
-		 stream << "256\n";
-	     
-	     m_PhaseJustLogfile.flush();
-	     m_PhaseJustLogfile.close();
-	 }
-	
-	NewConfData.m_nTMode = PhaseNodeMeasInfo->m_nTMode & 3; // test modus
-	NewConfData.m_nSRate = PhaseNodeMeasInfo->m_nnS; // samples / periode
-	NewConfData.m_fSFreq = PhaseJustFreq[N];
-	NewConfData.m_nMeasMode  =  PhaseNodeMeasInfo->m_nmMode;	
-	NewConfData.m_sRangeNVorgabe = PhaseNodeMeasInfo->m_srng0; // bereich kanal n
-	if (PhaseNodeMeasInfo->m_nmMode == Un_UxAbs) 
-	    NewConfData.m_sRangeXVorgabe = PhaseNodeMeasInfo->m_srng1; // bereich kanal x
-	else
-	    NewConfData.m_sRangeEVTVorgabe = PhaseNodeMeasInfo->m_srng1; // bereich kanal x 
-	m_PhaseNodeMeasState = PhaseNodeMeasExec1; // hier müssen wir später weitermachen
-	QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(PhaseJustSyncSlot())); 
-	SetConfDataSlot(&NewConfData); // und die neue konfiguration
-	// die messung wird neu gestartet am ende der konfiguration
-	AHS = wm3000Idle; // wir sind erst mal fertig
-	break; // PhaseNodeMeasNodeConfig
-              }
+        StopMeasurement(); // das kumuliert nur ....
+        m_pProgressDialog->setLabelText (trUtf8("Konfiguration setzen ..." ));
+        PhaseNodeMeasInfo = m_PhaseNodeMeasInfoList.first(); // info was zu tun ist
+
+        if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+        {
+             Q3TextStream stream( &m_PhaseJustLogfile );
+             stream << QString("RangeN=%1 RangeX=%2 Mode=%3 ")
+                                .arg(PhaseNodeMeasInfo->m_srngN)
+                                .arg(PhaseNodeMeasInfo->m_srngX)
+                                .arg(MModeName[PhaseNodeMeasInfo->m_nMMode]);
+             stream << QString("SenseMode=%1 nS=").arg(SenseModeText[PhaseNodeMeasInfo->m_nSMode]);
+             if (PhaseNodeMeasInfo->m_nnS == S80)
+             stream << "80\n";
+             else
+             stream << "256\n";
+
+             m_PhaseJustLogfile.flush();
+             m_PhaseJustLogfile.close();
+        }
+
+        NewConfData.m_nSenseMode = PhaseNodeMeasInfo->m_nSMode; // sense modus
+        NewConfData.m_nSRate = PhaseNodeMeasInfo->m_nnS; // samples / periode
+        NewConfData.m_fSFreq = PhaseJustFreq[N];
+        NewConfData.m_nMeasMode  =  PhaseNodeMeasInfo->m_nMMode;
+        NewConfData.m_sRangeNVorgabe = PhaseNodeMeasInfo->m_srngN; // bereich kanal n
+        if (PhaseNodeMeasInfo->m_nMMode == Un_UxAbs)
+            NewConfData.m_sRangeXVorgabe = PhaseNodeMeasInfo->m_srngX; // bereich kanal x
+        else
+            NewConfData.m_sRangeEVTVorgabe = PhaseNodeMeasInfo->m_srngX; // bereich kanal x
+        m_PhaseNodeMeasState = PhaseNodeMeasExec1; // hier müssen wir später weitermachen
+        QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(PhaseJustSyncSlot()));
+        SetConfDataSlot(&NewConfData); // und die neue konfiguration
+        // die messung wird neu gestartet am ende der konfiguration
+        AHS = wm3000Idle; // wir sind erst mal fertig
+        break; // PhaseNodeMeasNodeConfig
+    }
 	
     case PhaseNodeMeasExec1: // konfiguriert ist
-	NewConfData.m_sRangeNSoll = NewConfData.m_sRangeN =NewConfData.m_sRangeNVorgabe; // bereich kanal n
-	NewConfData.m_sRangeXSoll = NewConfData.m_sRangeX = NewConfData.m_sRangeXVorgabe; // bereich kanal x
-	NewConfData.m_sRangeEVTSoll = NewConfData.m_sRangeEVT = NewConfData.m_sRangeEVTVorgabe; // bereich kanal x
-	m_PhaseNodeMeasState = PhaseNodeMeasExec2; // hier müssen wir später weitermachen
-	mCount = PhaseNodeMeasInfo->m_nIgnore; // einschwingzeit setzen in messdurchläufen
-	m_sPhaseJustText = trUtf8("Einschwingzeit läuft" );
-	m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sPhaseJustText).arg(mCount));
-	QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot())); 
-	AHS = wm3000Idle; // wir sind erst mal fertig
-	break; // PhaseNodeMeasExec1
+        NewConfData.m_sRangeNSoll = NewConfData.m_sRangeN =NewConfData.m_sRangeNVorgabe; // bereich kanal n
+        NewConfData.m_sRangeXSoll = NewConfData.m_sRangeX = NewConfData.m_sRangeXVorgabe; // bereich kanal x
+        NewConfData.m_sRangeEVTSoll = NewConfData.m_sRangeEVT = NewConfData.m_sRangeEVTVorgabe; // bereich kanal x
+        m_PhaseNodeMeasState = PhaseNodeMeasExec2; // hier müssen wir später weitermachen
+        mCount = PhaseNodeMeasInfo->m_nIgnore; // einschwingzeit setzen in messdurchläufen
+        m_sJustText = trUtf8("Einschwingzeit läuft" );
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot()));
+        AHS = wm3000Idle; // wir sind erst mal fertig
+        break; // PhaseNodeMeasExec1
 	
     case PhaseNodeMeasExec2:	
-	mCount--;
-	m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sPhaseJustText).arg(mCount));
-	if (mCount == 0) { // eingeschwungen
-	    m_PhaseNodeMeasState = PhaseNodeMeasExec3; // ab jetzt messen wir wirklich
-	    mCount = PhaseNodeMeasInfo->m_nnMeas; // und setzen den zähler dafür
-	    switch (PhaseNodeMeasInfo->m_nTMode)
-	    {
-	    case adcNadcX:
-		m_sPhaseJustText = trUtf8("Messung Kanal N, adc läuft");
-		break;
-	    case sensNadcX:
-		m_sPhaseJustText = trUtf8("Messung Kanal N, %1 läuft").arg(PhaseNodeMeasInfo->m_srng0);
-		break;
-	    case adcXadcN:
-		m_sPhaseJustText = trUtf8("Messung Kanal X, adc läuft");
-		break;
-	    case sensXadcN:
-		m_sPhaseJustText = trUtf8("Messung Kanal X, %1 läuft").arg(PhaseNodeMeasInfo->m_srng1);
-		break; 
-	    default: 
-		break;
-	    }
-	    m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sPhaseJustText).arg(mCount));
-	    PhaseJustValueList.clear(); // phasenwinkel werte liste leeren, zur aufnahme der neuen messwerte
-	} 
-	
-	QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot()));  // wieder neu verbinden
-	AHS = wm3000Idle; // wir sind erst mal fertig	
-	break; //	PhaseNodeMeasExec2
+        mCount--;
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+        if (mCount == 0)
+        { // eingeschwungen
+            m_PhaseNodeMeasState = PhaseNodeMeasExec3; // ab jetzt messen wir wirklich
+            mCount = PhaseNodeMeasInfo->m_nnMeas; // und setzen den zähler dafür
+            switch (PhaseNodeMeasInfo->m_nJMode)
+            {
+            case sensNadcXPhase:
+                m_sJustText = trUtf8("Messung Kanal N, %1 läuft").arg(PhaseNodeMeasInfo->m_srngN);
+                break;
+            case sensXadcNPhase:
+            case sensEVTadcNPhase:
+                m_sJustText = trUtf8("Messung Kanal X, %1 läuft").arg(PhaseNodeMeasInfo->m_srngX);
+                break;
+            default:
+                break;
+            }
+            m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+            JustValueList.clear(); // phasenwinkel werte liste leeren, zur aufnahme der neuen messwerte
+        }
+
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot()));  // wieder neu verbinden
+        AHS = wm3000Idle; // wir sind erst mal fertig
+        break; //	PhaseNodeMeasExec2
 
     case PhaseNodeMeasExec3:
 	{
-            int i;
+        int i;
 	    ph0 = ActValues.dspActValues.phin;
 	    ph1 = ActValues.dspActValues.phix;
-	    switch (PhaseNodeMeasInfo->m_nTMode)
+        switch (PhaseNodeMeasInfo->m_nJMode)
 	    {
-	    case adcNadcX:
-		break; // wir wollten den kanal n adc messen ->fertig
-	    case adcXadcN:
-		ph0 = ph1;
-		break; // wir wollten kanal x adc messen
-	    case sensNadcX:
-		ph0 = ph0 - ph1;
-		break; // wir wollten kanal x sense messen
-	    case sensXadcN:
-		ph0 = ph1 - ph0;
-	    default: 
+        case sensNadcXPhase:
+            ph0 = ph0 - ph1;
+            break; // wir wollten kanal x sense messen
+        case sensXadcNPhase:
+        case sensEVTadcNPhase:
+            ph0 = ph1 - ph0;
+            default:
 		break;
 	    }
 	    ph0 *= 57.295779; // 360/(2*PI) winkel sind im bogenmass
-	    PhaseJustValueList.append(ph0); // wir schreiben den winkel wert in die liste
+        JustValueList.append(ph0); // wir schreiben den winkel wert in die liste
 	    
 	    mCount--;
-	    m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sPhaseJustText).arg(mCount));
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
 	    if (mCount == 0)
 	    {
-		m_pProgressDialog->setLabelText (trUtf8("Berechnung und Datenübertragung ..."));			ph0 = 0.0;
-		for (i = 0; i < PhaseJustValueList.count(); i++)
-		    ph0 -= PhaseJustValueList[i];
-		
-		ph0 /= PhaseJustValueList.count(); // der mittelwert aus den messungen
-		AHS = PhaseNodeMeasExec4;
-		m_ActTimer->start(0,wm3000Continue); // wir starten wieder selbst
+            m_pProgressDialog->setLabelText (trUtf8("Berechnung und Datenübertragung ..."));			ph0 = 0.0;
+            for (i = 0; i < JustValueList.count(); i++)
+                ph0 -= JustValueList[i];
+
+            ph0 /= JustValueList.count(); // der mittelwert aus den messungen
+            AHS = PhaseNodeMeasExec4;
+            m_ActTimer->start(0,wm3000Continue); // wir starten wieder selbst
 	    }
 	    else
 	    {
-		QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot())); 
-		AHS = wm3000Idle; // wir werden von der nächsten messung getriggert
+            QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(PhaseJustSyncSlot()));
+            AHS = wm3000Idle; // wir werden von der nächsten messung getriggert
 	    }
 	    
 	    break; // PhaseNodeMeasExec3
-	}
+    }
 	
 	
     case PhaseNodeMeasExec4:
@@ -1885,45 +2005,29 @@ case ConfigurationTestTMode:
 	    CWMRange* lr;
 	    QString sel;
 	    
-	    switch (PhaseNodeMeasInfo->m_nTMode)
+        switch (PhaseNodeMeasInfo->m_nJMode)
 	    {
-	    case adcNadcX:
-		if (m_ConfData.m_nSRate == S80)
-	//	    PCBIFace->setNodeInfoFreq("ch0", "adw80", N, PhaseJustFreq[N]);
-		    PCBIFace->setPhaseNodeInfo("ch0", "adw80", N, ph0, PhaseJustFreq[N] );
-		else
-//		    PCBIFace->setNodeInfoFreq("ch0", "adw256", N, PhaseJustFreq[N]);
-		    PCBIFace->setPhaseNodeInfo("ch0", "adw256", N, ph0, PhaseJustFreq[N]);
-		break;
-	    case sensNadcX:
-		//PCBIFace->setNodeInfoFreq("ch0", PhaseNodeMeasInfo->m_srng0, N, PhaseJustFreq[N]);
-		PCBIFace->setPhaseNodeInfo("ch0", PhaseNodeMeasInfo->m_srng0, N, ph0, PhaseJustFreq[N]);
-		break;
-	    case adcXadcN:
-		if (m_ConfData.m_nSRate == S80)
-//		    PCBIFace->setNodeInfoFreq("ch1", "adw80", N, PhaseJustFreq[N]);
-		    PCBIFace->setPhaseNodeInfo("ch1", "adw80", N, ph0, PhaseJustFreq[N]);
-		else
-		    PCBIFace->setPhaseNodeInfo("ch1", "adw256", N, ph0, PhaseJustFreq[N]);
-		break;
-	    case sensXadcN:
-		if (PhaseNodeMeasInfo->m_nmMode == Un_EVT)
-		{
-		    lr = Range(PhaseNodeMeasInfo->m_srng1,m_sEVTRangeList);
-		    sel = lr->Selector();
-		}
-		else
-		    sel = PhaseNodeMeasInfo->m_srng1;
-		
-		PCBIFace->setPhaseNodeInfo("ch1", sel, N, ph0, PhaseJustFreq[N]);
-		break; // wir wollten kanal x adc messen
+        case sensNadcXPhase:
+            //PCBIFace->setNodeInfoFreq("ch0", PhaseNodeMeasInfo->m_srng0, N, PhaseJustFreq[N]);
+            PCBIFace->setPhaseNodeInfo("ch0", PhaseNodeMeasInfo->m_srngN, N, ph0, PhaseJustFreq[N]);
+            break;
+        case sensXadcNPhase:
+            sel = PhaseNodeMeasInfo->m_srngX;
+            PCBIFace->setPhaseNodeInfo("ch1", sel, N, ph0, PhaseJustFreq[N]);
+            break;
+        case sensEVTadcNPhase:
+            lr = Range(PhaseNodeMeasInfo->m_srngX,m_sEVTRangeList);
+            sel = lr->Selector();
+            PCBIFace->setPhaseNodeInfo("ch1", sel, N, ph0, PhaseJustFreq[N]);
+            break; // wir wollten kanal x adc messen
 	    default: 
-		break;
+            break;
 	    }
 	
-	AHS++;
-	break; // PhaseNodeMeasExec4
-              }
+        AHS++;
+        break; // PhaseNodeMeasExec4
+    }
+
     case PhaseNodeMeasExec5:
 	{
 	if (m_ConfData.m_bSimulation) 
@@ -1935,78 +2039,481 @@ case ConfigurationTestTMode:
 	    N++;
 	    if (N < 4) 
 	    {
-		AHS = PhaseNodeMeasNodeConfig;
-		m_ActTimer->start(0,wm3000Continue);
+            AHS = PhaseNodeMeasNodeConfig;
+            m_ActTimer->start(0,wm3000Continue);
 	    }
 	    else
 	    {
-		lprogress++;
-		m_pProgressDialog->setProgress(lprogress);
-		m_PhaseNodeMeasInfoList.removeFirst();
-		if (m_PhaseNodeMeasInfoList.isEmpty() || (! m_pAbortButton->isEnabled()) || bOverload ) // entweder normal fertig geworden oder abbruch oder übersteuerung (solls eigentlich nicht geben)
-		{ // wir sind fertig mit der ermittlung
-		    if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
-		    {
-			Q3TextStream stream( &m_PhaseJustLogfile );
-			stream << "\nTerminated ";
-			if (bOverload) 
-			    stream << "because of overload condition !\n";
-			else
-			{
-			    if (m_pAbortButton->isEnabled())
-				stream << "normally\n";
-			    else
-				stream << "by user\n";
-			}
-			
-			m_PhaseJustLogfile.flush();
-			m_PhaseJustLogfile.close();
-		    }
-		    
-		    m_PhaseNodeMeasState = PhaseNodeMeasFinished; 
-		    QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(PhaseJustSyncSlot())); 
-		    SetConfDataSlot(&SaveConfData); // wir setzen die konfiguration zurück
-		    AHS = wm3000Idle; // statemachine kann neu gestartet werden
-		}
-		else
-		{
-		    if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
-		    {
-			Q3TextStream stream( &m_PhaseJustLogfile );
-			stream << "\n"; // für jeden block eine leerzeile
-			m_PhaseJustLogfile.flush();
-			m_PhaseJustLogfile.close();
-		    }
-		    
-		    N = 0; // durchlaufzähler für ermittlung  der stützstellen 
-		    AHS = PhaseNodeMeasNodeConfig;
-		    m_ActTimer->start(0,wm3000Continue); 
-		}
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            m_PhaseNodeMeasInfoList.removeFirst();
+            if (m_PhaseNodeMeasInfoList.isEmpty() || (! m_pAbortButton->isEnabled()) || bOverload ) // entweder normal fertig geworden oder abbruch oder übersteuerung (solls eigentlich nicht geben)
+            { // wir sind fertig mit der ermittlung
+                if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+                {
+                    Q3TextStream stream( &m_PhaseJustLogfile );
+                    stream << "\nTerminated ";
+                    if (bOverload)
+                        stream << "because of overload condition !\n";
+                    else
+                    {
+                        if (m_pAbortButton->isEnabled())
+                        stream << "normally\n";
+                        else
+                        stream << "by user\n";
+                    }
+
+                    m_PhaseJustLogfile.flush();
+                    m_PhaseJustLogfile.close();
+                }
+
+                m_PhaseNodeMeasState = PhaseNodeMeasFinished;
+                QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(PhaseJustSyncSlot()));
+                SetConfDataSlot(&SaveConfData); // wir setzen die konfiguration zurück
+                AHS = wm3000Idle; // statemachine kann neu gestartet werden
+            }
+            else
+            {
+                if (m_PhaseJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+                {
+                    Q3TextStream stream( &m_PhaseJustLogfile );
+                    stream << "\n"; // für jeden block eine leerzeile
+                    m_PhaseJustLogfile.flush();
+                    m_PhaseJustLogfile.close();
+                }
+
+                N = 0; // durchlaufzähler für ermittlung  der stützstellen
+                AHS = PhaseNodeMeasNodeConfig;
+                m_ActTimer->start(0,wm3000Continue);
+            }
 	    }
 	}    
 	break;
-              } // PhaseNodeMeasExec5 
+    } // PhaseNodeMeasExec5
 	
     case PhaseNodeMeasFinished:
-	delete m_pProgressDialog;
-	JustagePhaseBerechnungSlot(); // berechnung noch starten
-	AHS = wm3000Idle;
-	break;
-	
-	
+        delete m_pProgressDialog;
+        JustagePhaseBerechnungSlot(); // berechnung noch starten
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasStart:
+    case OffsetMeasStartVar:
+        m_OffsetJustLogfile.remove(); // beim starten wird das log file gelöscht
+        StopMeasurement(); // die kumulieren jetzt nur
+        m_pProgressDialog = new Q3ProgressDialog( trUtf8("Initialisierung..."), 0, m_OffsetMeasInfoList.count(), g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht alle justierpunkte +1 für das 0 setzen der koeffizienten
+
+        m_pAbortButton = new QPushButton(trUtf8("Abbruch"),0,0);
+        m_pProgressDialog->setCancelButton(m_pAbortButton);
+        m_pProgressDialog->setCaption(trUtf8("Offsetkorrekturen"));
+        m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
+        lprogress = 0; // int. progress counter
+        QObject::connect(m_pAbortButton,SIGNAL(pressed()),this,SLOT(JustAbortSlot()));
+
+        NewConfData = m_ConfData; // zum umsetzen
+        SaveConfData = m_ConfData; // wir haben eine kopie der aktuellen konfiguration
+        NewConfData.m_bOECorrection = false; // nix korrigieren
+        NewConfData.m_fxPhaseShift = 0.0; // auch hier keine korrekturen
+        NewConfData.m_fxTimeShift = 0.0; // dito
+        NewConfData.m_nSyncSource = Intern; // es muss intern synchronisiert sein
+        NewConfData.m_nTSync = 1000; // 1 sec. ist ok
+        NewConfData.m_nIntegrationTime = 2; // 1 sec.
+        NewConfData.m_nMeasPeriod = 16; //
+        NewConfData.m_bDCmeasurement = true;
+
+        m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
+        AHS++;
+        break;
+
+    case OffsetMeasCoefficientClearN:
+        OffsetCalcInfo = m_CalcInfoList.first();
+        PCBIFace->setOffsetNodeInfo(OffsetCalcInfo->m_sChannel, OffsetCalcInfo->m_sRange, 0, 0.0, 0.0); // wir setzen jeweils die 1. stützstelle und lassen im anschluss daran die koeffizienten berechnen
+        AHS++;
+        break; // OffsetMeasCoefficientClearN
+
+    case OffsetMeasCoefficientClearN2:
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            m_CalcInfoList.removeFirst();
+            if (m_CalcInfoList.isEmpty())
+            {
+                if (m_pAbortButton->isEnabled())
+                {
+                    PCBIFace->cmpOffsetCoefficient("ch0"); // berechnung der koeffizienten
+                    AHS++;
+                }
+                else
+                {
+                    m_ActTimer->start(0,RestartMeasurementStart); // die hatten wir gestoppt
+                    AHS = wm3000Idle;
+                    delete m_pProgressDialog;
+                    m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
+                }
+            }
+            else
+            {
+                AHS--;
+                m_ActTimer->start(0,wm3000Continue); // wir starten selbst damit es weiter geht
+            }
+        }
+        break;
+
+    case OffsetMeasCoefficientClearNFinished:
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            PCBIFace->cmpOffsetCoefficient("ch1"); // berechnung der koeffizienten
+            AHS++;
+        }
+        break;
+
+
+    case OffsetMeasBaseConfiguration:
+    case OffsetMeasBaseConfigurationVar:
+    {
+        StopMeasurement(); // das kumuliert nur ....
+        m_pProgressDialog->setProgress(lprogress); // progess bar setzen
+        m_pProgressDialog->setLabelText (trUtf8("Konfiguration setzen ..." ));
+        OffsetMeasInfo = m_OffsetMeasInfoList.first(); // info was zu tun ist
+
+        if (m_OffsetJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+        {
+             Q3TextStream stream( &m_OffsetJustLogfile );
+
+             stream << QString("RangeN=%1 RangeX=%2 Mode=%3 ")
+                               .arg(OffsetMeasInfo->m_srngN)
+                               .arg(OffsetMeasInfo->m_srngX)
+                               .arg(MModeName[OffsetMeasInfo->m_nMMode]);
+             stream << QString("SenseMode=%1 nS=").arg(SenseModeText[OffsetMeasInfo->m_nSMode]);
+             if (OffsetMeasInfo->m_nnS == S80)
+                stream << "80\n";
+             else
+                stream << "256\n";
+
+             m_OffsetJustLogfile.flush();
+             m_OffsetJustLogfile.close();
+         }
+
+         NewConfData.m_nSenseMode = OffsetMeasInfo->m_nSMode; // sense modus
+         NewConfData.m_nSRate = OffsetMeasInfo->m_nnS; // samples / periode
+         NewConfData.m_fSFreq = PhaseJustFreq[2]; // fix 50Hz
+         NewConfData.m_nMeasMode  =  OffsetMeasInfo->m_nMMode;
+         NewConfData.m_sRangeNVorgabe = OffsetMeasInfo->m_srngN; // bereich kanal n
+         if (OffsetMeasInfo->m_nMMode == Un_UxAbs)
+            NewConfData.m_sRangeXVorgabe = OffsetMeasInfo->m_srngX; // bereich kanal x
+         else
+            NewConfData.m_sRangeEVTVorgabe = OffsetMeasInfo->m_srngX; // bereich kanal x
+         m_OffsetMeasState = AHS + 1; // hier müssen wir später weitermachen
+         QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(OffsetJustSyncSlot()));
+         SetConfDataSlot(&NewConfData); // und die neue konfiguration
+         // die messung wird neu gestartet am ende der konfiguration
+         AHS = wm3000Idle; // wir sind erst mal fertig
+         break; // OffsetMeasBaseConfiguration OffsetMeasBaseConfigurationVar
+    }
+
+    case OffsetMeasExec1: // konfiguriert ist
+    case OffsetMeasExec1Var:
+        NewConfData.m_sRangeNSoll = NewConfData.m_sRangeN =NewConfData.m_sRangeNVorgabe; // bereich kanal n
+        NewConfData.m_sRangeXSoll = NewConfData.m_sRangeX = NewConfData.m_sRangeXVorgabe; // bereich kanal x
+        NewConfData.m_sRangeEVTSoll = NewConfData.m_sRangeEVT = NewConfData.m_sRangeEVTVorgabe; // bereich kanal x
+        m_OffsetMeasState = AHS + 1; // hier müssen wir später weitermachen
+        mCount = OffsetMeasInfo->m_nIgnore; // einschwingzeit setzen in messdurchläufen
+        m_sJustText = trUtf8("Einschwingzeit läuft" );
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));
+        AHS = wm3000Idle; // wir sind erst mal fertig
+        break; // OffsetMeasExec1 OffsetMeasExec1Var
+
+    case OffsetMeasExec2:
+    case OffsetMeasExec2Var:
+        mCount--;
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+        if (mCount == 0)
+        { // eingeschwungen
+            m_OffsetMeasState = AHS + 1; // ab jetzt messen wir wirklich
+            mCount = OffsetMeasInfo->m_nnMeas; // und setzen den zähler dafür
+            switch (OffsetMeasInfo->m_nJMode)
+            {
+            case sensNsensXOffset:
+                m_sJustText = trUtf8("Messung Kanal N %1, X %2 läuft").arg(OffsetMeasInfo->m_srngN).arg(OffsetMeasInfo->m_srngX);
+                break;
+            case sensNOffset:
+                // für den fall dass messkanäle unterschiedliche bereiche haben, was aber z.z. nicht funktioniert
+                m_sJustText = trUtf8("Messung Kanal N %1 läuft").arg(OffsetMeasInfo->m_srngN);
+                break;
+            case sensXOffset:
+            case sensEVTOffset:
+                // dito
+                m_sJustText = trUtf8("Messung Kanal X %1 läuft").arg(OffsetMeasInfo->m_srngX);
+                break;
+            default:
+                break;
+            }
+            m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+            JustValueList.clear(); // offset werte liste leeren, zur aufnahme der neuen messwerte
+        }
+
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));  // wieder neu verbinden
+        AHS = wm3000Idle; // wir sind erst mal fertig
+        break; // OffsetMeasExec2 OffsetMeasExec2Var
+
+    case OffsetMeasExec3:
+    case OffsetMeasExec3Var:
+    {
+        int i;
+
+        JustValueList.append(ActValues.dspActValues.ampl1nf); // wir schreiben offset wert in die liste
+        JustValueList.append(ActValues.dspActValues.ampl1xf); // dito
+
+        mCount--;
+        m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
+        if (mCount == 0)
+        {
+            m_pProgressDialog->setLabelText (trUtf8("Berechnung und Datenübertragung ..."));
+            offs0 = 0.0;
+            offs1 = 0.0;
+            int n;
+
+            n = JustValueList.count() >> 1;
+            for (i = 0; i < n; i++)
+            {
+                offs0 -= JustValueList[i*2];
+                offs1 -= JustValueList[i*2+1];
+            }
+
+            offs0 /= n; // der mittelwert aus den messungen
+            offs1 /= n;
+
+            AHS++; // wir laufen einfach drüber und kommen damit zur datenübertragung oder ablage in hash
+            m_ActTimer->start(0,wm3000Continue);
+        }
+        else
+        {
+            QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));
+            AHS = wm3000Idle; // wir werden von der nächsten messung getriggert
+        }
+
+        break; // OffsetMeasExec3 OffsetMeasExec3Var
+    }
+
+    case OffsetMeasExec4:
+    {
+        CWMRange* lr;
+        QString sel;
+
+        switch (OffsetMeasInfo->m_nJMode)
+        {
+        case sensNsensXOffset:
+            PCBIFace->setOffsetNodeInfo("ch0", OffsetMeasInfo->m_srngN, 0, offs0, 1.0);
+            AHS++; // wir müssen noch den 2. wert speichern
+            break;
+        case sensNOffset:
+            PCBIFace->setOffsetNodeInfo("ch0", OffsetMeasInfo->m_srngN, 0, offs0, 1.0);
+            AHS += 2; // wir überspringen das speicher des 2. wertes
+            break;
+        case sensXOffset:
+            PCBIFace->setOffsetNodeInfo("ch1", OffsetMeasInfo->m_srngX, 0, offs1, 1.0);
+            AHS += 2; // dito
+            break;
+        case sensEVTOffset:
+            lr = Range(OffsetMeasInfo->m_srngX,m_sEVTRangeList);
+            sel = lr->Selector();
+            PCBIFace->setOffsetNodeInfo("ch1", sel, 0, offs1, 1.0);
+            AHS += 2; // dito
+            break;
+        default:
+            break;
+        }
+
+        break; // OffsetMeasExec4
+    }
+
+    case OffsetMeasExec4Var:
+    {
+        // speichern der offset justage werte in hash
+        QString key;
+        switch (OffsetMeasInfo->m_nJMode)
+        {
+        case sensNsensXOffset:
+            key = Range(OffsetMeasInfo->m_srngN, m_sNRangeList)->getOffsKorrKey();
+            adjOffsetCorrectionHash.remove(key);
+            adjOffsetCorrectionHash[key] = offs0;
+            key = Range(OffsetMeasInfo->m_srngX, m_sXRangeList)->getOffsKorrKey();
+            adjOffsetCorrectionHash.remove(key);
+            adjOffsetCorrectionHash[key] = offs1;
+            break;
+        case sensNOffset:
+            key = Range(OffsetMeasInfo->m_srngN, m_sNRangeList)->getOffsKorrKey();
+            adjOffsetCorrectionHash.remove(key);
+            adjOffsetCorrectionHash[key] = offs0;
+            break;
+        case sensXOffset:
+            key = Range(OffsetMeasInfo->m_srngX, m_sXRangeList)->getOffsKorrKey();
+            adjOffsetCorrectionHash.remove(key);
+            adjOffsetCorrectionHash[key] = offs1;
+            break;
+        case sensEVTOffset:
+            key = Range(OffsetMeasInfo->m_srngX, m_sEVTRangeList)->getOffsKorrKey();
+            adjOffsetCorrectionHash.remove(key);
+            adjOffsetCorrectionHash[key] = offs1;
+            break;
+        default:
+            break;
+        }
+
+        AHS++;
+        m_ActTimer->start(0,wm3000Continue);
+        break;
+    }
+
+    case OffsetMeasExec5:
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            // wir speichern noch den 2. ermittelten wert
+            PCBIFace->setOffsetNodeInfo("ch1", OffsetMeasInfo->m_srngX, 0, offs1, 1.0);
+            AHS++;
+        }
+
+        break;
+
+    case OffsetMeasExec6:
+        if (m_ConfData.m_bSimulation)  // fehler oder abbruch
+        {
+            AHS = wm3000Idle;
+        }
+        else
+        {
+            lprogress++;
+            m_pProgressDialog->setProgress(lprogress);
+            m_OffsetMeasInfoList.removeFirst();
+
+            if (m_OffsetMeasInfoList.isEmpty() || (! m_pAbortButton->isEnabled()) || bOverload ) // entweder normal fertig geworden oder abbruch oder übersteuerung (solls eigentlich nicht geben)
+            { // wir sind fertig mit der ermittlung
+                if (m_OffsetJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+                {
+                    Q3TextStream stream( &m_OffsetJustLogfile );
+                    stream << "\nTerminated ";
+                    if (bOverload)
+                        stream << "because of overload condition !\n";
+                    else
+                    {
+                        if (m_pAbortButton->isEnabled())
+                        stream << "normally\n";
+                        else
+                        stream << "by user\n";
+                    }
+
+                    m_OffsetJustLogfile.flush();
+                    m_OffsetJustLogfile.close();
+                }
+
+                m_OffsetMeasState = AHS + 1; // OffsetMeasFinished;
+                QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(OffsetJustSyncSlot()));
+                SetConfDataSlot(&SaveConfData); // wir setzen die konfiguration zurück
+                AHS = wm3000Idle; // statemachine kann neu gestartet werden
+            }
+            else
+            {
+                if (m_OffsetJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+                {
+                    Q3TextStream stream( &m_OffsetJustLogfile );
+                    stream << "\n"; // für jeden block eine leerzeile
+                    m_OffsetJustLogfile.flush();
+                    m_OffsetJustLogfile.close();
+                }
+
+                AHS = OffsetMeasBaseConfiguration;
+                m_ActTimer->start(0,wm3000Continue);
+            }
+        }
+
+        break;
+
+
+    case OffsetMeasFinished:
+        delete m_pProgressDialog;
+        JustageOffsetBerechnungSlot(); // berechnung noch starten
+        AHS = wm3000Idle;
+        break;
+
+
+    case OffsetMeasExec5Var:
+        lprogress++;
+        m_pProgressDialog->setProgress(lprogress);
+        m_OffsetMeasInfoList.removeFirst();
+
+        if (m_OffsetMeasInfoList.isEmpty() || (! m_pAbortButton->isEnabled()) || bOverload ) // entweder normal fertig geworden oder abbruch oder übersteuerung (solls eigentlich nicht geben)
+        { // wir sind fertig mit der ermittlung
+            if (m_OffsetJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+            {
+                Q3TextStream stream( &m_OffsetJustLogfile );
+                stream << "\nTerminated ";
+                if (bOverload)
+                    stream << "because of overload condition !\n";
+                else
+                {
+                    if (m_pAbortButton->isEnabled())
+                    stream << "normally\n";
+                    else
+                    stream << "by user\n";
+                }
+
+                m_OffsetJustLogfile.flush();
+                m_OffsetJustLogfile.close();
+            }
+
+            m_OffsetMeasState = AHS + 1; // OffsetMeasFinishedVar;
+            QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(OffsetJustSyncSlot()));
+            SetConfDataSlot(&SaveConfData); // wir setzen die konfiguration zurück
+            AHS = wm3000Idle; // statemachine kann neu gestartet werden
+        }
+        else
+        {
+            if (m_OffsetJustLogfile.open( QIODevice::WriteOnly  | QIODevice::Append) ) // wir loggen das mal
+            {
+                Q3TextStream stream( &m_OffsetJustLogfile );
+                stream << "\n"; // für jeden block eine leerzeile
+                m_OffsetJustLogfile.flush();
+                m_OffsetJustLogfile.close();
+            }
+
+            AHS = OffsetMeasBaseConfigurationVar;
+            m_ActTimer->start(0,wm3000Continue);
+        }
+
+        break;
+
+    case OffsetMeasFinishedVar:
+        delete m_pProgressDialog;
+        measOffsetCorrectionHash = adjOffsetCorrectionHash;
+        offsetCorrectionHash2File();
+        AHS = wm3000Idle;
+        break;
+
     case JustageFlashProgStart:
-	PCBIFace->JustFlashProgram();
-	AHS++;
-	break;
+        PCBIFace->JustFlashProgram();
+        AHS++;
+        break;
 	
     case JustageFlashProgFinished:
-	AHS = wm3000Idle; // ob fehler oder nicht wir sind fertig
-	break;
+        AHS = wm3000Idle; // ob fehler oder nicht wir sind fertig
+        break;
     
     case JustageFlashExportStart:
-	PCBIFace->JustFlashExport(JDataFile);
-	AHS++;
-	break;
+        PCBIFace->JustFlashExport(JDataFile);
+        AHS++;
+        break;
 	
     case JustageFlashExportFinished:
 	AHS = wm3000Idle; // ob fehler oder nicht wir sind fertig
@@ -2084,7 +2591,7 @@ case ConfigurationTestTMode:
 	NewConfData.m_fSFreq = 50.0; // alles bei 50 hz
 	NewConfData.m_nSRate = S80;
 	NewConfData.m_nMeasMode  =  Un_UxAbs;
-	NewConfData.m_nTMode = sensNadcX; // wir starten mit messen n gegen adcx
+    NewConfData.m_nSenseMode = sensNadcX; // wir starten mit messen n gegen adcx
 	AHS++;
 	
 	// kein break wir laufen einfach drüber
@@ -2100,7 +2607,7 @@ case ConfigurationTestTMode:
 	
     case SelftestSetRangeNX:
 	m_pProgressDialog->setLabelText (trUtf8("Bereiche setzen ..." ));
-	NewConfData.m_nTMode = sensNadcX; // wir starten mit messen n gegen adcx
+    NewConfData.m_nSenseMode = sensNadcX; // wir starten mit messen n gegen adcx
 	NewConfData.m_sRangeNVorgabe = NewConfData.m_sRangeXVorgabe = m_SelftestInfoList.first();
 	m_SelftestState = SelftestMeasureNSync; // hier müssen wir später weitermachen
 	QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(SelftestSyncSlot())); 
@@ -2127,7 +2634,7 @@ case ConfigurationTestTMode:
 	m_pProgressDialog->setLabelText (trUtf8("Modus setzen ..." ));
 	
 	m_SelftestState = SelftestMeasureXSync; // hier müssen wir später weitermachen
-	NewConfData.m_nTMode = sensXadcN; // als nächstes messen wir x gegen adcn
+    NewConfData.m_nSenseMode = sensXadcN; // als nächstes messen wir x gegen adcn
 	QObject::connect(this,SIGNAL(ConfigReady()),this,SLOT(SelftestSyncSlot())); 
 	SetConfDataSlot(&NewConfData); // und die neue konfiguration
 	
@@ -2327,7 +2834,8 @@ void cWM3000U::InitWM3000()
       }
     
     m_ConfData.m_fSFreq = f;
-    
+    readOffsetCorrectionFile();
+    emit SendConfDataSignal(&m_ConfData); // wir senden die konfiguration an alle ...
     m_ActTimer->start(0,InitializationStart);
 }
     
@@ -2341,6 +2849,18 @@ void cWM3000U::setConventional(bool b)
 bool cWM3000U::isConventional()
 {
     return m_bConventional;
+}
+
+
+void cWM3000U::setDC(bool b)
+{
+    m_bDC = b;
+}
+
+
+bool cWM3000U::isDC()
+{
+    return m_bDC;
 }
 
 //------------------------------------------- ab hier stehen alle SLOTs--------------------------------------------------------
@@ -2370,7 +2890,7 @@ void cWM3000U::JustagePhaseSlot(void)
 void cWM3000U::JustagePhaseBerechnungSlot(void)
 {
 //    SetPhaseCalcInfo();
-    emit StartStateMachine(CmpPhCoeffStart);
+    emit StartStateMachine(CmpPhaseCoeffStart);
 }
 
 
@@ -2395,6 +2915,27 @@ void cWM3000U::JustageFlashImportSlot(QString s)
     s.replace("."+fi.extension(false),"");
     JDataFile = s;
     emit StartStateMachine(JustageFlashImportStart);
+}
+
+
+void cWM3000U::JustageOffsetSlot()
+{
+    SetOffsetCalcInfo();
+    SetOffsetMeasInfo(4,10); // zum ermitteln der offsetkorrekturen
+    emit StartStateMachine(OffsetMeasStart);
+}
+
+
+void cWM3000U::JustageOffsetVarSlot()
+{
+    SetOffsetMeasInfo(2,4);
+    emit StartStateMachine(OffsetMeasStartVar);
+}
+
+
+void cWM3000U::JustageOffsetBerechnungSlot()
+{
+    emit StartStateMachine(CmpOffsetCoeffStart);
 }
 
 
@@ -2484,6 +3025,7 @@ void cWM3000U::DefaultSettings(cConfData& cdata) // alle einstellungen default
 void cWM3000U::DefaultSettingsMeasurement(cConfData& cdata) // alle mess einstellungen default
 {
     cdata.m_bOECorrection = false;
+    cdata.m_bDCmeasurement = false;
     cdata.m_nMeasMode = Un_UxAbs;
     cdata.m_fxPhaseShift = 0.0;
     cdata.m_fxTimeShift = 0.0;
@@ -2491,7 +3033,7 @@ void cWM3000U::DefaultSettingsMeasurement(cConfData& cdata) // alle mess einstel
     cdata.m_nIntegrationTime = 1; // 1 sec.
     cdata.m_nSFreq = F50; 
     cdata.m_nSRate = S80;
-    cdata.m_nTMode = sensNsensX; // normale messung
+    cdata.m_nSenseMode = sensNsensX; // normale messung
     cdata.m_nSyncSource = Intern;
     cdata.m_nTSync = 1000;
  
@@ -2510,7 +3052,15 @@ void cWM3000U::PhaseJustSyncSlot()
     emit StartStateMachine(m_PhaseNodeMeasState); // bei der justage weitermachen
 }
 
-void cWM3000U::PhaseJustAbortSlot()
+
+void cWM3000U::OffsetJustSyncSlot()
+{
+    QObject::disconnect(this,0,this,SLOT(OffsetJustSyncSlot()));
+    emit StartStateMachine(m_OffsetMeasState); // bei der justage weitermachen
+}
+
+
+void cWM3000U::JustAbortSlot()
 {
     m_pAbortButton->setEnabled(false);
 /* abbbruch in state machine behandelt     
@@ -2545,20 +3095,20 @@ void cWM3000U::OverLoadMaxQuitSlot()
 void cWM3000U::SetPhaseCalcInfo() // wir init. die liste damit die statemachine weiß was zu tun ist
 {
     QString chn;
-    m_PhaseCalcInfoList.clear();
-    m_PhaseCalcInfoList.setAutoDelete( TRUE );
+    m_CalcInfoList.clear();
+    m_CalcInfoList.setAutoDelete( TRUE );
     chn = "ch0";
-    m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn,"adw80"));
-    m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn,"adw256"));
-    for (uint i = 0; i < m_sNXRangeList.count()-1; i++)
-   	m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn, m_sNXRangeList.at(i)->Selector()));
+    m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
     chn = "ch1";
-    m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn,"adw80"));
-    m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn,"adw256"));
-    for (uint i = 0; i < m_sNXRangeList.count()-1; i++)
-	m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn, m_sNXRangeList.at(i)->Selector()));
+    m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
     for (uint i = 0; i < m_sEVTRangeList.count()-1; i++)
-	m_PhaseCalcInfoList.append(new cPhaseCalcInfo(chn, m_sEVTRangeList.at(i)->Selector()));
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sEVTRangeList.at(i)->Selector()));
 }    
     
 
@@ -2575,18 +3125,158 @@ void cWM3000U::SetPhaseNodeMeasInfo() // wir init. die liste damit die statemach
     m_PhaseNodeMeasInfoList.append(new cPhaseNodeMeasInfo( "3.75V", "3.75V", adcXadcN, Un_UxAbs, S256, 4, 10));
 */        
     // die liste für alle konv. bereiche in kanal n
-    for (uint i = 0; i < m_sNXRangeList.count()-1; i++)
-	m_PhaseNodeMeasInfoList.append(new cPhaseNodeMeasInfo( m_sNXRangeList.at(i)->Name(), "3.75V", sensNadcX, Un_UxAbs, S80, 4, 10));
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( m_sNRangeList.at(i)->Name(), "3.75V", sensNadcX, Un_UxAbs, sensNadcXPhase, S80, 4, 10));
     
     // die liste für alle konv. bereiche in kanal x
-    for (uint i = 0; i < m_sNXRangeList.count()-1; i++)
-	m_PhaseNodeMeasInfoList.append(new cPhaseNodeMeasInfo("3.75V", m_sNXRangeList.at(i)->Name(), sensXadcN, Un_UxAbs, S80, 4, 10));
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo("3.75V", m_sNRangeList.at(i)->Name(), sensXadcN, Un_UxAbs, sensXadcNPhase, S80, 4, 10));
        
     // + die liste der evt bereiche in kanal x
     for (uint i = 0; i < m_sEVTRangeList.count()-1; i++) // i = 0 wäre der safety range.... jetzt nicht mehr
-	m_PhaseNodeMeasInfoList.append(new cPhaseNodeMeasInfo("3.75V",m_sEVTRangeList.at(i)->Name(), sensXadcN, Un_EVT, S80, 4, 10));
-	
-}    
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo("3.75V",m_sEVTRangeList.at(i)->Name(), sensXadcN, Un_EVT, sensEVTadcNPhase, S80, 4, 10));
+
+}
+
+
+void cWM3000U::SetOffsetCalcInfo()
+{
+    QString chn;
+    m_CalcInfoList.clear();
+    m_CalcInfoList.setAutoDelete( TRUE );
+    chn = "ch0";
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
+    chn = "ch1";
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
+    for (uint i = 0; i < m_sEVTRangeList.count()-1; i++)
+    m_CalcInfoList.append(new cCalcInfo(chn, m_sEVTRangeList.at(i)->Selector()));
+}
+
+
+void cWM3000U::SetOffsetMeasInfo(int te, int tm)
+{
+    QString key;
+
+    m_OffsetMeasInfoList.clear();
+    m_OffsetMeasInfoList.setAutoDelete(true);
+
+    adjOffsetCorrectionHash.clear();
+    measOffsetCorrectionHash.clear();
+
+    for (uint i = 0; i < m_sNRangeList.count()-1; i++)
+    {
+        key = m_sNRangeList.at(i)->getOffsKorrKey();
+        if (! adjOffsetCorrectionHash.contains(key))
+        {
+            // für diesen bereich haben wir noch keine eintrag in die liste , was zu tun ist
+            adjOffsetCorrectionHash[key] = 0.0; // platzhalter
+            m_OffsetMeasInfoList.append(new cJustMeasInfo(m_sNRangeList.at(i)->Name(), m_sXRangeList.at(0)->Name(), sensNsensX0V, Un_UxAbs, sensNOffset, S80, te, tm));
+        }
+    }
+
+    for (uint i = 0, j = adjOffsetCorrectionHash.count(); i < m_sXRangeList.count()-1; i++ )
+    {
+        key = m_sXRangeList.at(i)->getOffsKorrKey();
+        if (!adjOffsetCorrectionHash.contains(key))
+        {
+            // für diesen bereich haben wir noch keine eintrag in die liste , was zu tun ist
+            adjOffsetCorrectionHash[key] = 0.0; // platzhalter
+            if (j > 0)
+            {
+                // wir nehmen einen bereits vorhanden eintrag in der offset mess liste
+                cJustMeasInfo *jmi;
+                jmi = m_OffsetMeasInfoList.at(i);
+                jmi->m_nJMode = sensNsensXOffset;
+                jmi->m_srngX = m_sXRangeList.at(i)->Name();
+                j--;
+            }
+            else
+                m_OffsetMeasInfoList.append(new cJustMeasInfo(m_sNRangeList.at(0)->Name(), m_sXRangeList.at(i)->Name(), sensNsensX0V, Un_UxAbs, sensXOffset, S80, te, tm));
+        }
+    }
+
+    for (uint i = 0; i < m_sEVTRangeList.count()-1; i++)
+    {
+        key = m_sEVTRangeList.at(i)->getOffsKorrKey();
+        if (! adjOffsetCorrectionHash.contains(key))
+        {
+            // für diesen bereich haben wir noch keine eintrag in die liste , was zu tun ist
+            adjOffsetCorrectionHash[key] = 0.0; // platzhalter
+            m_OffsetMeasInfoList.append(new cJustMeasInfo(m_sNRangeList.at(0)->Name(), m_sEVTRangeList.at(i)->Name(), sensNsensX0V, Un_EVT, sensEVTOffset, S80, te, tm));
+        }
+    }
+}
+
+
+void cWM3000U::offsetCorrectionHash2File()
+{
+    m_OffsetDatafile.remove();
+    m_NSAOffsetDatafile.remove();
+
+    if (m_OffsetDatafile.open(QIODevice::WriteOnly))
+    {
+        QDataStream st(&m_OffsetDatafile);
+        st.setVersion(QDataStream::Qt_4_0);
+
+        QList<QString> keylist;
+        keylist = measOffsetCorrectionHash.keys();
+
+        for (int i = 0; i < keylist.count(); i++)
+        {
+            QString key;
+
+            key = keylist.at(i);
+            st << key << measOffsetCorrectionHash[key];
+        }
+        m_OffsetDatafile.flush();
+        m_OffsetDatafile.close();
+    }
+
+    if (m_NSAOffsetDatafile.open(QIODevice::WriteOnly))
+    {
+        QTextStream st(&m_NSAOffsetDatafile);
+
+        QList<QString> keylist;
+        keylist = measOffsetCorrectionHash.keys();
+
+        for (int i = 0; i < keylist.count(); i++)
+        {
+            QString key;
+            QString output;
+
+            key = keylist.at(i);
+            output = QString("%1;%2\n").arg(key).arg(measOffsetCorrectionHash[key]);
+            st << output;
+        }
+
+        m_NSAOffsetDatafile.flush();
+        m_NSAOffsetDatafile.close();
+    }
+}
+
+
+void cWM3000U::readOffsetCorrectionFile()
+{
+    adjOffsetCorrectionHash.clear();
+    measOffsetCorrectionHash.clear();
+
+    if (m_OffsetDatafile.open(QIODevice::ReadOnly))
+    {
+        QString key;
+        double val;
+        QDataStream st(&m_OffsetDatafile);
+        st.setVersion(QDataStream::Qt_4_0);
+        while (!m_OffsetDatafile.atEnd())
+        {
+            st >> key >> val;
+            adjOffsetCorrectionHash[key] = val;
+        }
+
+        measOffsetCorrectionHash = adjOffsetCorrectionHash;
+    }
+}
 
 
 void cWM3000U::SetSelfTestInfo(bool remote)
@@ -2594,9 +3284,9 @@ void cWM3000U::SetSelfTestInfo(bool remote)
     uint i;
     
     m_SelftestInfoList.clear();
-    for (i = 0; i < m_sNXRangeList.count()-1; i++)
+    for (i = 0; i < m_sNRangeList.count()-1; i++)
     {
-	m_SelftestInfoList.append(m_sNXRangeList.at(i)->Selector());
+    m_SelftestInfoList.append(m_sNRangeList.at(i)->Selector());
 	if (remote) break;
     }
     
@@ -2960,7 +3650,6 @@ CWMRange* cWM3000U::Range(float mw,cWMRangeList& rlist)
     return range;
 }
 
-
 /*
 void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen 
 {
@@ -3167,13 +3856,20 @@ void cWM3000U::SetDspWMCmdList()
   	DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
 //	DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn taster
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
-	// korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen	
-	DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
-	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+
+    // korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    else
+        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 	
-	DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
-	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+    else
+        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
 	
 	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
@@ -3189,11 +3885,17 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
 	// korrigierte einheitswurzel berechnen und im bzw. re von kanal 1 bestimmen	
-	DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    else
+        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 	
-	DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+    else
+        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
 	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
@@ -3260,18 +3962,33 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL3)").arg(4*nSPer)); // fenster funktion anwenden
 	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL3,FRMSX)").arg(4*nSPer)); // die schnelle rms messung für kanal x
 	
-	DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+    else
+        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
-	DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+    else
+        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
 	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
 	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)"); // für schnelle lp anzeige
-	DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+    else
+        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
-	DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+
+    if (m_ConfData.m_bDCmeasurement)
+        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+    else
+        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
 	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
@@ -3296,11 +4013,7 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addIntListItem( s = "CLEARN(11,FILTER)");
 	DspIFace->addIntListItem( s = "DSPINTTRIGGER(0x0,0x0003)"); // gibt interrupt an controler
 	DspIFace->addIntListItem( s = "STOPCHAIN(1,0x0003)"); // ende prozessnr., hauptkette 0 subkette 3
-	
-	
-	
-	
-	
+
     }
 }
 
@@ -3338,7 +4051,7 @@ void cWM3000U::SimulatedMeasurement()
     eParameter e = m_ConfData.m_NSecondary;
 
     ActValues.dspActValues.rmsnf = e.toDouble() * rnd;
-    CWMRange* r = Range(m_ConfData.m_sRangeN,m_sNXRangeList);
+    CWMRange* r = Range(m_ConfData.m_sRangeN,m_sNRangeList);
     ActValues.dspActValues.rmsnf *= r->Rejection()/r->Value();
     ActValues.RMSN1Sek = ActValues.dspActValues.rmsnf;
     ActValues.dspActValues.ampl1nf = ActValues.dspActValues.rmsnf * 1.414213562; // klirrfaktor = 0 
@@ -3349,7 +4062,7 @@ void cWM3000U::SimulatedMeasurement()
     {
 	 case Un_UxAbs:
 	    e =  m_ConfData.m_XSecondary;
-	    r = Range(m_ConfData.m_sRangeX,m_sNXRangeList);
+        r = Range(m_ConfData.m_sRangeX,m_sNRangeList);
 	    val = r->Value();
 	    rej = r->Rejection();
 	break;
@@ -3415,7 +4128,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     CmpActFrequency();
     ActValues.TDSync = ActValues.dspActValues.tdsync / TDBase;
 	
-    CWMRange* r = Range(m_ConfData.m_sRangeN,m_sNXRangeList);
+    CWMRange* r = Range(m_ConfData.m_sRangeN,m_sNRangeList);
     
     double val,rej,im,re;
     val = r->Value();
@@ -3434,13 +4147,13 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     {
     case Un_UxAbs:
     case Un_nConvent: // wir brauchen jetzt das ü-verhältnis um die sekundär grösse zu ermitteln
-	PrimX = m_ConfData.m_XPrimary;
-	SekX = m_ConfData.m_XSecondary;
-	break;
+        PrimX = m_ConfData.m_XPrimary;
+        SekX = m_ConfData.m_XSecondary;
+        break;
     case Un_EVT:
-	PrimX = m_ConfData.m_EVTPrimary;
-	SekX = m_ConfData.m_EVTSecondary;
-	break;
+        PrimX = m_ConfData.m_EVTPrimary;
+        SekX = m_ConfData.m_EVTSecondary;
+        break;
     }
     
     double kx = PrimX.toDouble() / SekX.toDouble();
@@ -3456,19 +4169,19 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     switch (m_ConfData.m_nMeasMode) // für dut messart abhängig
     {
     case Un_UxAbs:
-	r = Range(m_ConfData.m_sRangeX,m_sNXRangeList);
-	val = r->Value();
-	rej = r->Rejection();
-	break;
+        r = Range(m_ConfData.m_sRangeX,m_sNRangeList);
+        val = r->Value();
+        rej = r->Rejection();
+        break;
     case Un_EVT:
-	r = Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList);	  
-	val = r->Value();
-	rej = r->Rejection();
-	break;
+        r = Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList);
+        val = r->Value();
+        rej = r->Rejection();
+        break;
     case Un_nConvent:
-	val = 10.0e-3; // 1lsb -> 10mV 	  
-	//rej = 1.0;	  
-	rej = kx; // wir wollen die sekundär grösse des nConvent haben ... neue forderung dies anzuzeigen
+        val = 10.0e-3; // 1lsb -> 10mV
+        //rej = 1.0;
+        rej = kx; // wir wollen die sekundär grösse des nConvent haben ... neue forderung dies anzuzeigen
     }
 	
     ActValues.RMSX1Sek = ( val * ActValues.RMSX1Sek ) / rej; // der rohe messwert RMSX1Sek wurde schon  in statemachine gesetzt bzw. in simulation und wird hier skaliert!!!
@@ -3528,18 +4241,62 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
 }
 
 
-void cWM3000U::CorrActValues() {  // here we will do all the necessary corrections with use of adjustment values
+void cWM3000U::CorrActValues()
+{  // here we will do all the necessary corrections with use of adjustment values
     const float PI_180 = 0.017453293;
-    
+    double offsetCorr;
+    QString key;
+
     ActValues.dspActValues.rmsnf *= m_JustValues.GainCorrCh0;
     ActValues.dspActValues.ampl1nf *= m_JustValues.GainCorrCh0;
     ActValues.dspActValues.phin += m_JustValues.PhaseCorrCh0 * PI_180;
     ActValues.dspActValues.dphif += m_JustValues.PhaseCorrCh0 * PI_180;
+
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+        ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
+        ActValues.dspActValues.ampl1nf += m_JustValues.OffsetCorrCh0;
+
+        // wir korrigieren die offsetwerte aus der temp. offset korrektur
+        CWMRange* r = Range(m_ConfData.m_sRangeN, m_sNRangeList);
+        if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
+            offsetCorr = measOffsetCorrectionHash[key];
+        else
+            offsetCorr = 0.0;
+
+        ActValues.dspActValues.rmsnf += offsetCorr;
+        ActValues.dspActValues.ampl1nf += offsetCorr;
+    }
     
-    if ( m_ConfData.m_nMeasMode != Un_nConvent) { // wenn nicht nconvent 
-	ActValues.dspActValues.rmsxf *= m_JustValues.GainCorrCh1; // x kanal auch korrigieren
-	ActValues.dspActValues.ampl1xf *= m_JustValues.GainCorrCh1;
-	ActValues.dspActValues.phix += m_JustValues.PhaseCorrCh1 * PI_180;
-	ActValues.dspActValues.dphif -= m_JustValues.PhaseCorrCh1 * PI_180;
+    if ( m_ConfData.m_nMeasMode != Un_nConvent)
+    { // wenn nicht nconvent
+        CWMRange* r;
+
+        ActValues.dspActValues.rmsxf *= m_JustValues.GainCorrCh1; // x kanal auch korrigieren
+        ActValues.dspActValues.ampl1xf *= m_JustValues.GainCorrCh1;
+        ActValues.dspActValues.phix += m_JustValues.PhaseCorrCh1 * PI_180;
+        ActValues.dspActValues.dphif -= m_JustValues.PhaseCorrCh1 * PI_180;
+
+        if (m_ConfData.m_bDCmeasurement)
+        {
+            // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+            ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
+            ActValues.dspActValues.ampl1xf += m_JustValues.OffsetCorrCh1;
+
+            // wir korrigieren die offsetwerte aus der temp. offset korrektur
+            if (m_ConfData.m_nMeasMode == Un_UxAbs)
+                r = Range(m_ConfData.m_sRangeX, m_sXRangeList);
+            else
+                r = Range(m_ConfData.m_sRangeEVT, m_sEVTRangeList);
+
+            if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
+                offsetCorr = measOffsetCorrectionHash[key];
+            else
+                offsetCorr = 0.0;
+
+            ActValues.dspActValues.rmsxf += offsetCorr;
+            ActValues.dspActValues.ampl1xf += offsetCorr;
+        }
     }
 }
