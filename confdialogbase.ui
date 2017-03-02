@@ -78,108 +78,136 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Widget8">
       <attribute name="title">
        <string>Modus</string>
       </attribute>
-      <widget class="Q3ButtonGroup" name="ModeButtonGroup">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>12</x>
-         <y>12</y>
-         <width>123</width>
-         <height>116</height>
+         <x>11</x>
+         <y>11</y>
+         <width>139</width>
+         <height>172</height>
         </rect>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font/>
-       </property>
-       <property name="title">
-        <string>Messung</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignTop</set>
-       </property>
-       <property name="margin" stdset="0">
-        <number>0</number>
-       </property>
-       <widget class="QRadioButton" name="Mode0RadioButton">
-        <property name="geometry">
-         <rect>
-          <x>11</x>
-          <y>22</y>
-          <width>91</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Un/Ux &amp;abs.</string>
-        </property>
-        <property name="shortcut">
-         <string>Alt+A</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="Mode2RadioButton">
-        <property name="geometry">
-         <rect>
-          <x>11</x>
-          <y>48</y>
-          <width>72</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Un/&amp;EVT</string>
-        </property>
-        <property name="shortcut">
-         <string>Alt+E</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="Mode3RadioButton">
-        <property name="geometry">
-         <rect>
-          <x>11</x>
-          <y>74</y>
-          <width>101</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font/>
-        </property>
-        <property name="text">
-         <string>Un/n&amp;Convent</string>
-        </property>
-        <property name="shortcut">
-         <string>Alt+C</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="Q3ButtonGroup" name="ModeButtonGroup">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font/>
+          </property>
+          <property name="title">
+           <string>Messung</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignTop</set>
+          </property>
+          <property name="margin" stdset="0">
+           <number>0</number>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QRadioButton" name="Mode0RadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Un/Ux &amp;abs.</string>
+             </property>
+             <property name="shortcut">
+              <string>Alt+A</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="Mode2RadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Un/&amp;EVT</string>
+             </property>
+             <property name="shortcut">
+              <string>Alt+E</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="Mode3RadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font/>
+             </property>
+             <property name="text">
+              <string>Un/n&amp;Convent</string>
+             </property>
+             <property name="shortcut">
+              <string>Alt+C</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="Q3ButtonGroup" name="SignalButtonGroup">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font/>
+          </property>
+          <property name="title">
+           <string>Signal</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignTop</set>
+          </property>
+          <property name="margin" stdset="0">
+           <number>0</number>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QRadioButton" name="ACRadioButton">
+             <property name="text">
+              <string>AC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="DCRadioButton">
+             <property name="text">
+              <string>DC</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QWidget" name="Widget9">
