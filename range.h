@@ -32,12 +32,15 @@ private:
 class CWMRange: public CRange // ein wm bereich hat darüber hinaus eine aussteuerung für 100%
 { // und ein linearitätslimit für die bereichautomatik
 public:     
-    CWMRange(const QString,const QString,double,double,double);
+    CWMRange(const QString,const QString,double,double,double, const QString);
     double Rejection();
     double LinearityLimit(); 
+    QString getOffsKorrKey();
+
 private:    
     double m_fRejection;
     double m_fLineartiyLimit;
+    QString m_sOffsetKorrKey;
 } ;   
 
 

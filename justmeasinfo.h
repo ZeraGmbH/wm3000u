@@ -1,0 +1,5 @@
+#ifndef JUSTMEASINFO
+#define JUSTMEASINFO
+
+#endif // JUSTMEASINFO
+

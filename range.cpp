@@ -27,11 +27,12 @@ double CRange::str2double(const QString s)
 }
 
 
-CWMRange::CWMRange(QString rn, QString rs, double rv,double rj, double ll)
+CWMRange::CWMRange(QString rn, QString rs, double rv, double rj, double ll, const QString key)
     :CRange(rn,rs,rv)
 {
     m_fRejection = rj;
     m_fLineartiyLimit = ll;
+    m_sOffsetKorrKey = key;
 }    
 
 
@@ -44,4 +45,10 @@ double CWMRange::Rejection()
 double CWMRange::LinearityLimit()
 {
     return(m_fLineartiyLimit);
+}
+
+
+QString CWMRange::getOffsKorrKey()
+{
+    return m_sOffsetKorrKey;
 }
