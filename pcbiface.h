@@ -34,8 +34,8 @@ enum pcbIFaceActionHandlerState {
     SetSamplingPSamplesStart,
     SetSamplingPSamplesFinished,
     
-    SetTModeStart,
-    SetTModeFinished,
+    SetSenseModeStart,
+    SetSenseModeFinished,
     
     SetSyncSourceStart,
     SetSyncSourceFinished,
@@ -48,12 +48,21 @@ enum pcbIFaceActionHandlerState {
     
     ReadPhaseCorrectionStart,
     ReadPhaseCorrectionFinished,
+
+    ReadOffsetCorrectionStart,
+    ReadOffsetCorrectionFinished,
         
     setPhaseNodeInfoStart,
     setPhaseNodeInfoFinished,
     
     cmpPhaseCoefficientStart,
     cmpPhaseCoefficientFinished,
+
+    setOffsetNodeInfoStart,
+    setOffsetNodeInfoFinished,
+
+    cmpOffsetCoefficientStart,
+    cmpOffsetCoefficientFinished,
         
     JustFlashProgStart,
     JustFlashProgFinished,
@@ -100,14 +109,17 @@ public:
     void switchRange(int, QString); // schaltet im kanal(int) den bereich (qstring)
     void setSamplingFrequency(float); 
     void setSamplingPSamples(int);
-    void setTMode(int); 
+    void setSenseMode(int);
     void setSyncSource(int);
     void setSyncTiming(int);
     void readGainCorrection(int, QString, float);
     void readPhaseCorrection(int, QString, float);
+    void readOffsetCorrection(int, QString, float);
     void GetAdjustmentStatus();
     void setPhaseNodeInfo(QString, QString, int, float, float);
     void cmpPhaseCoefficient(QString);
+    void setOffsetNodeInfo(QString, QString, int, float, float);
+    void cmpOffsetCoefficient(QString);
     void SetSenseProtection(int);
        
     void JustFlashProgram();
@@ -133,13 +145,16 @@ private:
     void SendSwitchRangeCommand();
     void SendSetSamplingFrequencyCommand();
     void SendSetSamplingPSamplesCommand();
-    void SendSetTModeCommand();
+    void SendSetSenseModeCommand();
     void SendSetSyncSourceCommand();
     void SendSetSyncTimingCommand();
     void SendReadGainCorrectionCommand();
     void SendReadPhaseCorrectionCommand();
+    void SendReadOffsetCorrectionCommand();
     void SendsetPhaseNInfoCommand();
     void SendcmpPhaseCoefficientCommand();
+    void SendsetOffsetNInfoCommand();
+    void SendcmpOffsetCoefficientCommand();
     void SendSetSenseProtectionCommand();
     
     void SendJustFlashProgCommand();

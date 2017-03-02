@@ -32,24 +32,26 @@ void cPCBIFace::ActionHandler(int entryAHS)
 {
     static int AHS = pcbIFaceIdle;
         
-    if ( entryAHS != pcbIFaceContinue ) { // bei continue machen wir beim internen state weiter
-	if (AHS != pcbIFaceIdle) { // wir sollen was neues starten
-	    qDebug ("PCBIFace reentered with new AHS=%d while AHS=%d , check your program !",entryAHS, AHS); // das darf eigentlich nicht passieren
-	    return; // und sind fertig
-	}
-	else
-	{
-	    m_biFaceError = false; // wir haben noch keinen fehler
-	    AHS = entryAHS; // wir starten es
-	}
+    if ( entryAHS != pcbIFaceContinue )
+    { // bei continue machen wir beim internen state weiter
+        if (AHS != pcbIFaceIdle)
+        { // wir sollen was neues starten
+            qDebug ("PCBIFace reentered with new AHS=%d while AHS=%d , check your program !",entryAHS, AHS); // das darf eigentlich nicht passieren
+            return; // und sind fertig
+        }
+        else
+        {
+            m_biFaceError = false; // wir haben noch keinen fehler
+            AHS = entryAHS; // wir starten es
+        }
     }
     
     switch (AHS)
     {
     case pcbIFaceConnectYourselfStart:
-	iFaceSock->connectToHost(m_sHost,m_nPort); // verbindung zum leiterkarten server herstellen
-	AHS++;
-	break; // pcbIFaceConnectYourselfStart
+        iFaceSock->connectToHost(m_sHost,m_nPort); // verbindung zum leiterkarten server herstellen
+        AHS++;
+        break; // pcbIFaceConnectYourselfStart
 	
     case JustFlashProgFinished:
     case JustFlashExportFinished:
@@ -57,9 +59,12 @@ void cPCBIFace::ActionHandler(int entryAHS)
     case JustFlashGetChksumFinished:
     case setPhaseNodeInfoFinished:
     case cmpPhaseCoefficientFinished:
-    case SetTModeFinished:
+    case setOffsetNodeInfoFinished:
+    case cmpOffsetCoefficientFinished:
+    case SetSenseModeFinished:
     case ReadPhaseCorrectionFinished:	
     case ReadGainCorrectionFinished:
+    case ReadOffsetCorrectionFinished:
     case SetSyncTimingFinished:	
     case SetSyncSourceFinished:	
     case SetSamplingPSamplesFinished:	
@@ -73,117 +78,132 @@ void cPCBIFace::ActionHandler(int entryAHS)
     case PCBReadSerialNrFinished:
     case GetAdjStatusFinished:
     case SetSenseProtectionFinished:	
-	if (m_biFaceError) 
-	    emit iFaceError();
-	else
-	    emit iFaceDone();
-	AHS = pcbIFaceIdle; // wir sind durch
-	break; // pcbIFaceConnectionFinished
+        if (m_biFaceError)
+            emit iFaceError();
+        else
+            emit iFaceDone();
+        AHS = pcbIFaceIdle; // wir sind durch
+        break; // pcbIFaceConnectionFinished
 	
     case OpenChannelStart:
-	SendOpenChannelCommand();
-	AHS++;
-	break; // OpenChannelStart
+        SendOpenChannelCommand();
+        AHS++;
+        break; // OpenChannelStart
 	
     case ReadRangeStart:
-	SendReadRangeCommand();
-	AHS++;
-	break;
+        SendReadRangeCommand();
+        AHS++;
+        break;
 	
     case SwitchRangeStart:
-	SendSwitchRangeCommand();
-	AHS++;
-	break; // SwitchRangeStart
+        SendSwitchRangeCommand();
+        AHS++;
+        break; // SwitchRangeStart
 	
     case SetSamplingFrequencyStart:
-	SendSetSamplingFrequencyCommand();
-	AHS++;
-	break; // SetSamplingFrequencyStart
+        SendSetSamplingFrequencyCommand();
+        AHS++;
+        break; // SetSamplingFrequencyStart
 	
     case SetSamplingPSamplesStart:
-	SendSetSamplingPSamplesCommand();
-	AHS++;
-	break; // SetSamplingPSamplesStart
+        SendSetSamplingPSamplesCommand();
+        AHS++;
+        break; // SetSamplingPSamplesStart
 	
-    case SetTModeStart:
-	SendSetTModeCommand();
-	AHS++;
-	break; // SetTModeStart
+    case SetSenseModeStart:
+        SendSetSenseModeCommand();
+        AHS++;
+        break; // SetSenseModeStart
 	
     case SetSyncSourceStart:
-	SendSetSyncSourceCommand();
-	AHS++;
-	break; // SetSyncSourceStart
+        SendSetSyncSourceCommand();
+        AHS++;
+        break; // SetSyncSourceStart
 	
     case SetSyncTimingStart:
-	SendSetSyncTimingCommand();
-	AHS++;
-	break; // SetSyncTimingStart
+        SendSetSyncTimingCommand();
+        AHS++;
+        break; // SetSyncTimingStart
 	
     case ReadGainCorrectionStart:
-	SendReadGainCorrectionCommand();
-	AHS++;
-	break; // ReadGainCorrectionStart
+        SendReadGainCorrectionCommand();
+        AHS++;
+        break; // ReadGainCorrectionStart
 	
     case ReadPhaseCorrectionStart:
-	SendReadPhaseCorrectionCommand();
-	AHS++;
-	break; // ReadPhaseCorrectionStart
-	
+        SendReadPhaseCorrectionCommand();
+        AHS++;
+        break; // ReadPhaseCorrectionStart
+
+    case ReadOffsetCorrectionStart:
+        SendReadOffsetCorrectionCommand();
+        AHS++;
+        break; // ReadOffsetCorrectionStart
+
     case setPhaseNodeInfoStart:
-	SendsetPhaseNInfoCommand();
-	AHS++;
-	break; // setPhaseNodeInfoStart
+        SendsetPhaseNInfoCommand();
+        AHS++;
+        break; // setPhaseNodeInfoStart
 	
     case cmpPhaseCoefficientStart:
-	SendcmpPhaseCoefficientCommand();
-	AHS++;
-	break; // setPhaseNodeInfoStart
+        SendcmpPhaseCoefficientCommand();
+        AHS++;
+        break; // setPhaseNodeInfoStart
+
+    case setOffsetNodeInfoStart:
+        SendsetOffsetNInfoCommand();
+        AHS++;
+        break; // setPhaseNodeInfoStart
+
+    case cmpOffsetCoefficientStart:
+        SendcmpOffsetCoefficientCommand();
+        AHS++;
+        break; // setPhaseNodeInfoStart
 	
     case JustFlashProgStart:
-	SendJustFlashProgCommand();
-	AHS++;
-	break; // JustFlashProgStart
+        SendJustFlashProgCommand();
+        AHS++;
+        break; // JustFlashProgStart
     
     case JustFlashExportStart:
-	SendJustFlashExportCommand();
-	AHS++;
-	break;
+        SendJustFlashExportCommand();
+        AHS++;
+        break;
 	
     case JustFlashImportStart:
-	SendJustFlashImportCommand();
-	AHS++;
-	break;
+        SendJustFlashImportCommand();
+        AHS++;
+        break;
 	
     case JustFlashGetChksumStart:
-	SendReadFlashChksumCommand();
-	AHS++;
-	break;
+        SendReadFlashChksumCommand();
+        AHS++;
+        break;
 	
     case PCBReadDeviceVersionStart:
-	SendReadDeviceVersionCommand();
-	AHS++;
-	break;
+        SendReadDeviceVersionCommand();
+        AHS++;
+        break;
 	
     case PCBReadServerVersionStart:
-	SendReadServerVersionCommand();
-	AHS++;
-	break;
+        SendReadServerVersionCommand();
+        AHS++;
+        break;
 	
     case PCBReadSerialNrStart:
-	SendReadSerialNrCommand();
-	AHS++;
-	break;
+        SendReadSerialNrCommand();
+        AHS++;
+        break;
 	
     case GetAdjStatusStart:
-	SendGetAdjStatusCommand();
-	AHS++;
-	break;
+        SendGetAdjStatusCommand();
+        AHS++;
+        break;
 	
     case SetSenseProtectionStart:
-	SendSetSenseProtectionCommand();
-	AHS++;
-	break;
+        SendSetSenseProtectionCommand();
+        AHS++;
+        break;
 	
    }
 }
@@ -244,10 +264,10 @@ void cPCBIFace::setSamplingPSamples(int ps) // samples/periode einstellen
 }
 
 
-void cPCBIFace::setTMode(int tm) // test modus einstellen
+void cPCBIFace::setSenseMode(int sm) // test modus einstellen
 {
-    m_nP1 = tm;
-    m_ActTimer->start(0,SetTModeStart);
+    m_nP1 = sm;
+    m_ActTimer->start(0,SetSenseModeStart);
 }
 
 
@@ -284,6 +304,15 @@ void cPCBIFace::readPhaseCorrection(int ch, QString sRange, float actVal)
 }
 
 
+void cPCBIFace::readOffsetCorrection(int ch, QString sRange, float actVal)
+{
+    m_nP1 = ch;
+    m_sP1 = sRange;
+    m_fP1 = actVal;
+    m_ActTimer->start(0,ReadOffsetCorrectionStart);
+}
+
+
 void cPCBIFace::setPhaseNodeInfo(QString chn, QString rng, int index, float node, float arg)
 {
     m_sP1 = chn;
@@ -299,6 +328,24 @@ void cPCBIFace::cmpPhaseCoefficient(QString chn)
 {
     m_sP1 = chn;
     m_ActTimer->start(0,cmpPhaseCoefficientStart);
+}
+
+
+void cPCBIFace::setOffsetNodeInfo(QString chn, QString rng, int index, float node, float arg)
+{
+    m_sP1 = chn;
+    m_sP2 = rng;
+    m_nP1 = index;
+    m_fP1 = node;
+    m_fP2 = arg;
+    m_ActTimer->start(0,setOffsetNodeInfoStart);
+}
+
+
+void cPCBIFace::cmpOffsetCoefficient(QString chn)
+{
+    m_sP1 = chn;
+    m_ActTimer->start(0,cmpOffsetCoefficientStart);
 }
 
 void cPCBIFace::JustFlashProgram()
@@ -392,7 +439,7 @@ void cPCBIFace::SendSetSamplingPSamplesCommand()
 }	 
 
 
-void cPCBIFace::SendSetTModeCommand()
+void cPCBIFace::SendSetSenseModeCommand()
 {
     QString cmds = QString("syst:samp:mode %1\n").arg(m_nP1);
     iFaceSock->SendCommand(cmds);
@@ -424,6 +471,13 @@ void cPCBIFace::SendReadPhaseCorrectionCommand()
     iFaceSock->SendQuery(cmds);
 }
 
+
+void cPCBIFace::SendReadOffsetCorrectionCommand()
+{
+    QString cmds = QString("calc:ch%1:%2:coff %3?\n").arg(m_nP1).arg(m_sP1).arg(m_fP1);
+    iFaceSock->SendQuery(cmds);
+}
+
 void cPCBIFace::SendsetPhaseNInfoCommand()
 {
     QString cmds = QString("calc:%1:%2:pcn%3 %4,%5\n").arg(m_sP1).arg(m_sP2).arg(m_nP1).arg(m_fP1).arg(m_fP2);
@@ -434,7 +488,22 @@ void cPCBIFace::SendcmpPhaseCoefficientCommand()
 {
     QString cmds = QString("calc:%1:comp:cph\n").arg(m_sP1);
     iFaceSock->SendCommand(cmds);
-}   
+}
+
+
+void cPCBIFace::SendsetOffsetNInfoCommand()
+{
+    QString cmds = QString("calc:%1:%2:ocn%3 %4,%5\n").arg(m_sP1).arg(m_sP2).arg(m_nP1).arg(m_fP1).arg(m_fP2);
+    iFaceSock->SendCommand(cmds);
+}
+
+
+void cPCBIFace::SendcmpOffsetCoefficientCommand()
+{
+    QString cmds = QString("calc:%1:comp:coff\n").arg(m_sP1);
+    iFaceSock->SendCommand(cmds);
+}
+
 
 void cPCBIFace::SendJustFlashProgCommand()
 {
