@@ -74,6 +74,9 @@ signals:
     void UIJustageAmplitudeActionActivated();
     void UIJustagePhaseActionActivated();
     void UIJustageKoeffBerechnungActionActivated();
+    void UIJustageOffsetActionActivated();
+    void UIJustageOffsetBerechnungActionActivated();
+    void UIJustageOffsetVarActionActivated();
     void UIhilfeInfo_ber_QtActionActivated();
     void UIhilfeInfo_ber_ZeraActionActivated();
     void UIhilfeInfoActionActivated();

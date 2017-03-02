@@ -117,6 +117,8 @@
     <addaction name="messungStartAction"/>
     <addaction name="messungSpeichernMesswerteAction"/>
     <addaction name="separator"/>
+    <addaction name="messungOffsetabgleichAction"/>
+    <addaction name="separator"/>
     <addaction name="messungSimulationAction"/>
    </widget>
    <widget class="QMenu" name="Ansicht">
@@ -164,6 +166,10 @@
     <addaction name="JustageAmplitudeAction"/>
     <addaction name="JustagePhaseAction"/>
     <addaction name="JustageKoeffBerechnungAction"/>
+    <addaction name="separator"/>
+    <addaction name="JustageOffsetAction"/>
+    <addaction name="JustageOffsetBerechnungAction"/>
+    <addaction name="separator"/>
     <addaction name="justageFlashProgAction"/>
     <addaction name="justageFlasExportAction"/>
     <addaction name="justageFlashImportAction"/>
@@ -795,6 +801,21 @@
    </property>
    <property name="text">
     <string>Polnisch</string>
+   </property>
+  </action>
+  <action name="JustageOffsetAction">
+   <property name="text">
+    <string>Offset</string>
+   </property>
+  </action>
+  <action name="JustageOffsetBerechnungAction">
+   <property name="text">
+    <string>Offsetberechnung</string>
+   </property>
+  </action>
+  <action name="messungOffsetabgleichAction">
+   <property name="text">
+    <string>Offsetabgleich</string>
    </property>
   </action>
  </widget>
