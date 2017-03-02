@@ -36,7 +36,6 @@ WMViewBase *g_WMView;
 
 int main(int argc, char *argv[])
 {
-  bool bconvent;
   QApplication::setDesktopSettingsAware(true);
   g_app = new QApplication (argc, argv);
   QFont f = g_app->font();
@@ -76,20 +75,34 @@ int main(int argc, char *argv[])
   g_app->setMainWidget(g_WMView); // hauptfenster der applikation mitteilen
 
   QString option ="";
-  if ( g_app->argc() > 1 )
-    option = g_app->argv()[1];
+  int nrOptions;
+  bool bJustage = false;
+  bool bconvent = false;
+  bool bdc = false;
 
-  if (option != "-justage")
-    g_WMView->removeJustageItem();
-
-  bconvent = (option == "-convent");
-  if (bconvent)
+  nrOptions = g_app->argc();
+  if ( nrOptions > 1 )
   {
-      g_WMDevice->setConventional(true);
-      g_WMView->configureWM1000Items();
+      for (int i = 1; i < nrOptions; i++)
+      {
+          option = g_app->argv()[i];
+          if (option == "-justage")
+              bJustage = true;
+          if (option == "-convent")
+              bconvent = true;
+          if (option == "-dc")
+              bdc = true;
+      }
   }
-  else
-      g_WMDevice->setConventional(false);
+
+  if (!bJustage)
+      g_WMView->removeJustageItem();
+
+  g_WMDevice->setConventional(bconvent);
+  if (bconvent)
+      g_WMView->configureWM1000Items();
+
+  g_WMDevice->setDC(bdc);
 
 
   cReleaseInfo *g_ReleaseView = new cReleaseInfo(g_app);
@@ -120,6 +133,7 @@ int main(int argc, char *argv[])
   QObject::connect(g_WMActValView,SIGNAL(isVisibleSignal(bool)),g_WMView,SIGNAL(UIansichtIstwerteActionSet(bool))); //schliessen der istwertanzeige
   QObject::connect(g_WMView,SIGNAL(SaveSessionSignal(QString)),g_WMActValView,SLOT(SaveSession(QString))); // fenster grösse und position einrichten
   QObject::connect(g_WMView,SIGNAL(LoadSessionSignal(QString)),g_WMActValView,SLOT(LoadSession(QString))); // fenster grösse und position einrichten
+  QObject::connect(g_WMDevice,SIGNAL(SendConfDataSignal(cConfData*)),g_WMActValView,SLOT(SetConfInfoSlot(cConfData*))); // device sendet konfigurationsdaten an rawactualanzei
   QObject::connect(g_WMDevice,SIGNAL(SendActValuesSignal(cwmActValues*)),g_WMActValView,SLOT(ReceiveAVDataSlot( cwmActValues*))); // senden von istwerten
 
   CLogFileView* g_WMSCPILogFileView;
@@ -166,6 +180,9 @@ int main(int argc, char *argv[])
   QObject::connect(g_WMView,SIGNAL(UIJustageAmplitudeActionActivated()),g_WMDevice,SLOT(JustageAmplitudeSlot())); // welchsel in den amplituden justage modus wenn jumper
   QObject::connect(g_WMView,SIGNAL(UIJustagePhaseActionActivated()),g_WMDevice,SLOT(JustagePhaseSlot())); // automatischer phasenabgleich wenn jumper
   QObject::connect(g_WMView,SIGNAL(UIJustageKoeffBerechnungActionActivated()),g_WMDevice,SLOT(JustagePhaseBerechnungSlot())); // automatischer phasenabgleich wenn jumper
+  QObject::connect(g_WMView,SIGNAL(UIJustageOffsetActionActivated()),g_WMDevice,SLOT(JustageOffsetSlot())); // automatischer phasenabgleich wenn jumper
+  QObject::connect(g_WMView,SIGNAL(UIJustageOffsetBerechnungActionActivated()),g_WMDevice,SLOT(JustageOffsetBerechnungSlot())); // automatischer phasenabgleich wenn jumper
+  QObject::connect(g_WMView,SIGNAL(UIJustageOffsetVarActionActivated()),g_WMDevice,SLOT(JustageOffsetVarSlot())); // automatischer phasenabgleich wenn jumper
 
   QObject::connect((QObject*)g_WMView,SIGNAL(JustFlashProgSignal()),g_WMDevice,SLOT(JustageFlashProgSlot())); // welchsel in den amplituden justage modus wenn jumper
   QObject::connect((QObject*)g_WMView,SIGNAL(JustFlashExportSignal(QString)),g_WMDevice,SLOT(JustageFlashExportSlot(QString))); // automatischer phasenabgleich wenn jumper
