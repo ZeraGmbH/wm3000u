@@ -52,7 +52,6 @@ HEADERS	+= logfile.h \
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
-	Range.cpp \
 	BigLetter.cpp \
 	lbrowser.cpp \
 	ownerror.cpp \
@@ -90,7 +89,9 @@ SOURCES	+= Logfile.cpp \
     csessionhelper.cpp \
     dbushelper.cpp \
     dbushelperadapter.cpp \
-    releaseinfo.cpp
+    releaseinfo.cpp \
+    range.cpp \
+    wmglobal.cpp
 
 FORMS	= wmviewbase.ui \
 	rangedialogbase.ui \
