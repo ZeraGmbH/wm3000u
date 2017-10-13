@@ -111,6 +111,20 @@ void WMMeasValuesBase::ActualizeLPSlot( cwmActValues * av )
 void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
 {
     m_ConfData = *cd;
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        ui->mBigAngleName->setVisible(false);
+        ui->mBigAngleError->setVisible(false);
+        ui->mBigAngleUnit->setVisible(false);
+        //resize(ui->hboxLayout->sizeHint());
+    }
+    else
+    {
+        ui->mBigAngleName->setVisible(true);
+        ui->mBigAngleError->setVisible(true);
+        ui->mBigAngleUnit->setVisible(true);
+        //resize(ui->hboxLayout->sizeHint());
+    }
 }
 
 
