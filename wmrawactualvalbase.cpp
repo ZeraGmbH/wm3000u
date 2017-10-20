@@ -88,12 +88,24 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
 	// amplitude der grundschwingung
 	double ampl;
 	if (AmplPrimSekMode == prim)
-	    ampl = fabs(m_ActValues.VekN);
+    {
+        if (m_pConfData->m_bDCmeasurement)
+            ampl = m_ActValues.VekN.re();
+        else
+            ampl = fabs(m_ActValues.VekN);
+    }
 	else
-	    ampl = fabs(m_ActValues.VekNSek);
-	if (AmplDispMode == x1_SQRT2)
-	    ampl/=1.414213562;
-        ui->XnAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
+    {
+        if (m_pConfData->m_bDCmeasurement)
+            ampl = m_ActValues.VekNSek.re();
+        else
+            ampl = fabs(m_ActValues.VekNSek);
+    }
+
+    if (AmplDispMode == x1_SQRT2 && !m_pConfData->m_bDCmeasurement)
+        ampl/=1.414213562;
+
+    ui->XnAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
 	
 	/*
 	phi = m_ActValues.PHIN * radgrad;
@@ -112,10 +124,21 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
 
     // amplitude der grundschwingung
 	if (AmplPrimSekMode == prim)
-	    ampl = fabs(m_ActValues.VekX);
+    {
+        if (m_pConfData->m_bDCmeasurement)
+            ampl = m_ActValues.VekX.re();
+        else
+            ampl = fabs(m_ActValues.VekX);
+    }
 	else
-	    ampl = fabs(m_ActValues.VekXSek);
-	if (AmplDispMode == x1_SQRT2)
+    {
+        if (m_pConfData->m_bDCmeasurement)
+            ampl = m_ActValues.VekXSek.re();
+        else
+            ampl = fabs(m_ActValues.VekXSek);
+    }
+
+    if (AmplDispMode == x1_SQRT2 && !m_pConfData->m_bDCmeasurement)
 	    ampl/=1.414213562;
         ui->XxAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
 	
