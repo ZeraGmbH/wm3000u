@@ -3859,9 +3859,18 @@ void cWM3000U::SetDspWMCmdList()
 
     // korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen
     if (m_ConfData.m_bDCmeasurement)
+    {
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    }
     else
+    {
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL0,TEMP1)").arg(nSMeas)); // dc auf TEMP1
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL0)").arg(nSMeas)); // dc von allen samples abziehen
         DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    }
+
     DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 	
@@ -3873,11 +3882,19 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
 	
 	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
-	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1N)"); 
-//	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)"); 
-	
-	DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIN)");
-	// rms wert berechnung 
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1N)");
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIN)");
+    }
+    else
+    {
+        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1N)");
+        // DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)");
+        DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIN)");
+    }
+
+    // rms wert berechnung
 	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,RMSN)").arg(nSMeas));
 //	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,FRMSN)").arg(nSMeas));
 	// kanal 1 (x) bearbeiten	
@@ -3886,9 +3903,18 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
 	// korrigierte einheitswurzel berechnen und im bzw. re von kanal 1 bestimmen	
     if (m_ConfData.m_bDCmeasurement)
+    {
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    }
     else
+    {
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL1,TEMP1)").arg(nSMeas)); // dc auf TEMP1
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL1)").arg(nSMeas)); // dc von allen samples abziehen
         DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+    }
+
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 	
@@ -3898,9 +3924,20 @@ void cWM3000U::SetDspWMCmdList()
         DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
-	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
-	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1X)"); 
-	DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIX)");
+
+
+    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1X)");
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIX)");
+    }
+    else
+    {
+        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1X)");
+        DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIX)");
+    }
+
 	// rms wert berechnung 	
 	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL1,RMSX)").arg(nSMeas)); // rmswert berechnen
 	// ermitteln der zeit zwischen pps und 1. samplewert	
@@ -3958,9 +3995,27 @@ void cWM3000U::SetDspWMCmdList()
 	DspIFace->addCycListItem( s = "SETVAL(SINDEX2,0)"); // index 0 setzen
 	DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(4*nSPer)); // fensterfunktion über 4 signalperioden generieren
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL2)").arg(4*nSPer)); // fenster funktion anwenden
-	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL2,FRMSN)").arg(4*nSPer)); // die schnelle rms messung
+
+    if (!m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL2,TEMP1)").arg(4*nSPer)); // dc auf TEMP1
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL2)").arg(4*nSPer)); // dc von allen samples abziehen
+    }
+
+    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL2,FRMSN)").arg(4*nSPer)); // die schnelle rms messung
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL3)").arg(4*nSPer)); // fenster funktion anwenden
-	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL3,FRMSX)").arg(4*nSPer)); // die schnelle rms messung für kanal x
+
+    if (!m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL3,TEMP1)").arg(4*nSPer)); // dc auf TEMP1
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL3)").arg(4*nSPer)); // dc von allen samples abziehen
+    }
+
+    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL3,FRMSX)").arg(4*nSPer)); // die schnelle rms messung für kanal x
 	
     if (m_ConfData.m_bDCmeasurement)
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
@@ -3975,8 +4030,16 @@ void cWM3000U::SetDspWMCmdList()
         DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
-	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
-	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)"); // für schnelle lp anzeige
+
+    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,FAMPL1N)");
+    }
+    else
+    {
+        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)"); // für schnelle lp anzeige
+    }
 
     if (m_ConfData.m_bDCmeasurement)
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
@@ -3991,8 +4054,17 @@ void cWM3000U::SetDspWMCmdList()
         DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
 	DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
 	DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
-	// amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage 
-	DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1X)"); // für schnelle lp anzeige
+
+    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,FAMPL1X)");
+    }
+    else
+    {
+        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1X)"); // für schnelle lp anzeige
+    }
+
 	DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0400)"); // deaktivieren der berechnung 
 	DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0400)"); // ende prozessnr., hauptkette 0 subkette 3
 	
@@ -4256,6 +4328,7 @@ void cWM3000U::CorrActValues()
     {
         // wir korrigieren die offsetwerte aus der permanenten offset korrektur
         ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
+        ActValues.dspActValues.ampl1nf /= 2.0;
         ActValues.dspActValues.ampl1nf += m_JustValues.OffsetCorrCh0;
 
         // wir korrigieren die offsetwerte aus der temp. offset korrektur
@@ -4282,6 +4355,7 @@ void cWM3000U::CorrActValues()
         {
             // wir korrigieren die offsetwerte aus der permanenten offset korrektur
             ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
+            ActValues.dspActValues.ampl1xf /= 2.0;
             ActValues.dspActValues.ampl1xf += m_JustValues.OffsetCorrCh1;
 
             // wir korrigieren die offsetwerte aus der temp. offset korrektur
