@@ -18,9 +18,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.7.222"
+#define TheDevice "192.168.7.223"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -76,6 +76,11 @@
 // v2.22 25.06.2015 eparameter test so geändert, dass fehler in der angehängten einheit bemerkt werden.
 // v2.23 31.08.2016 polinische Sprache hinzugefügt, statusbar permanent
 // v2.24 02.03.2017 dc messmöglichkeit und offset justage eingebaut
+//                  konfiguration signal auswahl ac/dc
+//                  fenster für vektoren und fehlerwerte passen sich in abhängigkeit ac/dc an
+//                  permanente dc justage in justage menu
+//                  temporäre dc justage in messung menu
+//                  rms werte in dsp ... es werden die dc werte abgezogen wenn ac betrieb
 
 #define WMVersion "V2.24"
 
