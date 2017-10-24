@@ -10,12 +10,15 @@
 
 #include "ethadress.h"
 
-const int ConfVersion = 8;
+const int ConfVersion8 = 8;
+const int ConfVersion9 = 9; // m_bDCmearurement hinzugefügt
 
 class cConfData
 {
 public:
-    cConfData(){};
+    cConfData(){}
+
+    void setConfVersion();
     
     void serialize(QDataStream&);
     bool deserialize(QDataStream&);
