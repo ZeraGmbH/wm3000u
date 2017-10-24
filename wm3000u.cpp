@@ -2987,7 +2987,7 @@ void cWM3000U::DefaultSettingsMeasurementSlot() // wird nach *rst aufgerufen
 
 void cWM3000U::DefaultSettings(cConfData& cdata) // alle einstellungen default
 {
-    cdata.m_nVersion = ConfVersion;
+    cdata.setConfVersion();
     cdata.m_bRunning = true; // läuft oder läuft nicht
     cdata.m_bSimulation = false; 
     cdata.Language = de; // default deutsch
