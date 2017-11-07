@@ -35,10 +35,11 @@ void WMRawActualValBase::init()
     AmplPrimSekMode = prim;
     WinkelDispMode = mathpos;
     m_pContextMenu = new WMRawActualConfigBase(this);
-    connect(this,SIGNAL(SendVektorDispFormat(int,int,int)),m_pContextMenu,SLOT(ReceiveDisplayConfSlot(int,int,int)));
+    connect(this,SIGNAL(SendVektorDispFormat(bool,int,int,int)),m_pContextMenu,SLOT(ReceiveDisplayConfSlot(bool,int,int,int)));
     connect(m_pContextMenu,SIGNAL(SendVektorDisplayFormat(int,int,int)),this,SLOT(ReceiveVektorDispFormat(int,int,int)));
     connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
     LoadSession(".ses");
+
 }
 
 
@@ -102,7 +103,7 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
             ampl = fabs(m_ActValues.VekNSek);
     }
 
-    if (AmplDispMode == x1_SQRT2 && !m_pConfData->m_bDCmeasurement)
+    if (AmplDispMode == x1_SQRT2)
         ampl/=1.414213562;
 
     ui->XnAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
@@ -138,9 +139,10 @@ void WMRawActualValBase::ReceiveAVDataSlot( cwmActValues *ActValues )
             ampl = fabs(m_ActValues.VekXSek);
     }
 
-    if (AmplDispMode == x1_SQRT2 && !m_pConfData->m_bDCmeasurement)
+    if (AmplDispMode == x1_SQRT2)
 	    ampl/=1.414213562;
-        ui->XxAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
+
+    ui->XxAmplDisp -> setText( QString("%1 V").arg(ampl,10,'f',5) );
 	
 	/*
 	phi = m_ActValues.PHIX * radgrad;
@@ -168,6 +170,7 @@ void WMRawActualValBase::SetConfInfoSlot( cConfData * cd )
     {
         ui->XnPhaseDisp->setVisible(false);
         ui->XxPhaseDisp->setVisible(false);
+        AmplDispMode = x1;  // im fall von dc messung lassen wir nur x1 zu !!!
     }
     else
     {
@@ -241,7 +244,7 @@ void WMRawActualValBase::SaveSession(QString session)
 
 void WMRawActualValBase::contextMenuEvent( QContextMenuEvent * )
 {
-    emit SendVektorDispFormat(AmplDispMode, WinkelDispMode, AmplPrimSekMode);
+    emit SendVektorDispFormat(m_pConfData->m_bDCmeasurement, AmplDispMode, WinkelDispMode, AmplPrimSekMode);
     m_pContextMenu->show();
 }
 

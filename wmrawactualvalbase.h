@@ -33,7 +33,7 @@ public slots:
 
 signals:
     void isVisibleSignal(bool);
-    void SendVektorDispFormat(int,int,int);
+    void SendVektorDispFormat(bool,int,int,int);
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
