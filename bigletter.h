@@ -41,6 +41,7 @@ public:
     cAlign getAlignment() const;
     void setFrame(cFrame);
     cFrame getFrame() const;
+    bool isFormatChanged();
     
 protected:    
     virtual void resizeEvent ( QResizeEvent*);
@@ -56,6 +57,7 @@ private:
     QString m_sDisplay;
     cAlign m_nAlign;
     cFrame m_nFrame;
+    bool formatChanged;
 };    
   
 #endif
