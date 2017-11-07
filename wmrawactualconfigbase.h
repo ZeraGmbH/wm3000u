@@ -17,13 +17,14 @@ public:
     ~WMRawActualConfigBase();
 
 public slots:
-    virtual void ReceiveDisplayConfSlot( int m, int m2, int m3 );
+    virtual void ReceiveDisplayConfSlot(bool dc, int m, int m2, int m3 );
 
 signals:
     void SendVektorDisplayFormat(int,int,int);
 
 private:
     Ui::WMRawActualConfigBase *ui;
+    bool dcMode;
     int AmplDisplayMode;
     int WinkelDisplayMode;
     int AmplPrimSekMode;

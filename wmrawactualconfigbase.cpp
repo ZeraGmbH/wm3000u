@@ -24,12 +24,13 @@ void WMRawActualConfigBase::init()
 }
 
 
-void WMRawActualConfigBase::ReceiveDisplayConfSlot( int m, int m2, int m3)
+void WMRawActualConfigBase::ReceiveDisplayConfSlot(bool dc, int m, int m2, int m3)
 {
-     AmplDisplayMode = m;
-     WinkelDisplayMode = m2;  
-     AmplPrimSekMode = m3;
-     ActualizeDisplay();
+    dcMode = dc;
+    AmplDisplayMode = m;
+    WinkelDisplayMode = m2;
+    AmplPrimSekMode = m3;
+    ActualizeDisplay();
 }
 
 
@@ -45,6 +46,19 @@ void WMRawActualConfigBase::ActualizeDisplay()
     ui->MathradioButton->setChecked(ismathpos);
     ui->TechradioButton->setChecked(!ismathpos);
     
+    if (dcMode)
+    {
+        ui->Amplx1_sqrt2radioButton->setEnabled(false);
+        ui->MathradioButton->setEnabled(false);
+        ui->TechradioButton->setEnabled(false);
+    }
+    else
+    {
+        ui->Amplx1_sqrt2radioButton->setEnabled(true);
+        ui->MathradioButton->setEnabled(true);
+        ui->TechradioButton->setEnabled(true);
+    }
+
     bool isPrim = (AmplPrimSekMode == prim);
     
     ui->PrimradioButton->setChecked(isPrim);
