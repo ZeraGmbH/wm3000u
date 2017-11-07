@@ -81,8 +81,10 @@
 //                  permanente dc justage in justage menu
 //                  temporäre dc justage in messung menu
 //                  rms werte in dsp ... es werden die dc werte abgezogen wenn ac betrieb
+// v2.25 07.11.2017 fehlerwerte anzeige korrigiert dass nach startup die messwerte korrekt dargestellt werden.
+//                  kontextmenu für vector bzw. fehleranzeige in abhängigkeit von dc bzw. ac angepasst
 
-#define WMVersion "V2.24"
+#define WMVersion "V2.25"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
