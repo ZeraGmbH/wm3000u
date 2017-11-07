@@ -37,7 +37,7 @@ void WMMeasValuesBase::init()
     m_Format[0] = cFormatInfo(7,3,LoadpointUnit[LPProzent]); // defaults
     m_Format[1] = cFormatInfo(7,3,ErrorUnit[ErrProzent]);
     m_Format[2] = cFormatInfo(7,4,AngleUnit[Anglegrad]);
-    connect(this,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
+    connect(this,SIGNAL(SendFormatInfoSignal(bool,int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(bool, int,int,int, cFormatInfo*)));
     connect(m_pContextMenu,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),this,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
     connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
     LoadSession(".ses");
@@ -62,26 +62,16 @@ void WMMeasValuesBase::closeEvent( QCloseEvent * ce)
 
 void WMMeasValuesBase::ShowHideMVSlot(bool b)
 {
-    if (b) show();else close();
+    if (b)
+        show();
+    else
+        close();
 }
 
 
 void WMMeasValuesBase::resizeEvent(QResizeEvent * e)
 {
-    if (QLayout *lay=layout())
-    {
-        QLayoutIterator it = lay->iterator();
-        QLayoutItem *child;
-        int  w;
-        bool test;
-        while ( (child = it.current()) != 0 )
-        {
-            Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
-            w = l->minimumSize().width();
-            test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
-            ++it;
-        }
-    }
+    setStretchFactor();
     this->QDialog::resizeEvent(e);
     m_Timer.start(500);
 }
@@ -107,7 +97,6 @@ void WMMeasValuesBase::ActualizeLPSlot( cwmActValues * av )
 }
 
 
-
 void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
 {
     m_ConfData = *cd;
@@ -116,15 +105,16 @@ void WMMeasValuesBase::SetConfInfoSlot( cConfData * cd)
         ui->mBigAngleName->setVisible(false);
         ui->mBigAngleError->setVisible(false);
         ui->mBigAngleUnit->setVisible(false);
-        //resize(ui->hboxLayout->sizeHint());
+        m_nLPDisplayMode = totalRms;
+        m_nDisplayMode = IEC; // wmglobal
     }
     else
     {
         ui->mBigAngleName->setVisible(true);
         ui->mBigAngleError->setVisible(true);
         ui->mBigAngleUnit->setVisible(true);
-        //resize(ui->hboxLayout->sizeHint());
     }
+    repaint();
 }
 
 
@@ -163,6 +153,9 @@ void WMMeasValuesBase::ActualizeLoadPoint()
       ui->mBigLPNUnit->display(m_Format[0].UnitInfo.Name);
       ui->mBigLoadpointX->display(QString("%1").arg(AnzeigeWertX,m_Format[0].FieldWidth,'f',m_Format[0].Resolution));
       ui->mBigLPXUnit->display(m_Format[0].UnitInfo.Name);
+
+     if (ui->mBigLoadpointN->isFormatChanged() || ui->mBigLoadpointX->isFormatChanged())
+        resizeMeas();
 }
 
 
@@ -210,6 +203,37 @@ void WMMeasValuesBase::ActualizeDisplay()
        ui->mBigErrorName->setEnabled(false);
        ui->mBigErrorUnit->setEnabled(false);
    }
+
+   if (ui->mBigAmplError->isFormatChanged() || ui->mBigAngleError->isFormatChanged())
+       resizeMeas();
+}
+
+
+void WMMeasValuesBase::setStretchFactor()
+{
+    if (QLayout *lay=layout())
+    {
+        QLayoutIterator it = lay->iterator();
+        QLayoutItem *child;
+        int  w;
+        bool test;
+        while ( (child = it.current()) != 0 )
+        {
+            Q3BoxLayout *l = (Q3BoxLayout*) child->layout();
+            w = l->minimumSize().width();
+            test =((Q3BoxLayout*) lay)->setStretchFactor(l,w);
+            ++it;
+        }
+    }
+}
+
+
+void WMMeasValuesBase::resizeMeas()
+{
+    QSize size = this->size();
+    QSize tsize = QSize(size.width()+10, size.height()+10);
+    resize(tsize);
+    resize(size);
 }
 
 
@@ -284,7 +308,7 @@ void WMMeasValuesBase::SaveSession(QString session)
 
 void WMMeasValuesBase::contextMenuEvent( QContextMenuEvent * )
 {
-    emit SendFormatInfoSignal( m_nDisplayMode,m_nLPDisplayMode, 3, m_Format);
+    emit SendFormatInfoSignal(m_ConfData.m_bDCmeasurement, m_nDisplayMode,m_nLPDisplayMode, 3, m_Format);
     m_pContextMenu->show();
 }
 

@@ -37,7 +37,7 @@ public slots:
 
 signals:
     void isVisibleSignal(bool);
-    void SendFormatInfoSignal(int, int, int, cFormatInfo*);
+    void SendFormatInfoSignal(bool, int, int, int, cFormatInfo*);
 
 protected:
     virtual void closeEvent( QCloseEvent * ce );
@@ -60,7 +60,9 @@ private:
 
     void init();
     void destroy();
-    virtual void ActualizeDisplay();
+    void ActualizeDisplay();
+    void setStretchFactor();
+    void resizeMeas();
 
 private slots:
     void saveConfiguration();
