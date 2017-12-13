@@ -210,27 +210,35 @@ enum wm3000ActionHandlerState {
     PhaseNodeMeasExec5,
     PhaseNodeMeasFinished,
     
-    OffsetMeasStart,
-    OffsetMeasCoefficientClearN,
-    OffsetMeasCoefficientClearN2,
-    OffsetMeasCoefficientClearNFinished,
-    OffsetMeasBaseConfiguration,
-    OffsetMeasExec1, // 160
-    OffsetMeasExec2,
-    OffsetMeasExec3,
-    OffsetMeasExec4,
-    OffsetMeasExec5,
-    OffsetMeasExec6,
-    OffsetMeasFinished,
+    OffsetMeasWM3000Start,
+    OffsetMeasWM3000CoefficientClearN,
+    OffsetMeasWM3000CoefficientClearN2,
+    OffsetMeasWM3000CoefficientClearNFinished,
+    OffsetMeasWM3000BaseConfiguration,
+    OffsetMeasWM3000Exec1, // 160
+    OffsetMeasWM3000Exec2,
+    OffsetMeasWM3000Exec3,
+    OffsetMeasWM3000Exec4,
+    OffsetMeasWM3000Exec5,
+    OffsetMeasWM3000Exec6,
+    OffsetMeasWM3000Finished,
 
-    OffsetMeasStartVar,
-    OffsetMeasBaseConfigurationVar,
-    OffsetMeasExec1Var,
-    OffsetMeasExec2Var, // 170
-    OffsetMeasExec3Var,
-    OffsetMeasExec4Var,
-    OffsetMeasExec5Var,
-    OffsetMeasFinishedVar,
+    OffsetMeasWM3000StartVar,
+    OffsetMeasWM3000BaseConfigurationVar,
+    OffsetMeasWM3000Exec1Var,
+    OffsetMeasWM3000Exec2Var, // 170
+    OffsetMeasWM3000Exec3Var,
+    OffsetMeasWM3000Exec4Var,
+    OffsetMeasWM3000Exec5Var,
+    OffsetMeasWM3000FinishedVar,
+
+    OffsetMeasChannelNStart,
+    OffsetMeasChannelNSync,
+    OffsetMeasChannelNFinished,
+
+    OffsetMeasChannelXStart,
+    OffsetMeasChannelXSync,
+    OffsetMeasChannelXFinished,
 
     JustageFlashProgStart,
     JustageFlashProgFinished,
@@ -265,13 +273,15 @@ enum wm3000ActionHandlerState {
 class tJustValues
 {
 public:
-    tJustValues(){ GainCorrCh0 = 1; GainCorrCh1 = 1; PhaseCorrCh0 = 0; PhaseCorrCh1 = 0; OffsetCorrCh0 = 0; OffsetCorrCh1 = 0;}
+    tJustValues(){ GainCorrCh0 = 1; GainCorrCh1 = 1; PhaseCorrCh0 = 0; PhaseCorrCh1 = 0; OffsetCorrCh0 = 0; OffsetCorrCh1 = 0; OffsetCorrDevN = 0; OffsetCorrDevX = 0;}
     float GainCorrCh0;
     float GainCorrCh1;
     float PhaseCorrCh0;
     float PhaseCorrCh1;
     float OffsetCorrCh0;
     float OffsetCorrCh1;
+    float OffsetCorrDevN;
+    float OffsetCorrDevX;
 };
 
 
@@ -323,8 +333,12 @@ public slots:
     void JustageOffsetSlot(void);
     void JustageOffsetVarSlot();
     void JustageOffsetBerechnungSlot(void);
+    void OffsetMessungChannelNSlot(void);
+    void OffsetMessungChannelXSlot(void);
     void SelfTestManuell();
     void SelfTestRemote();
+    void OffsetMessungChannelNRemote();
+    void OffsetMessungChannelXRemote();
     
     // slots, die vom bereichauswahl menu aktiviert werden
     void SetRangeSlot(cConfData*); 
@@ -361,6 +375,7 @@ signals:
     void SendConfDataSignal(cConfData*); // konfigurationsdaten senden
     void SendOEDataSignal(cOwnError*); // eigenfehlerdaten senden
     void SendActValuesSignal(cwmActValues*); // istwerte senden
+    void SendJustValuesSignal(tJustValues*);
     void SendLPSignal(cwmActValues*); // es werden alle istwerte versendet, es sollaber nur der lp aktualisiert werden
     void SendIOStringSignal(QString); //  scpi input/output senden
     void SendLogFileSizeSignal(const long); // logfile grösse senden
@@ -376,6 +391,7 @@ signals:
     void SendVersionInfo(tVersSerial*); // wir versenden die versions , serial , chksum info 
     void AffectStatus(uchar, ushort); // zum setzen, rücksetzen der scpi status systeme
     void SelftestDone(int); // 0 ok  -1 fehler
+    void OffsetValue(double);
     void FreqQuestionable(bool);
 
 protected:

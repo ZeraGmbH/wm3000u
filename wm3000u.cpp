@@ -2097,8 +2097,8 @@ case ConfigurationTestSenseMode:
         AHS = wm3000Idle;
         break;
 
-    case OffsetMeasStart:
-    case OffsetMeasStartVar:
+    case OffsetMeasWM3000Start:
+    case OffsetMeasWM3000StartVar:
         m_OffsetJustLogfile.remove(); // beim starten wird das log file gelöscht
         StopMeasurement(); // die kumulieren jetzt nur
         m_pProgressDialog = new Q3ProgressDialog( trUtf8("Initialisierung..."), 0, m_OffsetMeasInfoList.count(), g_WMView, 0, FALSE, 0 ); // ein progress dialog 100% entspricht alle justierpunkte +1 für das 0 setzen der koeffizienten
@@ -2125,13 +2125,13 @@ case ConfigurationTestSenseMode:
         AHS++;
         break;
 
-    case OffsetMeasCoefficientClearN:
+    case OffsetMeasWM3000CoefficientClearN:
         OffsetCalcInfo = m_CalcInfoList.first();
         PCBIFace->setOffsetNodeInfo(OffsetCalcInfo->m_sChannel, OffsetCalcInfo->m_sRange, 0, 0.0, 0.0); // wir setzen jeweils die 1. stützstelle und lassen im anschluss daran die koeffizienten berechnen
         AHS++;
         break; // OffsetMeasCoefficientClearN
 
-    case OffsetMeasCoefficientClearN2:
+    case OffsetMeasWM3000CoefficientClearN2:
         if (m_ConfData.m_bSimulation)  // fehler oder abbruch
         {
             AHS = wm3000Idle;
@@ -2162,7 +2162,7 @@ case ConfigurationTestSenseMode:
         }
         break;
 
-    case OffsetMeasCoefficientClearNFinished:
+    case OffsetMeasWM3000CoefficientClearNFinished:
         if (m_ConfData.m_bSimulation)  // fehler oder abbruch
         {
             AHS = wm3000Idle;
@@ -2175,8 +2175,8 @@ case ConfigurationTestSenseMode:
         break;
 
 
-    case OffsetMeasBaseConfiguration:
-    case OffsetMeasBaseConfigurationVar:
+    case OffsetMeasWM3000BaseConfiguration:
+    case OffsetMeasWM3000BaseConfigurationVar:
     {
         StopMeasurement(); // das kumuliert nur ....
         m_pProgressDialog->setProgress(lprogress); // progess bar setzen
@@ -2218,8 +2218,8 @@ case ConfigurationTestSenseMode:
          break; // OffsetMeasBaseConfiguration OffsetMeasBaseConfigurationVar
     }
 
-    case OffsetMeasExec1: // konfiguriert ist
-    case OffsetMeasExec1Var:
+    case OffsetMeasWM3000Exec1: // konfiguriert ist
+    case OffsetMeasWM3000Exec1Var:
         NewConfData.m_sRangeNSoll = NewConfData.m_sRangeN =NewConfData.m_sRangeNVorgabe; // bereich kanal n
         NewConfData.m_sRangeXSoll = NewConfData.m_sRangeX = NewConfData.m_sRangeXVorgabe; // bereich kanal x
         NewConfData.m_sRangeEVTSoll = NewConfData.m_sRangeEVT = NewConfData.m_sRangeEVTVorgabe; // bereich kanal x
@@ -2231,8 +2231,8 @@ case ConfigurationTestSenseMode:
         AHS = wm3000Idle; // wir sind erst mal fertig
         break; // OffsetMeasExec1 OffsetMeasExec1Var
 
-    case OffsetMeasExec2:
-    case OffsetMeasExec2Var:
+    case OffsetMeasWM3000Exec2:
+    case OffsetMeasWM3000Exec2Var:
         mCount--;
         m_pProgressDialog->setLabelText (QString("%1 %2 ...").arg(m_sJustText).arg(mCount));
         if (mCount == 0)
@@ -2264,8 +2264,8 @@ case ConfigurationTestSenseMode:
         AHS = wm3000Idle; // wir sind erst mal fertig
         break; // OffsetMeasExec2 OffsetMeasExec2Var
 
-    case OffsetMeasExec3:
-    case OffsetMeasExec3Var:
+    case OffsetMeasWM3000Exec3:
+    case OffsetMeasWM3000Exec3Var:
     {
         int i;
 
@@ -2303,7 +2303,7 @@ case ConfigurationTestSenseMode:
         break; // OffsetMeasExec3 OffsetMeasExec3Var
     }
 
-    case OffsetMeasExec4:
+    case OffsetMeasWM3000Exec4:
     {
         CWMRange* lr;
         QString sel;
@@ -2335,7 +2335,7 @@ case ConfigurationTestSenseMode:
         break; // OffsetMeasExec4
     }
 
-    case OffsetMeasExec4Var:
+    case OffsetMeasWM3000Exec4Var:
     {
         // speichern der offset justage werte in hash
         QString key;
@@ -2373,7 +2373,7 @@ case ConfigurationTestSenseMode:
         break;
     }
 
-    case OffsetMeasExec5:
+    case OffsetMeasWM3000Exec5:
         if (m_ConfData.m_bSimulation)  // fehler oder abbruch
         {
             AHS = wm3000Idle;
@@ -2387,7 +2387,7 @@ case ConfigurationTestSenseMode:
 
         break;
 
-    case OffsetMeasExec6:
+    case OffsetMeasWM3000Exec6:
         if (m_ConfData.m_bSimulation)  // fehler oder abbruch
         {
             AHS = wm3000Idle;
@@ -2433,7 +2433,7 @@ case ConfigurationTestSenseMode:
                     m_OffsetJustLogfile.close();
                 }
 
-                AHS = OffsetMeasBaseConfiguration;
+                AHS = OffsetMeasWM3000BaseConfiguration;
                 m_ActTimer->start(0,wm3000Continue);
             }
         }
@@ -2441,14 +2441,14 @@ case ConfigurationTestSenseMode:
         break;
 
 
-    case OffsetMeasFinished:
+    case OffsetMeasWM3000Finished:
         delete m_pProgressDialog;
         JustageOffsetBerechnungSlot(); // berechnung noch starten
         AHS = wm3000Idle;
         break;
 
 
-    case OffsetMeasExec5Var:
+    case OffsetMeasWM3000Exec5Var:
         lprogress++;
         m_pProgressDialog->setProgress(lprogress);
         m_OffsetMeasInfoList.removeFirst();
@@ -2488,16 +2488,66 @@ case ConfigurationTestSenseMode:
                 m_OffsetJustLogfile.close();
             }
 
-            AHS = OffsetMeasBaseConfigurationVar;
+            AHS = OffsetMeasWM3000BaseConfigurationVar;
             m_ActTimer->start(0,wm3000Continue);
         }
 
         break;
 
-    case OffsetMeasFinishedVar:
+    case OffsetMeasWM3000FinishedVar:
         delete m_pProgressDialog;
         measOffsetCorrectionHash = adjOffsetCorrectionHash;
         offsetCorrectionHash2File();
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasChannelNStart:
+        m_pProgressDialog = new Q3ProgressDialog( trUtf8("Messung..."), 0, 2, g_WMView, 0, FALSE, 0 );
+        m_pProgressDialog->setCaption(trUtf8("Offsetmessung Kanal N"));
+        m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
+        m_OffsetMeasState = AHS + 1; // hier müssen wir später weitermachen
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasChannelNSync:
+    case OffsetMeasChannelXSync:
+        m_pProgressDialog->setProgress(1);
+        m_OffsetMeasState = AHS + 1; // hier müssen wir später weitermachen
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasChannelNFinished:
+        m_pProgressDialog->setProgress(2);
+        offs0 = ActValues.VekNSek.re();
+        if (m_ConfData.m_bOffsetCorrectionN)
+            offs0 += m_JustValues.OffsetCorrDevN;
+        m_JustValues.OffsetCorrDevN = offs0;
+        emit OffsetValue(offs0);
+        delete m_pProgressDialog;
+        emit SendJustValuesSignal(&m_JustValues);
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasChannelXStart:
+        m_pProgressDialog = new Q3ProgressDialog( trUtf8("Messung..."), 0, 2, g_WMView, 0, FALSE, 0 );
+        m_pProgressDialog->setCaption(trUtf8("Offsetmessung Kanal X"));
+        m_pProgressDialog->setMinimumDuration(0); // sofort sichtbar
+        m_OffsetMeasState = AHS + 1; // hier müssen wir später weitermachen
+        QObject::connect(this,SIGNAL(MeasureReady()),this,SLOT(OffsetJustSyncSlot()));
+        AHS = wm3000Idle;
+        break;
+
+    case OffsetMeasChannelXFinished:
+        m_pProgressDialog->setProgress(2);
+        offs0 = ActValues.VekXSek.re();
+        if (m_ConfData.m_bOffsetCorrectionX)
+            offs0 += m_JustValues.OffsetCorrDevX;
+        m_JustValues.OffsetCorrDevX = offs0;
+        emit OffsetValue(offs0);
+        delete m_pProgressDialog;
+        emit SendJustValuesSignal(&m_JustValues);
         AHS = wm3000Idle;
         break;
 
@@ -2922,20 +2972,32 @@ void cWM3000U::JustageOffsetSlot()
 {
     SetOffsetCalcInfo();
     SetOffsetMeasInfo(4,10); // zum ermitteln der offsetkorrekturen
-    emit StartStateMachine(OffsetMeasStart);
+    emit StartStateMachine(OffsetMeasWM3000Start);
 }
 
 
 void cWM3000U::JustageOffsetVarSlot()
 {
     SetOffsetMeasInfo(2,4);
-    emit StartStateMachine(OffsetMeasStartVar);
+    emit StartStateMachine(OffsetMeasWM3000StartVar);
 }
 
 
 void cWM3000U::JustageOffsetBerechnungSlot()
 {
     emit StartStateMachine(CmpOffsetCoeffStart);
+}
+
+
+void cWM3000U::OffsetMessungChannelNSlot()
+{
+    emit StartStateMachine(OffsetMeasChannelNStart);
+}
+
+
+void cWM3000U::OffsetMessungChannelXSlot()
+{
+    emit StartStateMachine(OffsetMeasChannelXStart);
 }
 
 
@@ -2951,7 +3013,19 @@ void cWM3000U::SelfTestRemote(void)
 {
     SetSelfTestInfo(true);
     m_pAbortButton = 0; // kein abbruch möglich
-    emit StartStateMachine(SelftestStart);    
+    emit StartStateMachine(SelftestStart);
+}
+
+
+void cWM3000U::OffsetMessungChannelNRemote()
+{
+    emit StartStateMachine(OffsetMeasChannelNStart);
+}
+
+
+void cWM3000U::OffsetMessungChannelXRemote()
+{
+    emit StartStateMachine(OffsetMeasChannelXStart);
 }
 
 
@@ -3026,6 +3100,8 @@ void cWM3000U::DefaultSettingsMeasurement(cConfData& cdata) // alle mess einstel
 {
     cdata.m_bOECorrection = false;
     cdata.m_bDCmeasurement = false;
+    cdata.m_bOffsetCorrectionN = false;
+    cdata.m_bOffsetCorrectionX = false;
     cdata.m_nMeasMode = Un_UxAbs;
     cdata.m_fxPhaseShift = 0.0;
     cdata.m_fxTimeShift = 0.0;
@@ -4238,6 +4314,14 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     re = ( val * ActValues.dspActValues.ampl1nf ) / rej;
     ActValues.VekNSek = complex (re,0.0); // der winkel für vekn ist 0 .... definition !!!
     
+    // wir haben u.u. eine offsetkorrektur für kanal n in "V" die wir nach der skalierung berücksichtigen müssen
+
+    if (m_ConfData.m_bOffsetCorrectionN)
+    {
+        ActValues.RMSNSek = sqrt(ActValues.RMSNSek * ActValues.RMSNSek - m_JustValues.OffsetCorrDevN * m_JustValues.OffsetCorrDevN);
+        ActValues.VekNSek -= m_JustValues.OffsetCorrDevN;
+    }
+
     switch (m_ConfData.m_nMeasMode) // für dut messart abhängig
     {
     case Un_UxAbs:
@@ -4262,6 +4346,12 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     im *= sin(ActValues.dspActValues.dphif); 
     re *= cos(ActValues.dspActValues.dphif);
     ActValues.VekXSek = complex(re,im); 
+
+    if (m_ConfData.m_bOffsetCorrectionX)
+    {
+        ActValues.RMSXSek = sqrt(ActValues.RMSXSek * ActValues.RMSXSek - m_JustValues.OffsetCorrDevX * m_JustValues.OffsetCorrDevX);
+        ActValues.VekXSek -= m_JustValues.OffsetCorrDevX;
+    }
     
     // alle winkel werden vom dsp ermittelt und  dphi ist schon mit tdsync frequenzabhängig korrigiert
     //  die vektoren n und x würden normalerweise mit der differenzfrequenz aus abtast- und signalfrequenz
@@ -4339,7 +4429,7 @@ void cWM3000U::CorrActValues()
             offsetCorr = 0.0;
 
         ActValues.dspActValues.rmsnf += offsetCorr;
-        ActValues.dspActValues.ampl1nf += offsetCorr;
+        ActValues.dspActValues.ampl1nf += offsetCorr;          
     }
     
     if ( m_ConfData.m_nMeasMode != Un_nConvent)
