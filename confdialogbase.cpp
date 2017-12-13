@@ -244,6 +244,8 @@ void ConfDialogBase::SetCmpMenu()
     ui->CmpKorrLineEdit1->setText(QString( "%1" ).arg(m_ConfDataTemp.m_fxPhaseShift,8,'f',4));
     ui->CmpKorrLineEdit2->setText(QString( "%1" ).arg(m_ConfDataTemp.m_fxTimeShift,5,'f',3));
     ui->CmpCorrCheckBox->setChecked(m_ConfDataTemp.m_bOECorrection);
+    ui->OffsetCorrectionNCheckbox->setChecked(m_ConfData.m_bOffsetCorrectionN);
+    ui->OffsetCorrectionXCheckbox->setChecked(m_ConfData.m_bOffsetCorrectionX);
 }
 
 
@@ -324,6 +326,8 @@ void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen,
     m_ConfDataTemp.m_fxPhaseShift=(ui->CmpKorrLineEdit1->text()).toDouble();
     m_ConfDataTemp.m_fxTimeShift=(ui->CmpKorrLineEdit2->text()).toDouble();
     m_ConfDataTemp.m_bOECorrection=ui->CmpCorrCheckBox->isChecked();
+    m_ConfDataTemp.m_bOffsetCorrectionN=ui->OffsetCorrectionNCheckbox->isChecked();
+    m_ConfDataTemp.m_bOffsetCorrectionX=ui->OffsetCorrectionXCheckbox->isChecked();
     // CmpMenu gescannt
     
     if (ui->SyncRadioButton1->isChecked()) m_ConfDataTemp.m_nSyncSource=Extern;
