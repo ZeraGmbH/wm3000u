@@ -51,7 +51,12 @@ enum wm3000SCPICmdType  { nixWCmd = LastCommonCommand, // 13
 			  GetStatusOperationEnable,
 			  GetStatusOperationCondition,
 			  GetStatusOperationEvent,
-			  GetStatusStandard,
+              GetStatusStandard,
+
+              // implementiertes store model
+
+              GetChannelNOffsetCmd,
+              GetChannelXOffsetCmd,
 			  
 			  // implementiertes sense model    
     
@@ -118,6 +123,10 @@ enum wm3000SCPICmdType  { nixWCmd = LastCommonCommand, // 13
 			  SetConfCompOecFile,
 			  GetConfCompOecOn,
 			  SetConfCompOecOn,
+              GetConfCompOffskN,
+              SetConfCompOffskN,
+              GetConfCompOffskX,
+              SetConfCompOffskX,
 //			  GetConfCompModeCatalog,
 //			  SetConfCompMode,
 //			  GetConfCompMode,
@@ -161,7 +170,13 @@ enum wmExecuteCommandStates   { EN61850SynclostCountStart = ExecCmdLast,
 			             ReadLPRead,
 				     
 			             ifSelftestStart,
-			             ifSelftestFinished 	     
+                         ifSelftestFinished,
+
+                         ifChannelNOffsetStart,
+                         ifChannelNOffsetFinished,
+
+                         ifChannelXOffsetStart,
+                         ifChannelXOffsetFinished,
 				     
 				 };
 
@@ -171,7 +186,8 @@ enum wait4What { wait4Nothing,
 	             wait4RangeAutomatic,
 	             wait4MeasurementData,
 	             wait4LoadpointData,
-	             wait4SelftestResult	     
+                 wait4SelftestResult,
+                 wait4Offsetresult,
 		 };
 
 class cWM3000SCPIFace: public cSCPIFace
@@ -185,6 +201,9 @@ public:
     virtual char* GetDeviceIdentification();
     virtual char* DeviceSelfTest();
     virtual void ResetDevice();
+    virtual char* GetChannelNOffset();
+    virtual char* GetChannelXOffset();
+
     void setConfiguration(cConfData*); // beim einrichten des interface 1x aufrufen ...
     // im gegensatz zu receiveconfiguration (slot) werden hier actual und target conf. gesetzt
     
@@ -197,6 +216,7 @@ public slots:
     void ReceiveLPValue(cwmActValues*);
     void ReceiveVersionInfo(tVersSerial*);
     void ReceiveSelftestResult(int);
+    void ReceiveNXOffset(double offs);
     
 protected slots:    
     virtual void ExecuteCommand(int); // ausführen kommandos statemachine
@@ -209,9 +229,12 @@ signals:
     void ResetETHStatus();
     void SetDefaultMeasConfig();
     void SelftestRequest();
+    void ChannelNOffsetMeasureRequest();
+    void ChannelXOffsetMeasureRequest();
         
 private:
     int SelftestResult;
+    double OffsetResult;
     tVersSerial* m_pVersion;
     cwmActValues mActValues;
     QStringList m_sNXItemList;
@@ -327,7 +350,11 @@ private:
     char* mGetConfCompOecFile();
     void mSetConfCompOecFile(char*);
     char* mGetConfCompOecOn();
+    char* mGetConfCompOffskN();
+    char* mGetConfCompOffskX();
     void mSetConfCompOecOn(char*);
+    void mSetConfCompOffskN(char*);
+    void mSetConfCompOffskX(char*);
 //    char* mGetConfCompModeCatalog();
 //    void mSetConfCompMode(char*);
 //    char* mGetConfCompMode();

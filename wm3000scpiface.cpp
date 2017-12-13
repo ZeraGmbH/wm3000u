@@ -63,6 +63,20 @@ void cWM3000SCPIFace::ResetDevice()
 }
 
 
+char *cWM3000SCPIFace::GetChannelNOffset()
+{
+    m_pSMachineTimer->start(0, ifChannelNOffsetStart);
+    return 0;
+}
+
+
+char *cWM3000SCPIFace::GetChannelXOffset()
+{
+    m_pSMachineTimer->start(0, ifChannelXOffsetStart);
+    return 0;
+}
+
+
 void cWM3000SCPIFace::setConfiguration(cConfData* cd)
 {
     m_ConfDataActual = m_ConfDataTarget =  *cd;
@@ -209,11 +223,22 @@ void cWM3000SCPIFace::ReceiveSelftestResult(int r)
 {
     if (m_nWait4What == wait4SelftestResult) // wir machen nur was draus wenn wir drauf warten
     {
-	m_nWait4What = wait4Nothing;
-	SelftestResult = r;
-	m_pSMachineTimer->start(0, ExecCmdContinue); // und geben die kontrolle an die statemachine
+        m_nWait4What = wait4Nothing;
+        SelftestResult = r;
+        m_pSMachineTimer->start(0, ExecCmdContinue); // und geben die kontrolle an die statemachine
     }
-}    
+}
+
+
+void cWM3000SCPIFace::ReceiveNXOffset(double offs)
+{
+    if (m_nWait4What == wait4Offsetresult)
+    {
+        m_nWait4What = wait4Nothing;
+        OffsetResult = offs;
+        m_pSMachineTimer->start(0, ExecCmdContinue); // und geben die kontrolle an die statemachine
+    }
+}
 
     
 void cWM3000SCPIFace::CmdExecution(QString& s)
@@ -1015,6 +1040,34 @@ char* cWM3000SCPIFace::mGetConfCompOecOn()
 }
 
 
+char *cWM3000SCPIFace::mGetConfCompOffskN()
+{
+    QString rs;
+
+    m_ConfDataTarget = m_ConfDataActual;
+    if (m_ConfDataActual.m_bOffsetCorrectionN)
+    rs = "1";
+    else
+    rs = "0";
+
+    return sAlloc(rs);
+}
+
+
+char *cWM3000SCPIFace::mGetConfCompOffskX()
+{
+    QString rs;
+
+    m_ConfDataTarget = m_ConfDataActual;
+    if (m_ConfDataActual.m_bOffsetCorrectionX)
+    rs = "1";
+    else
+    rs = "0";
+
+    return sAlloc(rs);
+}
+
+
 void cWM3000SCPIFace::mSetConfCompOecOn(char* s)
 {
     ushort us;
@@ -1026,39 +1079,27 @@ void cWM3000SCPIFace::mSetConfCompOecOn(char* s)
 }
 
 
-/*
-char* cWM3000SCPIFace::mGetConfCompModeCatalog()
+void cWM3000SCPIFace::mSetConfCompOffskN(char* s)
 {
-    QString rs;
-    
-    rs = QString("%1,%2").arg(0).arg(CompName[0]);
-    for (int i = 1; i < MaxCompMode; i++)
-	rs = rs + ";" + QString("%1,%2").arg(i).arg(CompName[i]);
-     
-    return sAlloc(rs);
-}
-*/
-
-/*
-void cWM3000SCPIFace::mSetConfCompMode(char* s)
-{
-    int cm;
-    if ( SearchEntry(&s,CompName,MaxCompMode,cm,true) )
+    ushort us;
+    if ( GetParameter(&s, us, 0, 1, 10, true) )
     {
-	m_ConfDataTarget.m_nCompMode = cm;
+    m_ConfDataTarget.m_bOffsetCorrectionN = ( us ==1 );
 //	emit SendConfiguration(&m_ConfData);
     }
 }
-*/
 
-/*
-char* cWM3000SCPIFace::mGetConfCompMode()
+
+void cWM3000SCPIFace::mSetConfCompOffskX(char* s)
 {
-    QString rs;
-    rs = QString("%1,%2").arg(m_ConfDataActual.m_nCompMode).arg(CompName[m_ConfDataActual.m_nCompMode]);
-    return sAlloc(rs);
+    ushort us;
+    if ( GetParameter(&s, us, 0, 1, 10, true) )
+    {
+    m_ConfDataTarget.m_bOffsetCorrectionX = ( us ==1 );
+//	emit SendConfiguration(&m_ConfData);
+    }
 }
-*/
+
 
 char* cWM3000SCPIFace::mGetConfOperModeCatalog()
 {
@@ -1670,7 +1711,49 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	answ = sAlloc(s);
 	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
 	break;
+
+    case ifChannelNOffsetStart:
+    if ( !isAuthorized())
+    {
+        AddEventError(CommandProtected); // wir dürfen nicht !!!
+        m_pSMachineTimer->start(0, ExecCmdFinished); // bei fehlern sind wir direkt fertig
+    }
+    else
+    {
+        emit ChannelNOffsetMeasureRequest(); // selbsttest anstossen
+        m_nWait4What =  wait4Offsetresult;
+        EXS++;
+    }
+
+    break;
 	
+    case ifChannelNOffsetFinished:
+    s = QString("%1").arg(OffsetResult); // wir benutzen das selftest resultat auch für hier
+    answ = sAlloc(s);
+    m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
+    break;
+
+    case ifChannelXOffsetStart:
+    if ( !isAuthorized())
+    {
+        AddEventError(CommandProtected); // wir dürfen nicht !!!
+        m_pSMachineTimer->start(0, ExecCmdFinished); // bei fehlern sind wir direkt fertig
+    }
+    else
+    {
+        emit ChannelXOffsetMeasureRequest(); // selbsttest anstossen
+        m_nWait4What =  wait4Offsetresult;
+        EXS++;
+    }
+
+    break;
+
+    case ifChannelXOffsetFinished:
+    s = QString("%1").arg(OffsetResult); // wir benutzen das selftest resultat auch für hier
+    answ = sAlloc(s);
+    m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
+    break;
+
     }
     
 		
@@ -1731,7 +1814,8 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 		  case SetConfCompPhcPhase: mSetConfCompPhcPhase(s);break;
 		  case SetConfCompOecFile: mSetConfCompOecFile(s);break;
 		  case SetConfCompOecOn: mSetConfCompOecOn(s);break;
-//		  case SetConfCompMode: mSetConfCompMode(s);break;
+          case SetConfCompOffskN: mSetConfCompOffskN(s);break;
+          case SetConfCompOffskX: mSetConfCompOffskX(s);break;
 		  case SetConfOperMode: mSetConfOperMode(s);break;
           case SetConfOperSignal: mSetConfOperSignal(s);break;
 		  default: qDebug("ProgrammierFehler"); // hier sollten wir nie hinkommen
@@ -1784,7 +1868,8 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 	case SetConfCompPhcPhase:
 	case SetConfCompOecFile: 
 	case SetConfCompOecOn: 
-//	case SetConfCompMode: 
+    case SetConfCompOffskN:
+    case SetConfCompOffskX:
 	case SetConfOperMode: 
     case SetConfOperSignal:
 	    m_pSMachineTimer->start(0, ExecCmdPartFinished);
@@ -1809,6 +1894,9 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case ServiceRequestEnableQuery: an = GetDeviceSRE();break; // *SRE?
 	case StatusByteQuery: an = GetDeviceSTB();break; // *STB?
 	    
+    case GetChannelNOffsetCmd: an = GetChannelNOffset();break;
+    case GetChannelXOffsetCmd: an = GetChannelXOffset();break;
+
 	case GetScpiErrorAll: an = mGetScpiErrorAll();break;
 	case GetScpiErrorCount: an = mGetScpiErrorCount();break;
 	case GetScpiError: an = mGetScpiError();break;
@@ -1851,7 +1939,7 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfRatioChn: an = mGetConfRatioChn();break;
 	case GetConfSyncPeriod: an = mGetConfSyncPeriod();break;
 	case GetConfSyncSource: an = mGetConfSyncSource();break;
-    	case GetConfMeasTInt: an = mGetConfMeasTInt();break;
+    case GetConfMeasTInt: an = mGetConfMeasTInt();break;
 	case GetConfMeasMPeriod: an = mGetConfMeasMPeriod();break;
 	case GetConfMeasSRate: an = mGetConfMeasSRate();break;
 	case GetConfMeasSFreq: an = mGetConfMeasSFreq();break;
@@ -1859,8 +1947,8 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfCompPhcPhase: an = mGetConfCompPhcPhase();break;
 	case GetConfCompOecFile: an = mGetConfCompOecFile();break;
 	case GetConfCompOecOn: an = mGetConfCompOecOn();break;
-//	case GetConfCompModeCatalog: an = mGetConfCompModeCatalog();break;
-//	case GetConfCompMode: an = mGetConfCompMode();break;
+    case GetConfCompOffskN: an = mGetConfCompOffskN();break;
+    case GetConfCompOffskX: an = mGetConfCompOffskX();break;
 	case GetConfOperModeCatalog: an = mGetConfOperModeCatalog();break;
 	case GetConfOperMode: an = mGetConfOperMode();break;
     case GetConfOperSignalCatalog: an = mGetConfOperSignalCatalog();break;
@@ -1922,8 +2010,8 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfCompPhcPhase:
 	case GetConfCompOecFile:
 	case GetConfCompOecOn:
-//	case GetConfCompModeCatalog:
-//	case GetConfCompMode:
+    case GetConfCompOffskN:
+    case GetConfCompOffskX:
 	case GetConfOperModeCatalog:
 	case GetConfOperMode:
     case GetConfOperSignalCatalog:
@@ -1959,6 +2047,8 @@ cNodeSCPI* Configuration;
 				          cNodeSCPI* ConfigurationComputationModeCatalog;	
 			    cNodeSCPI* ConfigurationComputationOECorrection;
 			                        cNodeSCPI* ConfigurationComputationOECorrectionOn;
+                                    cNodeSCPI* ConfigurationComputationXOffset;
+                                    cNodeSCPI* ConfigurationComputationNOffset;
  				          cNodeSCPI* ConfigurationComputationOECorrectionFile;
 	                                cNodeSCPI* ConfigurationComputationPHCorrection;
 				          cNodeSCPI* ConfigurationComputationPHCorrectionPhase;	
@@ -2004,6 +2094,10 @@ cNodeSCPI* Sense;
 	                        cNodeSCPI* SenseCNameRange;
 			               cNodeSCPI* SenseCNameRangeCatalog;
 	
+cNodeSCPI* Store;
+         cNodeSCPI* StoreChannelNOffset;
+         cNodeSCPI* StoreChannelXOffset;
+
 				       
 cNodeSCPI* Status;
                    cNodeSCPI* StatusStandard;
@@ -2076,17 +2170,24 @@ cNode* cWM3000SCPIFace::InitScpiCmdTree(cNode* cn) {
     StatusOperationCondition=new cNodeSCPI("CONDITION",isQuery | isCommand,StatusOperationEnable,NULL,SetStatusOperationCondition,GetStatusOperationCondition);
     StatusOperationEvent=new cNodeSCPI("EVENT",isQuery,StatusOperationCondition,NULL,nixCmd,GetStatusOperationEvent);
     StatusOperation=new cNodeSCPI("OPERATION",isNode | isQuery,StatusQuestionable,StatusOperationEvent,nixCmd,GetStatusOperationEvent);
-    StatusStandard=new cNodeSCPI("STANDARD",isQuery,StatusOperation,NULL,nixCmd,GetStatusStandard);    Status=new cNodeSCPI("STATUS",isNode,System,StatusStandard,nixCmd,nixCmd);	     
+    StatusStandard=new cNodeSCPI("STANDARD",isQuery,StatusOperation,NULL,nixCmd,GetStatusStandard);
+    Status=new cNodeSCPI("STATUS",isNode,System,StatusStandard,nixCmd,nixCmd);
     
+
+    // implementiertes store model
    
-    // implementiertes sense model    
+    StoreChannelNOffset=new cNodeSCPI("NOFFSET",isQuery,NULL,NULL,nixCmd,GetChannelNOffsetCmd);
+    StoreChannelXOffset=new cNodeSCPI("XOFFSET",isQuery,StoreChannelNOffset,NULL,nixCmd,GetChannelXOffsetCmd);
+    Store=new cNodeSCPI("STORE",isNode,Status,StoreChannelXOffset,nixCmd,nixCmd);
+
+    // implementiertes sense model
     
     SenseCNameRangeCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,OutRangeCatalog);
     SenseCNameRange=new cNodeSCPI("RANGE",isNode | isCommand | isQuery,NULL,SenseCNameRangeCatalog,SetRange,GetRange);
     SenseCName=new cNodeSCPIVar(&mMeasChannelList,isNode,NULL,SenseCNameRange,nixCmd,nixCmd);
     SenseChannelCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,OutChannelCatalog);
     SenseChannel=new cNodeSCPI("CHANNEL",isNode,SenseCName,SenseChannelCatalog,nixCmd,nixCmd);
-    Sense=new cNodeSCPI("SENSE",isNode,Status,SenseChannel,nixCmd,nixCmd);
+    Sense=new cNodeSCPI("SENSE",isNode,Store,SenseChannel,nixCmd,nixCmd);
     
     
     // implementiertes measure model 
@@ -2131,11 +2232,10 @@ cNode* cWM3000SCPIFace::InitScpiCmdTree(cNode* cn) {
     ConfigurationComputationOECorrectionFile=new cNodeSCPI("FILE",isQuery | isCommand,NULL,NULL,SetConfCompOecFile,GetConfCompOecFile);
     ConfigurationComputationOECorrectionOn=new cNodeSCPI("ON",isQuery | isCommand,ConfigurationComputationOECorrectionFile,NULL,SetConfCompOecOn,GetConfCompOecOn);
     ConfigurationComputationOECorrection=new cNodeSCPI("OECORRECTION",isNode,ConfigurationComputationPHCorrection,ConfigurationComputationOECorrectionOn,nixCmd,nixCmd);
-  
-//    ConfigurationComputationModeCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,GetConfCompModeCatalog);
-//    ConfigurationComputationMode=new cNodeSCPI("MODE",isNode | isCommand | isQuery,ConfigurationComputationOECorrection,ConfigurationComputationModeCatalog,SetConfCompMode,GetConfCompMode);
-    
-    ConfigurationComputation=new cNodeSCPI("COMPUTATION",isNode,ConfigurationMeasure,ConfigurationComputationOECorrection,nixCmd,nixCmd);
+    ConfigurationComputationXOffset=new cNodeSCPI("XOFFSET",isQuery | isCommand,ConfigurationComputationOECorrection,NULL,SetConfCompOffskX,GetConfCompOffskX);
+    ConfigurationComputationNOffset=new cNodeSCPI("NOFFSET",isQuery | isCommand,ConfigurationComputationXOffset,NULL,SetConfCompOffskN,GetConfCompOffskN);
+
+    ConfigurationComputation=new cNodeSCPI("COMPUTATION",isNode,ConfigurationMeasure,ConfigurationComputationNOffset,nixCmd,nixCmd);
     ConfigurationOperationSignalCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,GetConfOperSignalCatalog);
     ConfigurationOperationSignal=new cNodeSCPI("SIGNAL",isNode | isQuery | isCommand,ConfigurationComputation,ConfigurationOperationSignalCatalog,SetConfOperSignal,GetConfOperSignal);
     ConfigurationOperationModeCatalog=new cNodeSCPI("CATALOG",isQuery,NULL,NULL,nixCmd,GetConfOperModeCatalog);
