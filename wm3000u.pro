@@ -48,7 +48,8 @@ HEADERS	+= logfile.h \
     csessionhelper.h \
     dbushelper.h \
     dbushelperadapter.h \
-    releaseinfo.h
+    releaseinfo.h \
+    wmoffsetvalbase.h
 
 SOURCES	+= Logfile.cpp \
 	main.cpp \
@@ -91,7 +92,8 @@ SOURCES	+= Logfile.cpp \
     releaseinfo.cpp \
     range.cpp \
     wmglobal.cpp \
-    bigletter.cpp
+    bigletter.cpp \
+    wmoffsetvalbase.cpp
 
 FORMS	= wmviewbase.ui \
 	rangedialogbase.ui \
@@ -102,7 +104,8 @@ FORMS	= wmviewbase.ui \
 	versionviewbase.ui \
 	wmmeasconfigbase.ui \
 	wmrawactualconfigbase.ui \
-    confdialogbase.ui
+    confdialogbase.ui \
+    wmoffsetvalbase.ui
 
 IMAGES	= images/filenew \
 	images/fileopen \
