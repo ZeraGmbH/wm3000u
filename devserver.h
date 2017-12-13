@@ -99,6 +99,9 @@ public slots:
     void ReceiveENInfoReguest(); // wenn eins der interfaces en61850 info angefragt hat
     void ReceiveSelftestResult(int);
     void ReceiveSelftestRequest(); // wenn eins der interfaces *tst ausführen soll
+    void ReceiveOffsetResult(double offs);
+    void ReceiveChannelNOffsetMeasureRequest();
+    void ReceiveChannelXOffsetMeasureRequest();
     void ReceiveResetETHStatusCommand();
     void ReceiveIFaceRangeCommand(cConfData*);
     void SetRangeListSlot( cWMRangeList&,  cWMRangeList&);
@@ -114,8 +117,11 @@ signals:
     void SendIFaceConfiguration(cConfData*); // senden der conf.  an das interface
     void SendIFaceETHStatus(cEN61850Info*); // wir senden den eth status an das interface
     void SendSelftestResult(int); // wir senden das ergebnis des selbsttest an das interface
+    void SendOffsetResult(double); // dito
     void RequestEN61850Info(); //  der server fordert die info an und verteilt sie
     void RequestSelftest(); // der server lässt den selbsttest durchführen
+    void RequestChannelNOffsetMeasure(); // der server lässt die n kanal offsetmessung durchführen
+    void RequestChannelXOffsetMeasure(); // der server lässt die x kanal offsetmessung durchführen
     void ResetETHStatus(); // der server leitet das reset kommando weiter
     void SendRangeCommand(cConfData*); // ebenso den bereich setzen befehl
     void SendDefaultConfigCommand(); // der server leitet kommando zum setzen default konfig. weiter
