@@ -25,6 +25,7 @@ public:
     virtual bool LoadSession( QString session );
     void removeJustageItem();
     void configureWM1000Items();
+    void configureWMwoDC();
 
 public slots:
     virtual void SetViewConfDataInfoSlot( cConfData * cd );
@@ -64,6 +65,8 @@ signals:
     void UIansichtEigenfehlerActionSet(bool);
     void UIansichtIstwerteActionToggled(bool);
     void UIansichtIstwerteActionSet(bool);
+    void UIansichtOffsetActionToggled(bool);
+    void UIansichtOffsetActionSet(bool);
     void UIansichtDialogActionToggled(bool);
     void UIansichtDialogActionSet(bool);
     void UIansichtEN61850ActionToggled(bool);
@@ -77,6 +80,8 @@ signals:
     void UIJustageOffsetActionActivated();
     void UIJustageOffsetBerechnungActionActivated();
     void UIJustageOffsetVarActionActivated();
+    void UIMessungOffsetKanalNActivated();
+    void UIMessungOffsetKanalXActivated();
     void UIhilfeInfo_ber_QtActionActivated();
     void UIhilfeInfo_ber_ZeraActionActivated();
     void UIhilfeInfoActionActivated();
