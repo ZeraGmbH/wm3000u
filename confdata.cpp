@@ -7,7 +7,7 @@
 
 void cConfData::setConfVersion()
 {
-    m_nVersion = ConfVersion9;
+    m_nVersion = ConfVersion10;
 }
 
 void cConfData::serialize(QDataStream& ts)
@@ -29,6 +29,8 @@ void cConfData::serialize(QDataStream& ts)
     ts << (int) m_bStrongEthSynchronisation;
     ts << Language;
     ts << (int)m_bDCmeasurement;
+    ts << (int)m_bOffsetCorrectionN;
+    ts << (int)m_bOffsetCorrectionX;
 }
 
 
@@ -62,11 +64,21 @@ bool cConfData::deserialize(QDataStream& ts)
         ts >> Language;
         m_bOENewLoad = (m_sOETFile != "") ; // falls schon eine datei geladen war -> mitteilen
     }
-    if (tmp == ConfVersion9)
+
+    if (tmp == ConfVersion9 || tmp == ConfVersion10)
     {
         int dc;
         ts >> dc;
         m_bDCmeasurement = dc;
+    }
+
+    if (tmp == ConfVersion10)
+    {
+        int yes;
+        ts >> yes;
+        m_bOffsetCorrectionN = yes;
+        ts >> yes;
+        m_bOffsetCorrectionX = yes;
     }
 
     return ret;
