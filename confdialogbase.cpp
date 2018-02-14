@@ -395,21 +395,23 @@ void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen,
     
     if (ui->S80RadioButton->isChecked())
     {
-    m_ConfDataTemp.m_nSRate=S80;
-        ui->CmpIntervallSpinBox->setMaxValue(40);
+        m_ConfDataTemp.m_nSRate=S80;
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS80MeasPeriod);
     }
 	    
     if (ui->S256RadioButton->isChecked())
     {
-    m_ConfDataTemp.m_nSRate=S256;
-        ui->CmpIntervallSpinBox->setMaxValue(14);
-    if (m_ConfDataTemp.m_nMeasPeriod > 14)
-	{
-        m_ConfDataTemp.m_nMeasPeriod = 14;
-            ui->CmpIntervallSpinBox->setValue(14);
-	}
+        m_ConfDataTemp.m_nSRate=S256;
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS256MeasPeriod);
+        /*
+        if (m_ConfDataTemp.m_nMeasPeriod > 14)
+        {
+            m_ConfDataTemp.m_nMeasPeriod = 14;
+                ui->CmpIntervallSpinBox->setValue(14);
+        }
+        */
     }
-    
+
     m_ConfDataTemp.m_nIntegrationTime=ui->TIntegrationSpinBox->value();
     //  MessungMenu gescannt
     
@@ -464,11 +466,11 @@ void ConfDialogBase::SetMessungMenu()
     switch (m_ConfDataTemp.m_nSRate) {
     case S80:
         ui->S80RadioButton->setChecked(true);
-        ui->CmpIntervallSpinBox->setMaxValue(40);
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS80MeasPeriod);
 	break;
     case S256:
         ui->S256RadioButton->setChecked(true);
-        ui->CmpIntervallSpinBox->setMaxValue(14);
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS256MeasPeriod);
 	break;
     }
     
