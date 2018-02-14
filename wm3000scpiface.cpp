@@ -607,6 +607,12 @@ void cWM3000SCPIFace::mSetConfLogFileSize(char*)
 
 void cWM3000SCPIFace::mConfigurationApply(char*)
 {
+    // fehler fällt erst hier auf -> status byte setzen
+    if ((m_ConfDataTarget.m_nSRate == S256) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS256MeasPeriod)) // 256 samples/periode
+        AddEventError(ParameterNotAllowed);
+    if ((m_ConfDataTarget.m_nSRate == S80) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS80MeasPeriod)) // 80 samples/periode
+        AddEventError(ParameterNotAllowed);
+
     emit SendConfiguration(&m_ConfDataTarget);
     m_ConfDataActual = m_ConfDataTarget;
 }
@@ -902,19 +908,16 @@ void cWM3000SCPIFace::mSetConfMeasMPeriod(char* s)
     ushort us;
     if (m_ConfDataTarget.m_nSRate == S256) // 256 samples/periode
     {
-	if ( GetParameter(&s, us, 4, 16, 10, true))
-	{
-	    m_ConfDataTarget.m_nMeasPeriod = us;
-	    //	emit SendConfiguration(&m_ConfData);
-	}
+        GetParameter(&s, us, 4, nmaxS256MeasPeriod, 10, true); // we set stb in case of error
+        m_ConfDataTarget.m_nMeasPeriod = us; // but send the value with apply
+        //	emit SendConfiguration(&m_ConfData);
+
     }	
     else
     {
-	if ( GetParameter(&s, us, 4, 40, 10, true))
-	{
-	    m_ConfDataTarget.m_nMeasPeriod = us;
-	    //	emit SendConfiguration(&m_ConfData);
-	}
+        GetParameter(&s, us, 4, nmaxS80MeasPeriod, 10, true);
+        m_ConfDataTarget.m_nMeasPeriod = us;
+        //	emit SendConfiguration(&m_ConfData);
     }
 }
 
@@ -935,9 +938,9 @@ void cWM3000SCPIFace::mSetConfMeasSRate(char* s)
     if ( SearchEntry(&s, SRates, MaxSRate, src, true) )
     {
 	m_ConfDataTarget.m_nSRate = src;
-	if (m_ConfDataTarget.m_nSRate == S256) // wir begrenzen die messperioden auf
-	    if (m_ConfDataTarget.m_nMeasPeriod > 16) // 18 signalperioden wenn 256samples/periode
-		m_ConfDataTarget.m_nMeasPeriod = 16;
+    //if (m_ConfDataTarget.m_nSRate == S256) // wir begrenzen die messperioden auf
+    //    if (m_ConfDataTarget.m_nMeasPeriod > 16) // 18 signalperioden wenn 256samples/periode
+    //	m_ConfDataTarget.m_nMeasPeriod = 16;
 //	emit SendConfiguration(&m_ConfData);
     }
 }
