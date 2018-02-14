@@ -85,8 +85,11 @@
 //                  kontextmenu für vector bzw. fehleranzeige in abhängigkeit von dc bzw. ac angepasst
 // v2.26 13.12.2017 offset messung und visualisierung für kanal n und x eingebaut. interface so erweitert dass
 //                  diese messungen von extern gestartet werden können und die offsetwerte abgefragt werden können.
+// v2.27 14.02.2018 bugfix : diw wm3000 hängt sich auf wenn via interface ein zu großer wert messperioden gesendet wird.
+//                  das konnte passieren wenn die samplerate von 80 auf 256 gesetzt wurde. im gui wurde das automatisch
+//                  korrigiert. jetzt wird zentral am gerät korrigiert und und gui und interface informiert.
 
-#define WMVersion "V2.26"
+#define WMVersion "V2.27"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
@@ -104,6 +107,9 @@
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;
 const int nmaxRecentSESFiles = 5;
+const int nmaxS80MeasPeriod = 40;
+const int nmaxS256MeasPeriod = 14;
+
 const float TDBase = 100.0e6; // 100 mhz auflösung für td messung (pps->1. sample)
 
 enum DisplayModes {ANSI,IEC,MaxCompMode}; // compmodi
