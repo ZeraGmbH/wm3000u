@@ -22,6 +22,7 @@ cWM3000SCPIFace::cWM3000SCPIFace(cClientIODevice* ciod, short l)
 {
     m_pCommands = InitScpiCmdTree(m_pCommands); // verketten der common und scpi commands
     m_nWait4What = wait4Nothing;
+    m_bAddEventError = false;
     mMeasChannelList << "N" << "X" << "EVT";
     m_pVersion  = 0;
 }
@@ -609,9 +610,9 @@ void cWM3000SCPIFace::mConfigurationApply(char*)
 {
     // fehler fällt erst hier auf -> status byte setzen
     if ((m_ConfDataTarget.m_nSRate == S256) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS256MeasPeriod)) // 256 samples/periode
-        AddEventError(ParameterNotAllowed);
+        m_bAddEventError = true; // we add the error later to ensure the whole command string is executed
     if ((m_ConfDataTarget.m_nSRate == S80) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS80MeasPeriod)) // 80 samples/periode
-        AddEventError(ParameterNotAllowed);
+        m_bAddEventError = true;
 
     emit SendConfiguration(&m_ConfDataTarget);
     m_ConfDataActual = m_ConfDataTarget;
@@ -1587,6 +1588,11 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	
     case ExecCmdFinished:
 	{
+        if (m_bAddEventError)
+        {
+            m_bAddEventError = false;
+            AddEventError(ParameterNotAllowed);
+        }
 	    if (m_sAnswer.length() > 0)
 		emit SendAnswer(m_sAnswer);
 	    
