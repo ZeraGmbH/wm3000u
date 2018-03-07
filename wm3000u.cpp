@@ -3804,15 +3804,7 @@ void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
 
 	DspIFace->ClearVarLists();
 
-    ActValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für die istwerte daten
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",nS,vDspIntern)); // sinus, cosinus, hanning abwechselnd
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL3",4*nSp,vDspIntern));
-
-	
-	// maxima 
+    // maxima
 	MaxValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für den maximumsucher
 	DspIFace->addVarItem(MaxValData, new cDspVar("MAXN",1,vApplication | vDspIntern));
 	DspIFace->addVarItem(MaxValData, new cDspVar("MAXX",1,vApplication | vDspIntern));
@@ -3825,6 +3817,7 @@ void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
 	DspIFace->addVarItem(RMSValData, new cDspVar("FRMSX",1,vApplication | vDspIntern));
 	DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1X",1,vApplication | vDspIntern));
 
+    ActValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für die istwerte daten
 	
 //	nur dsp intern verwendete messdaten 
 	DspIFace->addVarItem(ActValData, new cDspVar("SINDEX",1,vDspIntern)); // index zur speicherung der sampledaten für die fehlermessung (variables messintervall);
@@ -3858,6 +3851,12 @@ void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
 	DspIFace->addVarItem(ActValData, new cDspVar("PHIN",1,vApplication | vDspIntern));
 	DspIFace->addVarItem(ActValData, new cDspVar("PHIX",1,vApplication | vDspIntern));
 	
+
+    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
+    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
+    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",nS,vDspIntern)); // sinus, cosinus, hanning abwechselnd
+    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
+    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL3",4*nSp,vDspIntern));
 
     }
 }
