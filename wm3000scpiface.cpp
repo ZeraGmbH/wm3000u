@@ -609,6 +609,7 @@ void cWM3000SCPIFace::mSetConfLogFileSize(char*)
 void cWM3000SCPIFace::mConfigurationApply(char*)
 {
     // fehler fällt erst hier auf -> status byte setzen
+
     if ((m_ConfDataTarget.m_nSRate == S256) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS256MeasPeriod)) // 256 samples/periode
         m_bAddEventError = true; // we add the error later to ensure the whole command string is executed
     if ((m_ConfDataTarget.m_nSRate == S80) && (m_ConfDataTarget.m_nMeasPeriod > nmaxS80MeasPeriod)) // 80 samples/periode
@@ -909,7 +910,7 @@ void cWM3000SCPIFace::mSetConfMeasMPeriod(char* s)
     ushort us;
     if (m_ConfDataTarget.m_nSRate == S256) // 256 samples/periode
     {
-        GetParameter(&s, us, 4, nmaxS256MeasPeriod, 10, true); // we set stb in case of error
+        GetParameter(&s, us, 4, nmaxS80MeasPeriod, 10, true); // we set stb in case of error
         m_ConfDataTarget.m_nMeasPeriod = us; // but send the value with apply
         //	emit SendConfiguration(&m_ConfData);
 
