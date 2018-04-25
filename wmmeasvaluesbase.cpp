@@ -11,7 +11,7 @@
 extern eUnit LoadpointUnit[];
 extern eUnit ErrorUnit[];
 extern eUnit AngleUnit[];
-
+extern eUnit RCFUnit[];
 
 WMMeasValuesBase::WMMeasValuesBase(QWidget *parent) :
     QDialog(parent),
@@ -37,6 +37,7 @@ void WMMeasValuesBase::init()
     m_Format[0] = cFormatInfo(7,3,LoadpointUnit[LPProzent]); // defaults
     m_Format[1] = cFormatInfo(7,3,ErrorUnit[ErrProzent]);
     m_Format[2] = cFormatInfo(7,4,AngleUnit[Anglegrad]);
+    m_Format[3] = cFormatInfo(6,4,RCFUnit[nix]);
     connect(this,SIGNAL(SendFormatInfoSignal(bool,int,int,int, cFormatInfo*)),m_pContextMenu,SLOT(ReceiveFormatInfoSlot(bool, int,int,int, cFormatInfo*)));
     connect(m_pContextMenu,SIGNAL(SendFormatInfoSignal(int,int,int, cFormatInfo*)),this,SLOT(ReceiveFormatInfoSlot(int,int,int, cFormatInfo*)));
     connect(&m_Timer, SIGNAL(timeout()), this, SLOT(saveConfiguration()));
@@ -178,6 +179,9 @@ void WMMeasValuesBase::ActualizeDisplay()
    ui->mBigAngleError->display(QString("%1").arg(AnzeigeWert,m_Format[2].FieldWidth,'f',m_Format[2].Resolution));
    ui->mBigAngleUnit->display(m_Format[2].UnitInfo.Name);
    
+   AnzeigeWert = m_ActValues.RCF;
+   ui->mBigRCF->display(QString("%1").arg(AnzeigeWert,m_Format[3].FieldWidth,'f',m_Format[3].Resolution));
+
    if (m_nDisplayMode == ANSI || !m_ActValues.bvalid  || m_ConfData.m_bDCmeasurement)
    {
        ui->mBigAngleName->setEnabled(false);
@@ -196,12 +200,18 @@ void WMMeasValuesBase::ActualizeDisplay()
        ui->mBigAmplError->setEnabled(true);
        ui->mBigErrorName->setEnabled(true);
        ui->mBigErrorUnit->setEnabled(true);
+       ui->mBigRCF->setEnabled(true);
+       ui->mBigRCFName->setEnabled(true);
+       ui->mBigRCFUnit->setEnabled(true);
    }
    else
    {
        ui->mBigAmplError->setEnabled(false);
        ui->mBigErrorName->setEnabled(false);
        ui->mBigErrorUnit->setEnabled(false);
+       ui->mBigRCF->setEnabled(false);
+       ui->mBigRCFName->setEnabled(false);
+       ui->mBigRCFUnit->setEnabled(false);
    }
 
    if (ui->mBigAmplError->isFormatChanged() || ui->mBigAngleError->isFormatChanged())
@@ -246,7 +256,7 @@ bool WMMeasValuesBase::LoadSession(QString session)
 	QDataStream stream( &file );
 	stream >> m_widGeometry;
 
-	for (int i = 0; i< 3; i++) 
+    for (int i = 0; i< 4; i++)
 	    stream >> m_Format[i];
 
 	stream >> m_nDisplayMode;
@@ -295,7 +305,7 @@ void WMMeasValuesBase::SaveSession(QString session)
 	QDataStream stream( &file );
 	stream << m_widGeometry;
 
-	for (int i = 0; i < 3; i++) 
+    for (int i = 0; i < 4; i++)
 	    stream << m_Format[i];
 
 	stream << m_nDisplayMode;

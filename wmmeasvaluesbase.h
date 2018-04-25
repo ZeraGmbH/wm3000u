@@ -51,7 +51,7 @@ private:
     cwmActValues m_ActValues;
     cConfData m_ConfData;
     WMMeasConfigBase* m_pContextMenu;
-    cFormatInfo m_Format[3];
+    cFormatInfo m_Format[4];
     int m_nDisplayMode;
     int m_nLPDisplayMode;
 

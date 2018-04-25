@@ -107,6 +107,31 @@
       </widget>
      </item>
      <item>
+      <widget class="CBigLetter" name="mBigRCFName" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>RCF:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="CBigLetter" name="mBigAngleName" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -175,6 +200,31 @@
      </item>
      <item>
       <widget class="CBigLetter" name="mBigAmplError" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string>-.-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigRCF" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -287,6 +337,31 @@
        </property>
        <property name="m_sDisplay" stdset="0">
         <string>%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CBigLetter" name="mBigRCFUnit" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="m_nAlign" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nFrame" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="m_nStartSize" stdset="0">
+        <number>15</number>
+       </property>
+       <property name="m_sDisplay" stdset="0">
+        <string></string>
        </property>
       </widget>
      </item>

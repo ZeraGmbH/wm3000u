@@ -1675,7 +1675,7 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
         .arg(mActValues.LoadPoint1X)
 	    .arg(mActValues.AmplErrorIEC)
 	    .arg(mActValues.AmplErrorANSI);
-	s += QString(";%1").arg(mActValues.AngleError);
+    s += QString(";%1;%2").arg(mActValues.AngleError).arg(mActValues.RCF);
 	answ = sAlloc(s);
 	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
 	break;	 

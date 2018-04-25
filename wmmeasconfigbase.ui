@@ -325,6 +325,57 @@
        </layout>
       </widget>
      </item>
+     <item>
+      <widget class="Q3GroupBox" name="RCFgroupBox">
+       <property name="title">
+        <string>RCF</string>
+       </property>
+       <layout class="QVBoxLayout">
+        <item>
+         <widget class="QSpinBox" name="RCFspinBoxFW">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="minimum">
+           <number>5</number>
+          </property>
+          <property name="maximum">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="RCFspinBoxRS">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>6</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="RCFSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

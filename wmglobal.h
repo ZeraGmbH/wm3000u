@@ -18,9 +18,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.7.223"
+#define TheDevice "192.168.7.223"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -85,11 +85,15 @@
 //                  kontextmenu für vector bzw. fehleranzeige in abhängigkeit von dc bzw. ac angepasst
 // v2.26 13.12.2017 offset messung und visualisierung für kanal n und x eingebaut. interface so erweitert dass
 //                  diese messungen von extern gestartet werden können und die offsetwerte abgefragt werden können.
-// v2.27 14.02.2018 bugfix : diw wm3000 hängt sich auf wenn via interface ein zu großer wert messperioden gesendet wird.
+// v2.27 14.02.2018 bugfix : die wm3000 hängt sich auf wenn via interface ein zu großer wert messperioden gesendet wird.
 //                  das konnte passieren wenn die samplerate von 80 auf 256 gesetzt wurde. im gui wurde das automatisch
 //                  korrigiert. jetzt wird zentral am gerät korrigiert und und gui und interface informiert.
+// v2.28 24.04.2018 bugfix : wenn das sampling system gesetzt wird, z.B. nach *rst, kann es sein dass der dsp busy meldet.
+//                  die wm3000 blieb bis jetzt dann mit fehlermeldung unexpected answer stehen . busy wird jetzt recovert.
+//                  einbau berechnung rcf ratio correction factor. und grossanzeige um rcf erweitert. interface (measure)
+//                  erweitert. kontext menu ergänzt für die nachkommastellenzahl von rcf zu editieren.
 
-#define WMVersion "V2.27"
+#define WMVersion "V2.28"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
@@ -175,6 +179,7 @@ struct cwmActValues {  // wird an andere objekte gesendet
     double AmplErrorIEC; 
     double AmplErrorANSI;
     double AngleError;
+    double RCF; // ratio correction factor
     double PHIN;
     double PHIX;
     bool bvalid;

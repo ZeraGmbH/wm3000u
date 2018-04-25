@@ -4401,7 +4401,9 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
 	      
     double absN;
     absN = fabs(ActValues.VekN);
-    ActValues.AmplErrorIEC = 100.0 * (fabs(ActValues.VekX) -absN) / absN;
+    double err = (fabs(ActValues.VekX) -absN) / absN;
+    ActValues.AmplErrorIEC = 100.0 * err;
+    ActValues.RCF = 1.0 / (1.0 + err);
     ActValues.AmplErrorANSI = (ActValues.AmplErrorIEC/100.0 - ( (1.0+ActValues.AmplErrorIEC/100.0) * (4.0 / 3.0) * ActValues.AngleError ))*100.0;
  
     ActValues.bvalid = true; // aktivieren der fehleranzeige

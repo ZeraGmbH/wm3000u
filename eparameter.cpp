@@ -43,6 +43,7 @@ eUnit AngleUnit[AnzAngleUnits] = { eUnit(QString(QChar(176)), 1.0),
 		                        eUnit("grad", 1.0),
 			          eUnit("rad",57.2957795),};
 
+eUnit RCFUnit[AnzRCFUnits] = { eUnit("", 1.0) };
 
 QDataStream& operator << (QDataStream& ds, eUnit& eu)
 {

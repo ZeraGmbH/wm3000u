@@ -77,7 +77,10 @@ void WMMeasConfigBase::ReceiveFormatInfoSlot(bool dc, int m, int m2, int n, cFor
     ui->WspinBoxFW->setValue(m_Format[2].FieldWidth);
     ui->WspinBoxRS->setValue(m_Format[2].Resolution);
     ui->WcomboBox->setCurrentText(m_Format[2].UnitInfo.Name);
- 
+
+    ui->RCFspinBoxFW->setValue(m_Format[3].FieldWidth);
+    ui->RCFspinBoxRS->setValue(m_Format[3].Resolution);
+
     Actualize();
 }
 
@@ -168,6 +171,9 @@ void WMMeasConfigBase::SendData2AppSlot()
     m_Format[2].FieldWidth = ui->WspinBoxFW->value();
     m_Format[2].Resolution = ui->WspinBoxRS->value();
     
-    emit SendFormatInfoSignal(m_nDisplayMode, m_nLPDisplayMode, 3, m_Format);
+    m_Format[3].FieldWidth = ui->RCFspinBoxFW->value();
+    m_Format[3].Resolution = ui->RCFspinBoxRS->value();
+
+    emit SendFormatInfoSignal(m_nDisplayMode, m_nLPDisplayMode, 4, m_Format);
 }
 
