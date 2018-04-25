@@ -318,7 +318,7 @@ void WMMeasValuesBase::SaveSession(QString session)
 
 void WMMeasValuesBase::contextMenuEvent( QContextMenuEvent * )
 {
-    emit SendFormatInfoSignal(m_ConfData.m_bDCmeasurement, m_nDisplayMode,m_nLPDisplayMode, 3, m_Format);
+    emit SendFormatInfoSignal(m_ConfData.m_bDCmeasurement, m_nDisplayMode,m_nLPDisplayMode, 4, m_Format);
     m_pContextMenu->show();
 }
 
