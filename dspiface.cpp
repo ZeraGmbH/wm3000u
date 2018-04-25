@@ -110,8 +110,7 @@ void cDspIFace::ActionHandler(int entryAHS)
     case ReadServerVersionFinished:	
     case SetSignalRoutingFinished:	
     case CmdLists2DspFinished:	
-    case VarLists2DspFinished:	
-    case SetSamplingSystemFinished:	
+    case VarLists2DspFinished:		
     case BootDspFinished:	
     case dspIFaceConnectionFinished:
 	if (m_biFaceError) 
@@ -217,6 +216,7 @@ void cDspIFace::ActionHandler(int entryAHS)
     case SetDsp61850EthTypeAppIdFinished:	
     case SetDsp61850PriorityTaggedFinished:	
     case ResetMaximumFinished:
+    case SetSamplingSystemFinished:
 	{
 	    QString s;
 	    if (m_biFaceError) { // wenn fehler
@@ -724,7 +724,10 @@ void cDspIFace::SendBootCommand()
 void cDspIFace::SendSamplingSystemCommand()
 {
     QString cmds = QString("syst:dsp:samp %1,%2,%3\n").arg(m_nP1).arg(m_nP2).arg(m_nP3);
-    iFaceSock->SendCommand(cmds);
+    QStringList sl;
+    sl.append("ACK");
+    sl.append("BUSY");
+    iFaceSock->SendCommand(cmds,sl);
 }
 
 
