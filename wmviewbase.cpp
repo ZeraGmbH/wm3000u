@@ -48,6 +48,7 @@ void WMViewBase::configureWMwoDC()
     ui->Messung->removeAction(ui->messungOffsetabgleichWM3000Action);
     ui->Messung->removeAction(ui->messungOffsetKanalNAction);
     ui->Messung->removeAction(ui->messungOffsetKanalXAction);
+    ui->Ansicht->removeAction(ui->ansichtOffsetAction);
 }
 
 
