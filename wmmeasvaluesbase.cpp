@@ -241,7 +241,7 @@ void WMMeasValuesBase::setStretchFactor()
 void WMMeasValuesBase::resizeMeas()
 {
     QSize size = this->size();
-    QSize tsize = QSize(size.width()+10, size.height()+10);
+    QSize tsize = QSize(size.width()+1, size.height()+1);
     resize(tsize);
     resize(size);
 }
