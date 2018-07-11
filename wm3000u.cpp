@@ -4252,12 +4252,16 @@ void cWM3000U::CmpActFrequency()
 {
 
     double fsoll;
-    switch (m_ConfData.m_nSFreq)
-    {
-        case F16 : fsoll = 50.0/3.0;break;
-        case F50 : fsoll = 50.0;break;
-        case F60 : fsoll = 60.0;
-    }
+
+    if (m_ConfData.m_bDCmeasurement)
+        fsoll = 0.0;
+    else
+        switch (m_ConfData.m_nSFreq)
+        {
+            case F16 : fsoll = 50.0/3.0;break;
+            case F50 : fsoll = 50.0;break;
+            case F60 : fsoll = 60.0;
+        }
 
     ActValues.Frequenz = m_ConfData.m_fSFreq * ActValues.dspActValues.kfkorrf;
 
