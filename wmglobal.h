@@ -92,8 +92,10 @@
 //                  die wm3000 blieb bis jetzt dann mit fehlermeldung unexpected answer stehen . busy wird jetzt recovert.
 //                  einbau berechnung rcf ratio correction factor. und grossanzeige um rcf erweitert. interface (measure)
 //                  erweitert. kontext menu ergänzt für die nachkommastellenzahl von rcf zu editieren.
+// v2.29 11.07.2018 bei der frequenzberechnung den sollwert im falle von dc betrieb fest auf 0 gesetzt. hier muss später
+//                  hubertus nochmal ran, weil wir sonst im falle eines signales mit f > 0 trotzdem 0 anzeigen.
 
-#define WMVersion "V2.28"
+#define WMVersion "V2.29"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
