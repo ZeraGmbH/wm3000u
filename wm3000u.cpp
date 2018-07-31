@@ -4254,16 +4254,23 @@ void cWM3000U::CmpActFrequency()
     double fsoll;
 
     if (m_ConfData.m_bDCmeasurement)
+    {
         fsoll = 0.0;
+    }
     else
+    {
         switch (m_ConfData.m_nSFreq)
         {
             case F16 : fsoll = 50.0/3.0;break;
             case F50 : fsoll = 50.0;break;
             case F60 : fsoll = 60.0;
         }
+    }
 
     ActValues.Frequenz = m_ConfData.m_fSFreq * ActValues.dspActValues.kfkorrf;
+    if (ActValues.Frequenz < 6.0) //
+        ActValues.Frequenz = 0.0;
+
 
     bool bFreqQuestionable = (fabs(ActValues.Frequenz-fsoll) > 1.0);
     emit FreqQuestionable(bFreqQuestionable);
