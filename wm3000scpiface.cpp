@@ -1665,21 +1665,34 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	
     case MeasFetch:
     case FetchStart:	
-	s = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
-	    .arg(mActValues.Frequenz)
-	    .arg(fabs(mActValues.VekN))
-	    .arg(mActValues.PHIN)
-	    .arg(fabs(mActValues.VekX))	 
-	    .arg(mActValues.PHIX)
-        .arg(mActValues.LoadPointX)
-        .arg(mActValues.LoadPoint1X)
-	    .arg(mActValues.AmplErrorIEC)
-	    .arg(mActValues.AmplErrorANSI);
-    s += QString(";%1;%2").arg(mActValues.AngleError).arg(mActValues.RCF);
-	answ = sAlloc(s);
-	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
-	break;	 
-	
+    {
+        double ampln, amplx;
+
+        if (m_ConfDataActual.m_bDCmeasurement)
+        {
+            ampln = mActValues.VekN.re();
+            amplx = mActValues.VekX.re();
+        }
+        else
+        {
+            ampln = fabs(mActValues.VekN);
+            amplx = fabs(mActValues.VekX);
+        }
+        s = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
+            .arg(mActValues.Frequenz)
+            .arg(ampln)
+            .arg(mActValues.PHIN)
+            .arg(amplx)
+            .arg(mActValues.PHIX)
+            .arg(mActValues.LoadPointX)
+            .arg(mActValues.LoadPoint1X)
+            .arg(mActValues.AmplErrorIEC)
+            .arg(mActValues.AmplErrorANSI);
+        s += QString(";%1;%2").arg(mActValues.AngleError).arg(mActValues.RCF);
+        answ = sAlloc(s);
+        m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
+        break;
+    }
 	
     case ReadLPStart:
 	EXS++;
