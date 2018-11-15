@@ -76,6 +76,7 @@ void cPCBIFace::ActionHandler(int entryAHS)
     case PCBReadDeviceVersionFinished:
     case PCBReadServerVersionFinished:
     case PCBReadSerialNrFinished:
+    case PCBReadJustdataVersionFinished:
     case GetAdjStatusFinished:
     case SetSenseProtectionFinished:	
         if (m_biFaceError)
@@ -195,6 +196,11 @@ void cPCBIFace::ActionHandler(int entryAHS)
         AHS++;
         break;
 	
+    case PCBReadJustdataVersionStart:
+        SendReadJustdataVersionCommand();
+        AHS++;
+        break;
+
     case GetAdjStatusStart:
         SendGetAdjStatusCommand();
         AHS++;
@@ -393,7 +399,13 @@ void cPCBIFace::ReadServerVersion()
 
 void cPCBIFace::ReadSerialNr()
 {
-    m_ActTimer->start(0,PCBReadSerialNrStart);   
+    m_ActTimer->start(0,PCBReadSerialNrStart);
+}
+
+
+void cPCBIFace::ReadJustDataVersion()
+{
+    m_ActTimer->start(0,PCBReadJustdataVersionStart);
 }
 
 
@@ -541,7 +553,14 @@ void cPCBIFace::SendReadServerVersionCommand()
 void cPCBIFace::SendReadSerialNrCommand()
 {
     QString cmds = QString("syst:sern?\n");
-    iFaceSock->SendQuery(cmds);    
+    iFaceSock->SendQuery(cmds);
+}
+
+
+void cPCBIFace::SendReadJustdataVersionCommand()
+{
+    QString cmds = QString("syst:vers:adj?\n");
+    iFaceSock->SendQuery(cmds);
 }
 
 

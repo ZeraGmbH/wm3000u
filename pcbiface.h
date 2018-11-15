@@ -84,6 +84,9 @@ enum pcbIFaceActionHandlerState {
     
     PCBReadSerialNrStart,
     PCBReadSerialNrFinished,
+
+    PCBReadJustdataVersionStart,
+    PCBReadJustdataVersionFinished,
     
     GetAdjStatusStart,
     GetAdjStatusFinished,
@@ -129,6 +132,7 @@ public:
     void ReadDeviceVersion();
     void ReadServerVersion();
     void ReadSerialNr();
+    void ReadJustDataVersion();
     
 protected slots:
     void ActionHandler(int);
@@ -163,6 +167,7 @@ private:
     void SendReadDeviceVersionCommand();
     void SendReadServerVersionCommand();
     void SendReadSerialNrCommand();
+    void SendReadJustdataVersionCommand();
     void SendReadFlashChksumCommand();
     void SendGetAdjStatusCommand();
     
