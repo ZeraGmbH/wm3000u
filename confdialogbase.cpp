@@ -123,7 +123,10 @@ void ConfDialogBase::init()
     }
 
     if (!g_WMDevice->isDC())
+    {
         ui->ConfTabWidget->removeChild(ui->DCRadioButton);
+        ui->ACRadioButton->setEnabled(false);
+    }
 }
 
 
