@@ -33,7 +33,6 @@
 #include "eparameter.h"
 #include "tools.h"
 
-
 extern WMViewBase *g_WMView;
 extern char* MModeName[];
 
@@ -295,19 +294,60 @@ void cWM3000U::ActionHandler(int entryAHS)
 	AHS++;
 	break; // InitializationConnect2pcbHost
     
+    case InitializationTestDC:
+    {
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
+            m_ActTimer->start(10,RestartMeasurementStart); // falls wir simuliert gestartet sind ...
+        }
+        else
+        {
+            if (m_bDC) // wm3000 wurde mit dc option gestartet
+            {
+                PCBIFace->ReadJustDataVersion();
+                AHS++;
+            }
+            else
+            {
+                m_bNoDCAdjust = false; // wenn kein dc -> ist es egal wenn dc nicht justiert wäre
+                AHS = InitializationOpenChannel0;
+                m_ActTimer->start(0,wm3000Continue); // event, damit statemachine weiterläuft
+            }
+        }
+
+        break;
+    } // InitializationTestDC
+
+    case InitializationReadJustdataVersion:
+    {
+        QString vs;
+
+        if (m_ConfData.m_bSimulation)
+            AHS = wm3000Idle;
+        else
+        {
+            vs = PCBIFace->iFaceSock->GetAnswer(); // antwort lesen
+            vs = vs.right(4);
+            m_bNoDCAdjust = (vs.toDouble() < 2.12);
+            AHS++;
+            m_ActTimer->start(0,wm3000Continue); // event, damit statemachine weiterläuft
+        }
+    }
+
     case InitializationOpenChannel0:
-	if (m_ConfData.m_bSimulation)
-	{
-	    AHS = wm3000Idle;
-	    m_ActTimer->start(10,RestartMeasurementStart); // falls wir simuliert gestartet sind ...
-	}
-	else
-	{
-	    PCBIFace->openChannel(0); // kanal 0 öffnen
-	    AHS++;
-	}
-	break; // InitializationOpenChannel0
-    
+    if (m_ConfData.m_bSimulation)
+    {
+        AHS = wm3000Idle;
+        m_ActTimer->start(10,RestartMeasurementStart); // falls wir simuliert gestartet sind ...
+    }
+    else
+    {
+        PCBIFace->openChannel(0); // kanal 0 öffnen
+        AHS++;
+    }
+    break; // InitializationOpenChannel0
+
     case InitializationOpenChannel1:
 	if (m_ConfData.m_bSimulation)
 	    AHS = wm3000Idle;
@@ -382,7 +422,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 		}
 		else
 		    m_ActTimer->start(0,wm3000Continue); // event, damit statemachine weiterläuft wenn wir nichts gesendet haben
-		AHS++;
+            AHS++;
 	    }
 	    break; // InitializationSwitchRange01
 	}
@@ -878,7 +918,7 @@ void cWM3000U::ActionHandler(int entryAHS)
 	{
 	    s = PCBIFace->iFaceSock->GetAnswer();
 	    stat = s.toInt();
-	    if ( stat  > 0) // nicht justiert
+        if ( (stat  > 0) || m_bNoDCAdjust ) // nicht justiert
 	    {
             m_bJust = false;
             emit JustifiedSignal(false);
@@ -886,12 +926,14 @@ void cWM3000U::ActionHandler(int entryAHS)
 
             s = tr("Achtung !");
             s+="\n";
-            if (stat & 7)
+            if (stat & 7 || m_bNoDCAdjust)
                 s += trUtf8("Gerät ist nicht justiert !");
             if (stat & 2)
                 s += trUtf8("\nNicht identische Versionsnummer !");
             if (stat & 4)
                 s += trUtf8("\nNicht identische Seriennummer !");
+            if (m_bNoDCAdjust)
+                s += trUtf8("\nKeine DC Justage Daten !");
 
             QMessageBox::critical( 0, "Justage", s);
 	    }
@@ -2905,6 +2947,7 @@ bool cWM3000U::isConventional()
 void cWM3000U::setDC(bool b)
 {
     m_bDC = b;
+    m_ConfData.m_bDCmeasurement = b;
 }
 
 

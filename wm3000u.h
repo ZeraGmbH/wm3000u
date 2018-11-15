@@ -42,7 +42,8 @@ enum wm3000ActionHandlerState {
     
     InitializationStart,
     InitializationConnect2pcbHost,
-    
+    InitializationTestDC,
+    InitializationReadJustdataVersion,
     InitializationOpenChannel0,
     InitializationOpenChannel1,
     
@@ -483,6 +484,7 @@ private:
     cWMessageBox *m_SelftestMsgBox;
     bool m_bConventional;
     bool m_bDC;
+    bool m_bNoDCAdjust;
 };
 
 #endif    
