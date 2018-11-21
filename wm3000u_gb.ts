@@ -302,6 +302,30 @@ Allowed mV,V,kV</translation>
         <source>Destination:</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Signal</source>
+        <translation>Signal</translation>
+    </message>
+    <message>
+        <source>AC</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DC</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Offset Korrektur</source>
+        <translation>Offset correction</translation>
+    </message>
+    <message>
+        <source>Kanal N</source>
+        <translation>Channel N</translation>
+    </message>
+    <message>
+        <source>Kanal X</source>
+        <translation>Channel X</translation>
+    </message>
 </context>
 <context>
     <name>EN61850monbase</name>
@@ -569,6 +593,10 @@ Allowed mV,V,kV</translation>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancel</translation>
     </message>
+    <message>
+        <source>RCF</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>WMMeasValuesBase</name>
@@ -608,6 +636,10 @@ Allowed mV,V,kV</translation>
         <source>LP(N):</source>
         <translation>LP(N):</translation>
     </message>
+    <message>
+        <source>RCF:</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>WMOeViewBase</name>
@@ -642,6 +674,25 @@ Allowed mV,V,kV</translation>
     <message>
         <source>--------</source>
         <translation>--------</translation>
+    </message>
+</context>
+<context>
+    <name>WMOffsetValBase</name>
+    <message>
+        <source>Offset</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>---------</source>
+        <translation>---------</translation>
+    </message>
+    <message>
+        <source>Un:</source>
+        <translation>Un:</translation>
+    </message>
+    <message>
+        <source>Ux:</source>
+        <translation>Ux:</translation>
     </message>
 </context>
 <context>
@@ -1204,6 +1255,30 @@ Allowed mV,V,kV</translation>
         <source>Polnisch</source>
         <translation>Polish</translation>
     </message>
+    <message>
+        <source>Offset</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Offsetberechnung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Offsetabgleich WM3000</source>
+        <translation>Offset adjustment WM3000</translation>
+    </message>
+    <message>
+        <source>Offsetmessung Kanal N</source>
+        <translation>Offset measurement Channel N</translation>
+    </message>
+    <message>
+        <source>Offsetmessung Kanal X</source>
+        <translation>Offset measurement Channel X</translation>
+    </message>
+    <message>
+        <source>&amp;Offset</source>
+        <translation>&amp;Offset</translation>
+    </message>
 </context>
 <context>
     <name>cLittleBrowser</name>
@@ -1287,7 +1362,7 @@ Line : %2
     </message>
     <message utf8="true">
         <source>Messung Kanal N, adc läuft</source>
-        <translation>Measurement channel N, adc running</translation>
+        <translation type="obsolete">Measurement channel N, adc running</translation>
     </message>
     <message utf8="true">
         <source>Messung Kanal N, %1 läuft</source>
@@ -1295,7 +1370,7 @@ Line : %2
     </message>
     <message utf8="true">
         <source>Messung Kanal X, adc läuft</source>
-        <translation>Measurement channel X, adc running</translation>
+        <translation type="obsolete">Measurement channel X, adc running</translation>
     </message>
     <message utf8="true">
         <source>Messung Kanal X, %1 läuft</source>
@@ -1443,6 +1518,43 @@ Details stehen im Logfile</source>
     <message utf8="true">
         <source>Gerät ist nicht justiert !</source>
         <translation>Device is not justified !</translation>
+    </message>
+    <message>
+        <source>
+Keine DC Justage Daten !</source>
+        <translation>No DC adjustment data available !</translation>
+    </message>
+    <message>
+        <source>Initialisierung...</source>
+        <translation>Initializing...</translation>
+    </message>
+    <message>
+        <source>Offsetkorrekturen</source>
+        <translation></translation>
+    </message>
+    <message utf8="true">
+        <source>Messung Kanal N %1, X %2 läuft</source>
+        <translation></translation>
+    </message>
+    <message utf8="true">
+        <source>Messung Kanal N %1 läuft</source>
+        <translation></translation>
+    </message>
+    <message utf8="true">
+        <source>Messung Kanal X %1 läuft</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Messung...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Offsetmessung Kanal N</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Offsetmessung Kanal X</source>
+        <translation></translation>
     </message>
 </context>
 <context>
