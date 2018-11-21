@@ -333,6 +333,7 @@ void cWM3000U::ActionHandler(int entryAHS)
             AHS++;
             m_ActTimer->start(0,wm3000Continue); // event, damit statemachine weiterläuft
         }
+        break;
     }
 
     case InitializationOpenChannel0:
