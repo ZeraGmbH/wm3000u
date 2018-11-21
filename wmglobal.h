@@ -94,8 +94,14 @@
 //                  erweitert. kontext menu ergänzt für die nachkommastellenzahl von rcf zu editieren.
 // v2.29 11.07.2018 bei der frequenzberechnung den sollwert im falle von dc betrieb fest auf 0 gesetzt. hier muss später
 //                  hubertus nochmal ran, weil wir sonst im falle eines signales mit f > 0 trotzdem 0 anzeigen.
+// v2.30 31.07.2018 hardware misst jetzt frequenz bis runter zu 5.96 hz. dies ist jetzt richtig berücksichtigt.
+// v2.31 21.11.2018 dc messwerte werden jetzt mit vorzeichen im interface gesendet. der ac button im konfigurations menu ist
+//                  disabled wenn wm3000 nicht mit dc option gestartet wurde. es wurde eine funktion eingebaut um die justage
+//                  daten version abzufragen. hintergrund ist dass geräte die noch einen alten justage daten stand haben
+//                  (also vor dc) trotzdem als justiert gelten solange die software ohne dc option gestartet wird.
+//                  es wurden neue übersetzungs files für englisch und polnisch hinzugefügt.
 
-#define WMVersion "V2.30"
+#define WMVersion "V2.31"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
