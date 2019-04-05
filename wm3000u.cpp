@@ -3218,13 +3218,14 @@ void cWM3000U::SetPhaseCalcInfo() // wir init. die liste damit die statemachine 
     m_CalcInfoList.clear();
     m_CalcInfoList.setAutoDelete( TRUE );
     chn = "ch0";
-    m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
-    m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
+    // ad-wandler abgleich findet nicht mehr statt
+    // m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
+    // m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
     for (uint i = 0; i < m_sNRangeList.count()-1; i++)
     m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
     chn = "ch1";
-    m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
-    m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
+    // m_CalcInfoList.append(new cCalcInfo(chn,"adw80"));
+    // m_CalcInfoList.append(new cCalcInfo(chn,"adw256"));
     for (uint i = 0; i < m_sNRangeList.count()-1; i++)
     m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
     for (uint i = 0; i < m_sEVTRangeList.count()-1; i++)

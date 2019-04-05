@@ -100,6 +100,7 @@
 //                  daten version abzufragen. hintergrund ist dass geräte die noch einen alten justage daten stand haben
 //                  (also vor dc) trotzdem als justiert gelten solange die software ohne dc option gestartet wird.
 //                  es wurden neue übersetzungs files für englisch und polnisch hinzugefügt.
+//                  die ad-wandler werden beim phasenabgleich nicht mehr berücksichtigt.
 
 #define WMVersion "V2.31"
 
