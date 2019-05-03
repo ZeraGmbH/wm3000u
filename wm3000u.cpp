@@ -1571,6 +1571,8 @@ case ConfigurationTestSenseMode:
 	}
 	else
 	{
+        QString key;
+        double offsetCorr;
 	    float tmpFloat[4];
                   float *source = DspIFace->data(RMSValData);
 	    float *dest = (float*) tmpFloat;
@@ -1583,11 +1585,27 @@ case ConfigurationTestSenseMode:
 	    tmpFloat[1] *= m_JustValues.GainCorrCh0; 
 	    tmpFloat[1] /= 1.41421356; // rms der grundwelle
 	    
-	    ActValues.dspActValues.rmsnf = tmpFloat[0];
-	    ActValues.RMSN1Sek = tmpFloat[1]; // der rms wert der grundwelle
+        if (m_ConfData.m_bDCmeasurement)
+        {
+            // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+            tmpFloat[0] += m_JustValues.OffsetCorrCh0;
+            tmpFloat[1] += m_JustValues.OffsetCorrCh0;
+
+            // wir korrigieren die offsetwerte aus der temp. offset korrektur
+            CWMRange* r = Range(m_ConfData.m_sRangeN, m_sNRangeList);
+            if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
+                offsetCorr = measOffsetCorrectionHash[key];
+            else
+                offsetCorr = 0.0;
+
+            tmpFloat[0] += offsetCorr;
+            tmpFloat[1] += offsetCorr;
+        }
 	    
-	    tmpFloat[2] *= 1.63299; // hanning fenster korrektur    
-	    
+        ActValues.dspActValues.rmsnf = tmpFloat[0];
+        ActValues.RMSN1Sek = tmpFloat[1]; // der rms wert der grundwelle
+
+        tmpFloat[2] *= 1.63299; // hanning fenster korrektur
 	    tmpFloat[3] *= 2.0; // hanning fenster korrektur    
 	    tmpFloat[3] /= 1.41421356; // rms der grundwelle
 	    
@@ -1595,6 +1613,28 @@ case ConfigurationTestSenseMode:
 	    {
             tmpFloat[2] *= m_JustValues.GainCorrCh1;
             tmpFloat[3] *= m_JustValues.GainCorrCh1;
+
+            if (m_ConfData.m_bDCmeasurement)
+            {
+                CWMRange* r;
+                // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+                tmpFloat[2] += m_JustValues.OffsetCorrCh1;
+                tmpFloat[3] += m_JustValues.OffsetCorrCh1;
+
+                // wir korrigieren die offsetwerte aus der temp. offset korrektur
+                if (m_ConfData.m_nMeasMode == Un_UxAbs)
+                    r = Range(m_ConfData.m_sRangeX, m_sXRangeList);
+                else
+                    r = Range(m_ConfData.m_sRangeEVT, m_sEVTRangeList);
+
+                if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
+                    offsetCorr = measOffsetCorrectionHash[key];
+                else
+                    offsetCorr = 0.0;
+
+                tmpFloat[2] += offsetCorr;
+                tmpFloat[3] += offsetCorr;
+            }
 	    }
 	    
 	    ActValues.dspActValues.rmsxf = tmpFloat[2];
@@ -4369,7 +4409,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     
     // berechnen der sekundär grössen
     // amplitude n,x sind gefilterte messwerte, die winkel nicht da feste abtastfrequenz
-    
+
     ActValues.RMSN1Sek = ( val * ActValues.RMSN1Sek ) / rej; // der rohe messwert RMSN1Sek wurde schon  in statemachine gesetzt bzw. in simulation und wird hier skaliert!!!
     ActValues.RMSNSek = ( val * ActValues.dspActValues.rmsnf ) / rej; 
     re = ( val * ActValues.dspActValues.ampl1nf ) / rej;
@@ -4377,9 +4417,10 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     
     // wir haben u.u. eine offsetkorrektur für kanal n in "V" die wir nach der skalierung berücksichtigen müssen
 
-    if (m_ConfData.m_bOffsetCorrectionN)
+    if (m_ConfData.m_bOffsetCorrectionN && m_ConfData.m_bDCmeasurement)
     {
-        ActValues.RMSNSek = sqrt(ActValues.RMSNSek * ActValues.RMSNSek - m_JustValues.OffsetCorrDevN * m_JustValues.OffsetCorrDevN);
+        //ActValues.RMSNSek = sqrt( fabs(ActValues.RMSNSek * ActValues.RMSNSek - m_JustValues.OffsetCorrDevN * m_JustValues.OffsetCorrDevN));
+        ActValues.RMSNSek -= m_JustValues.OffsetCorrDevN;
         ActValues.VekNSek -= m_JustValues.OffsetCorrDevN;
     }
 
@@ -4408,9 +4449,10 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     re *= cos(ActValues.dspActValues.dphif);
     ActValues.VekXSek = complex(re,im); 
 
-    if (m_ConfData.m_bOffsetCorrectionX)
+    if (m_ConfData.m_bOffsetCorrectionX && m_ConfData.m_bDCmeasurement)
     {
-        ActValues.RMSXSek = sqrt(ActValues.RMSXSek * ActValues.RMSXSek - m_JustValues.OffsetCorrDevX * m_JustValues.OffsetCorrDevX);
+        //ActValues.RMSXSek = sqrt(fabs(ActValues.RMSXSek * ActValues.RMSXSek - m_JustValues.OffsetCorrDevX * m_JustValues.OffsetCorrDevX));
+        ActValues.RMSXSek -= m_JustValues.OffsetCorrDevX;
         ActValues.VekXSek -= m_JustValues.OffsetCorrDevX;
     }
     
@@ -4480,6 +4522,7 @@ void cWM3000U::CorrActValues()
     if (m_ConfData.m_bDCmeasurement)
     {
         // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+        //ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
         ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
         ActValues.dspActValues.ampl1nf /= 2.0;
         ActValues.dspActValues.ampl1nf += m_JustValues.OffsetCorrCh0;
@@ -4507,6 +4550,7 @@ void cWM3000U::CorrActValues()
         if (m_ConfData.m_bDCmeasurement)
         {
             // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+            //ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
             ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
             ActValues.dspActValues.ampl1xf /= 2.0;
             ActValues.dspActValues.ampl1xf += m_JustValues.OffsetCorrCh1;
