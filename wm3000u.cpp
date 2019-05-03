@@ -2988,7 +2988,7 @@ bool cWM3000U::isConventional()
 void cWM3000U::setDC(bool b)
 {
     m_bDC = b;
-    m_ConfData.m_bDCmeasurement = b;
+    //m_ConfData.m_bDCmeasurement = b;
 }
 
 
