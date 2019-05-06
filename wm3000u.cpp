@@ -1572,6 +1572,7 @@ case ConfigurationTestSenseMode:
 	else
 	{
         QString key;
+        int sign;
         double offsetCorr;
 	    float tmpFloat[4];
                   float *source = DspIFace->data(RMSValData);
@@ -1588,8 +1589,9 @@ case ConfigurationTestSenseMode:
         if (m_ConfData.m_bDCmeasurement)
         {
             // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-            tmpFloat[0] += m_JustValues.OffsetCorrCh0;
-            tmpFloat[1] += m_JustValues.OffsetCorrCh0;
+            sign = signum(tmpFloat[1]);
+            tmpFloat[0] = sign * tmpFloat[0] + m_JustValues.OffsetCorrCh0;
+            tmpFloat[1] = sign * tmpFloat[1] + m_JustValues.OffsetCorrCh0;
 
             // wir korrigieren die offsetwerte aus der temp. offset korrektur
             CWMRange* r = Range(m_ConfData.m_sRangeN, m_sNRangeList);
@@ -1598,8 +1600,8 @@ case ConfigurationTestSenseMode:
             else
                 offsetCorr = 0.0;
 
-            tmpFloat[0] += offsetCorr;
-            tmpFloat[1] += offsetCorr;
+            tmpFloat[0] = fabs(tmpFloat[0] + offsetCorr);
+            tmpFloat[1] = fabs(tmpFloat[1] + offsetCorr);
         }
 	    
         ActValues.dspActValues.rmsnf = tmpFloat[0];
@@ -1617,9 +1619,10 @@ case ConfigurationTestSenseMode:
             if (m_ConfData.m_bDCmeasurement)
             {
                 CWMRange* r;
+                sign = signum(tmpFloat[3]);
                 // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-                tmpFloat[2] += m_JustValues.OffsetCorrCh1;
-                tmpFloat[3] += m_JustValues.OffsetCorrCh1;
+                tmpFloat[2] = sign * tmpFloat[2] + m_JustValues.OffsetCorrCh1;
+                tmpFloat[3] = sign * tmpFloat[3] + m_JustValues.OffsetCorrCh1;
 
                 // wir korrigieren die offsetwerte aus der temp. offset korrektur
                 if (m_ConfData.m_nMeasMode == Un_UxAbs)
@@ -1632,8 +1635,8 @@ case ConfigurationTestSenseMode:
                 else
                     offsetCorr = 0.0;
 
-                tmpFloat[2] += offsetCorr;
-                tmpFloat[3] += offsetCorr;
+                tmpFloat[2] = fabs(tmpFloat[2] + offsetCorr);
+                tmpFloat[3] = fabs(tmpFloat[3] + offsetCorr);
             }
 	    }
 	    
@@ -3463,6 +3466,12 @@ void cWM3000U::SetSelfTestInfo(bool remote)
 }
 
 
+int cWM3000U::signum(double value)
+{
+    return (value>0)?1:((value<0)?-1:0);
+}
+
+
 void cWM3000U::SetConfDataSlot(cConfData *cd) // signal kommt vom konfigurations dialog oder aus interface
 { // oder aus statemachine
     // we limit the number of
@@ -4511,6 +4520,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
 void cWM3000U::CorrActValues()
 {  // here we will do all the necessary corrections with use of adjustment values
     const float PI_180 = 0.017453293;
+    int sign;
     double offsetCorr;
     QString key;
 
@@ -4522,8 +4532,9 @@ void cWM3000U::CorrActValues()
     if (m_ConfData.m_bDCmeasurement)
     {
         // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-        //ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
-        ActValues.dspActValues.rmsnf += m_JustValues.OffsetCorrCh0;
+        // im rms können wir aber das vorzeichen nicht mehr sehen .....
+        sign = signum(ActValues.dspActValues.ampl1nf);
+        ActValues.dspActValues.rmsnf = sign * ActValues.dspActValues.rmsnf + m_JustValues.OffsetCorrCh0;
         ActValues.dspActValues.ampl1nf /= 2.0;
         ActValues.dspActValues.ampl1nf += m_JustValues.OffsetCorrCh0;
 
@@ -4534,8 +4545,8 @@ void cWM3000U::CorrActValues()
         else
             offsetCorr = 0.0;
 
-        ActValues.dspActValues.rmsnf += offsetCorr;
-        ActValues.dspActValues.ampl1nf += offsetCorr;          
+        ActValues.dspActValues.rmsnf = fabs(ActValues.dspActValues.rmsnf + offsetCorr);
+        ActValues.dspActValues.ampl1nf += offsetCorr;
     }
     
     if ( m_ConfData.m_nMeasMode != Un_nConvent)
@@ -4550,8 +4561,8 @@ void cWM3000U::CorrActValues()
         if (m_ConfData.m_bDCmeasurement)
         {
             // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-            //ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
-            ActValues.dspActValues.rmsxf += m_JustValues.OffsetCorrCh1;
+            sign = signum(ActValues.dspActValues.ampl1xf);
+            ActValues.dspActValues.rmsxf = sign * ActValues.dspActValues.rmsxf + m_JustValues.OffsetCorrCh1;
             ActValues.dspActValues.ampl1xf /= 2.0;
             ActValues.dspActValues.ampl1xf += m_JustValues.OffsetCorrCh1;
 
@@ -4566,7 +4577,7 @@ void cWM3000U::CorrActValues()
             else
                 offsetCorr = 0.0;
 
-            ActValues.dspActValues.rmsxf += offsetCorr;
+            ActValues.dspActValues.rmsxf = fabs(ActValues.dspActValues.rmsxf + offsetCorr);
             ActValues.dspActValues.ampl1xf += offsetCorr;
         }
     }
