@@ -441,6 +441,7 @@ private:
     void offsetCorrectionHash2File();
     void readOffsetCorrectionFile();
     void SetSelfTestInfo(bool); // manuell oder remote
+    int signum(double value);
     
     QTimer *MeasureTimer;
     QTimer *MeasureLPTimer; 
