@@ -4030,19 +4030,21 @@ void cWM3000U::SetDspWMCmdList()
 //	DspIFace->addCycListItem( s = QString("FLATTOP(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
   	DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
 //	DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn taster
-	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
+
 
     // korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen
     if (m_ConfData.m_bDCmeasurement)
     {
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
     }
     else
     {
         DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL0,TEMP1)").arg(nSMeas)); // dc auf TEMP1
-        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        //DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        //DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
         DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL0)").arg(nSMeas)); // dc von allen samples abziehen
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
         DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
     }
 
@@ -4075,18 +4077,20 @@ void cWM3000U::SetDspWMCmdList()
 	// kanal 1 (x) bearbeiten	
 	
 	DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
-	DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
+
 	// korrigierte einheitswurzel berechnen und im bzw. re von kanal 1 bestimmen	
     if (m_ConfData.m_bDCmeasurement)
     {
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
         DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
     }
     else
     {
         DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL1,TEMP1)").arg(nSMeas)); // dc auf TEMP1
-        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
+        //DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
+        //DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
         DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL1)").arg(nSMeas)); // dc von allen samples abziehen
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
         DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
     }
 
