@@ -700,7 +700,7 @@ void cWM3000SCPIFace::mSetConfEnUPriority(char* s)
 }
 
 
-char* cWM3000SCPIFace::mGetConfENAsdu()
+char* cWM3000SCPIFace::mGetConfENFAsdu()
 {
     m_ConfDataTarget = m_ConfDataActual;
     QString s = QString("%1").arg(m_ConfDataActual.FirstASDU);
@@ -708,12 +708,31 @@ char* cWM3000SCPIFace::mGetConfENAsdu()
 }
 
 
-void cWM3000SCPIFace::mSetConfENAsdu(char* s)
+void cWM3000SCPIFace::mSetConfENFAsdu(char* s)
 {
     ushort us;
     if ( GetParameter(&s, us, 1, 8, 10, true) )
     {
     m_ConfDataTarget.FirstASDU = us;
+//	emit SendConfiguration(&m_ConfData);
+    }
+}
+
+
+char* cWM3000SCPIFace::mGetConfENLAsdu()
+{
+    m_ConfDataTarget = m_ConfDataActual;
+    QString s = QString("%1").arg(m_ConfDataActual.LastASDU);
+    return sAlloc(s);
+}
+
+
+void cWM3000SCPIFace::mSetConfENLAsdu(char* s)
+{
+    ushort us;
+    if ( GetParameter(&s, us, 1, 8, 10, true) )
+    {
+    m_ConfDataTarget.LastASDU = us;
 //	emit SendConfiguration(&m_ConfData);
     }
 }
@@ -1820,7 +1839,8 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 		  case SetConfEnVid: mSetConfEnVid(s);break;
 		  case SetConfEnCfi: mSetConfEnCfi(s);break;
 		  case SetConfEnUPriority: mSetConfEnUPriority(s);break;
-		  case SetConfENAsdu: mSetConfENAsdu(s);break;
+          case SetConfENFAsdu: mSetConfENFAsdu(s);break;
+          case SetConfENLAsdu: mSetConfENLAsdu(s);break;
 		  case SetConfEnDSet: mSetConfEnDSet(s);break;
 		  case SetConfENMAdrWM3000: mSetConfENMAdrWM3000(s);break;
 		  case SetConfENMAdrMU: mSetConfENMAdrMU(s);break;
@@ -1874,7 +1894,8 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 	case SetConfEnVid: 
 	case SetConfEnCfi: 
 	case SetConfEnUPriority: 
-	case SetConfENAsdu: 
+    case SetConfENLAsdu:
+    case SetConfENFAsdu:
 	case SetConfEnDSet: 
 	case SetConfENMAdrWM3000: 
 	case SetConfENMAdrMU: 
@@ -1953,7 +1974,8 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfEnVid: an = mGetConfEnVid();break;
 	case GetConfEnCfi: an = mGetConfEnCfi();break;
 	case GetConfEnUPriority: an = mGetConfEnUPriority();break;
-	case GetConfENAsdu: an = mGetConfENAsdu();break;
+    case GetConfENFAsdu: an = mGetConfENFAsdu();break;
+    case GetConfENLAsdu: an = mGetConfENLAsdu();break;
 	case GetConfEnDSet: an = mGetConfEnDSet();break;
 	case GetConfENMAdrWM3000: an = mGetConfENMAdrWM3000();break;
 	case GetConfENMAdrMU: an = mGetConfENMAdrMU();break;
@@ -2016,7 +2038,8 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfEnVid:
 	case GetConfEnCfi:
 	case GetConfEnUPriority:
-	case GetConfENAsdu:
+    case GetConfENFAsdu:
+    case GetConfENLAsdu:
 	case GetConfEnDSet:
 	case GetConfENMAdrWM3000:
 	case GetConfENMAdrMU:
@@ -2091,7 +2114,8 @@ cNodeSCPI* Configuration;
 			                        cNodeSCPI* ConfigurationEN61850MacAdressMergingUnit;
 				          cNodeSCPI* ConfigurationEN61850MacAdressWM3000;	
 			    cNodeSCPI* ConfigurationEN61850DataSet;
-			    cNodeSCPI* ConfigurationEN61850Asdu;	  
+                cNodeSCPI* ConfigurationEN61850LAsdu;
+                cNodeSCPI* ConfigurationEN61850FAsdu;
 			    cNodeSCPI* ConfigurationEN61850UserPriority;	  
 			    cNodeSCPI* ConfigurationEN61850Cfi;	  
 			    cNodeSCPI* ConfigurationEN61850Vid;
@@ -2231,8 +2255,12 @@ cNode* cWM3000SCPIFace::InitScpiCmdTree(cNode* cn) {
     ConfigurationEN61850Vid=new cNodeSCPI("VID",isQuery | isCommand,ConfigurationEN61850Appid,NULL,SetConfEnVid,GetConfEnVid);
     ConfigurationEN61850Cfi=new cNodeSCPI("CFI",isQuery | isCommand,ConfigurationEN61850Vid,NULL,SetConfEnCfi,GetConfEnCfi);
     ConfigurationEN61850UserPriority=new cNodeSCPI("UPRIORITY",isQuery | isCommand,ConfigurationEN61850Cfi,NULL,SetConfEnUPriority,GetConfEnUPriority);
-    ConfigurationEN61850Asdu=new cNodeSCPI("ASDU",isQuery | isCommand,ConfigurationEN61850UserPriority,NULL,SetConfENAsdu,GetConfENAsdu);
-    ConfigurationEN61850DataSet=new cNodeSCPI("DATASET",isQuery | isCommand,ConfigurationEN61850Asdu,NULL,SetConfEnDSet,GetConfEnDSet);
+
+    ConfigurationEN61850LAsdu=new cNodeSCPI("LASDU",isQuery | isCommand,ConfigurationEN61850UserPriority,NULL,SetConfENLAsdu,GetConfENLAsdu);
+
+
+    ConfigurationEN61850FAsdu=new cNodeSCPI("FASDU",isQuery | isCommand,ConfigurationEN61850LAsdu,NULL,SetConfENFAsdu,GetConfENFAsdu);
+    ConfigurationEN61850DataSet=new cNodeSCPI("DATASET",isQuery | isCommand,ConfigurationEN61850FAsdu,NULL,SetConfEnDSet,GetConfEnDSet);
     ConfigurationEN61850MacAdressWM3000=new cNodeSCPI("WM3000",isQuery | isCommand,NULL,NULL,SetConfENMAdrWM3000,GetConfENMAdrWM3000);
     ConfigurationEN61850MacAdressMergingUnit=new cNodeSCPI("MERGINGUNIT",isQuery | isCommand,ConfigurationEN61850MacAdressWM3000,NULL,SetConfENMAdrMU,GetConfENMAdrMU);
     ConfigurationEN61850MacAdress=new cNodeSCPI("MACADRESS",isNode,ConfigurationEN61850DataSet,ConfigurationEN61850MacAdressMergingUnit,nixCmd,nixCmd);
