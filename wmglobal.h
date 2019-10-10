@@ -101,8 +101,11 @@
 //                  (also vor dc) trotzdem als justiert gelten solange die software ohne dc option gestartet wird.
 //                  es wurden neue übersetzungs files für englisch und polnisch hinzugefügt.
 //                  die ad-wandler werden beim phasenabgleich nicht mehr berücksichtigt.
+//
+// v2.32 10.10.2019 einige korrekturen im zusammenhang mit dc messung
+//                  neue kommandos für first asdu und last asdu
 
-#define WMVersion "V2.31"
+#define WMVersion "V2.32"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
