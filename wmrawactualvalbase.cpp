@@ -170,12 +170,16 @@ void WMRawActualValBase::SetConfInfoSlot( cConfData * cd )
     {
         ui->XnPhaseDisp->setVisible(false);
         ui->XxPhaseDisp->setVisible(false);
+        ui->FreqDisp->setVisible(false);
+        ui->FreqLabel->setVisible(false);
         AmplDispMode = x1;  // im fall von dc messung lassen wir nur x1 zu !!!
     }
     else
     {
         ui->XnPhaseDisp->setVisible(true);
         ui->XxPhaseDisp->setVisible(true);
+        ui->FreqDisp->setVisible(true);
+        ui->FreqLabel->setVisible(true);
     }
     resize(ui->gridLayout->minimumSize());
 }
