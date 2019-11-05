@@ -146,9 +146,6 @@ int main(int argc, char *argv[])
   QObject::connect(g_WMView,SIGNAL(LoadSessionSignal(QString)),g_WMOffsetView,SLOT(LoadSession(QString))); // fenster grösse und position einrichten
   QObject::connect(g_WMDevice,SIGNAL(SendJustValuesSignal(tJustValues*)),g_WMOffsetView,SLOT(ReceiveJustDataSlot(tJustValues*))); // device sendet konfigurationsdaten an rawactualanzei
 
-
-
-
   CLogFileView* g_WMSCPILogFileView;
   if (bconvent)
       g_WMSCPILogFileView = new CLogFileView(QObject::tr("WM1000U SCPI Kommunikation"),100,g_WMView,"WMSCPILogView"); // kommunikation anzeige erzeugen
@@ -233,9 +230,6 @@ int main(int argc, char *argv[])
   QObject::connect((QObject*)g_WMDevice,SIGNAL(OffsetValue(double)),wm3000DeviceServer,SLOT(ReceiveOffsetResult(double))); // rückgabe des offset wertes an interface
   QObject::connect(wm3000DeviceServer,SIGNAL(RequestChannelNOffsetMeasure()),(QObject*)g_WMDevice,SLOT(OffsetMessungChannelNRemote())); // selbsttest (remote) starten
   QObject::connect(wm3000DeviceServer,SIGNAL(RequestChannelXOffsetMeasure()),(QObject*)g_WMDevice,SLOT(OffsetMessungChannelXRemote())); // selbsttest (remote) starten
-
-
-
 
   QObject::connect((QObject*)g_WMDevice,SIGNAL(AffectStatus(uchar, ushort)),wm3000DeviceServer,SLOT(ReceiveAffectStatus(uchar, ushort))); // setzen des selbsttest ergebnisses
 
