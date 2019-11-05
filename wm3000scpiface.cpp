@@ -958,7 +958,14 @@ void cWM3000SCPIFace::mSetConfMeasSRate(char* s)
     
     if ( SearchEntry(&s, SRates, MaxSRate, src, true) )
     {
-	m_ConfDataTarget.m_nSRate = src;
+        m_ConfDataTarget.m_nSRate = src;
+        // wenn die samplerate gesetzt wird werden die asdu's default gesetzt.
+        // sie lassen sich einzeln immer noch überschreiben falls nötig
+        m_ConfDataTarget.FirstASDU = 1;
+        if (m_ConfDataTarget.m_nSRate == S80)
+            m_ConfDataTarget.LastASDU = 1;
+        if (m_ConfDataTarget.m_nSRate == S256)
+            m_ConfDataTarget.LastASDU = 8;
     //if (m_ConfDataTarget.m_nSRate == S256) // wir begrenzen die messperioden auf
     //    if (m_ConfDataTarget.m_nMeasPeriod > 16) // 18 signalperioden wenn 256samples/periode
     //	m_ConfDataTarget.m_nMeasPeriod = 16;
