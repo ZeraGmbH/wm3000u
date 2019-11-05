@@ -104,8 +104,11 @@
 //
 // v2.32 10.10.2019 einige korrekturen im zusammenhang mit dc messung
 //                  neue kommandos für first asdu und last asdu
+// v2.33 05.11.2019 bugfix : der automatismus aus dem bildschirmdialog  wurde übernommen dass wenn die anzahl
+//                  der samples gesetzt wird ... dann ebenfalls die asdu's mit gesetzt werden
 
-#define WMVersion "V2.32"
+
+#define WMVersion "V2.33"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
