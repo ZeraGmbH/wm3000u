@@ -66,6 +66,7 @@ void WMViewBase::init()
     connect(wmEdit2,SIGNAL(textMessage(QString)),this,SLOT(ReceiveResultFileSlot(QString)));
     ui->ansichtFehlerMessungAction->setChecked(false);
     ui->ansichtIstwerteAction->setChecked(false);
+    ui->ansichtOffsetAction->setChecked(false);
     ui->ansichtDialogAction->setChecked(false);
     ui->ansichtEigenfehlerAction->setChecked(false);
     ui->ansichtEN61850Action->setChecked(false);
