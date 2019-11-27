@@ -4433,7 +4433,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     if (m_ConfData.m_bOffsetCorrectionN && m_ConfData.m_bDCmeasurement)
     {
         //ActValues.RMSNSek = sqrt( fabs(ActValues.RMSNSek * ActValues.RMSNSek - m_JustValues.OffsetCorrDevN * m_JustValues.OffsetCorrDevN));
-        ActValues.RMSNSek -= m_JustValues.OffsetCorrDevN;
+        ActValues.RMSNSek -= fabs(m_JustValues.OffsetCorrDevN);
         ActValues.VekNSek -= m_JustValues.OffsetCorrDevN;
     }
 
@@ -4465,7 +4465,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     if (m_ConfData.m_bOffsetCorrectionX && m_ConfData.m_bDCmeasurement)
     {
         //ActValues.RMSXSek = sqrt(fabs(ActValues.RMSXSek * ActValues.RMSXSek - m_JustValues.OffsetCorrDevX * m_JustValues.OffsetCorrDevX));
-        ActValues.RMSXSek -= m_JustValues.OffsetCorrDevX;
+        ActValues.RMSXSek -= fabs(m_JustValues.OffsetCorrDevX);
         ActValues.VekXSek -= m_JustValues.OffsetCorrDevX;
     }
     
@@ -4510,9 +4510,17 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     ActValues.AngleError = normWinkelrad_PIPI(ActValues.AngleError);
 //    if (fabs(ActValues.AngleError) > PI ) ActValues.AngleError -= sign(ActValues.AngleError) * 2 * PI;
 	      
-    double absN;
-    absN = fabs(ActValues.VekN);
-    double err = (fabs(ActValues.VekX) -absN) / absN;
+    double err;
+
+    if (m_ConfData.m_bDCmeasurement)
+        err = (ActValues.VekX.re() - ActValues.VekN.re()) / ActValues.VekN.re();
+    else
+    {
+        double absN;
+        absN = fabs(ActValues.VekN);
+        err = (fabs(ActValues.VekX) -absN) / absN;
+    }
+
     ActValues.AmplErrorIEC = 100.0 * err;
     ActValues.RCF = 1.0 / (1.0 + err);
     ActValues.AmplErrorANSI = (ActValues.AmplErrorIEC/100.0 - ( (1.0+ActValues.AmplErrorIEC/100.0) * (4.0 / 3.0) * ActValues.AngleError ))*100.0;
