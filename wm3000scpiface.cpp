@@ -616,6 +616,7 @@ void cWM3000SCPIFace::mConfigurationApply(char*)
         m_bAddEventError = true;
 
     emit SendConfiguration(&m_ConfDataTarget);
+    SetnoOperFlag(false); // wir warten darauf daß konfigurieren fertig wird
     m_ConfDataActual = m_ConfDataTarget;
 }
 
@@ -1756,7 +1757,7 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common 
 	break;
 	
     case ifSelftestFinished:
-	s = QString("%1").arg(SelftestResult);
+    s = QString("+%1").arg(SelftestResult);
 	answ = sAlloc(s);
 	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
 	break;

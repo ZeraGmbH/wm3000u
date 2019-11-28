@@ -213,6 +213,7 @@ public:
     char* GetDeviceESR();
     char* GetDeviceSRE();
     char* GetDeviceSTB();
+    void setOPCQState(opcStates state);
     
     
 public slots:

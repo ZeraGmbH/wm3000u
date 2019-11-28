@@ -221,6 +221,16 @@ void cSCPIFace::AffectSCPIStatus(uchar action, ushort stat)
 	
     case ResetOperStat:
 	m_pOperationStat->ResetConditionBit(stat);
+    if ((stat == OperConfiguring) && (m_nOPCQState == OQAS))
+    // wenn wir in opc query active state sind und die Configuration fertig war
+    {
+        // d.h. es war eine *opc? abfrage während wir dabei waren zu konfigurieren
+        {
+            //QString s;
+            //emit SendAnswer(s = QString("+1")); // dann senden wir jetzt die antwort darauf
+            setOPCQState(OQIS); // und wechseln wieder in den operation query idle state
+        }
+    }
 	break;
 	
     case SetQuestStat:
@@ -263,9 +273,28 @@ void cSCPIFace::OPCCommand()
 
 char* cSCPIFace::OPCQuery()
 {   // kann falls anders sein soll überschrieben werden, wir lassen nur seq. kommandos zu
+    /*
     char* out;
     out = (char*) malloc(3);
     strcpy(out,"+1");
+    return out;
+    */
+
+    // es wurde überschrieben
+    char* out;
+
+    out = 0; // kein output
+    if (m_bnoOperationPendingFlag) // wenn keine konfiguration pending ist geben wir direkt eine anrwort
+    {
+        out = (char*) malloc(3);
+        strcpy(out,"+1");
+    }
+    else
+    {
+        m_bnoOperationPendingFlag = true;
+        setOPCQState(OQAS); // ansonsten merken wir uns daß eine *opc? anfrage war
+    }
+
     return out;
 }
 
@@ -447,6 +476,19 @@ char* cSCPIFace::GetDeviceSRE()
 char* cSCPIFace::GetDeviceSTB()
 {
     return RegConversion(m_nSTB);
+}
+
+
+void cSCPIFace::setOPCQState(opcStates state)
+{
+    if ((m_nOPCQState) == OQAS && (state == OQIS))
+    // d.h. es war eine *opc? abfrage während wir dabei waren zu konfigurieren, was jetzt abgeschlossen ist
+    {
+        QString s;
+        emit SendAnswer(s = QString("+1")); // dann senden wir jetzt die antwort darauf
+    }
+
+    m_nOPCQState = state;
 }
 
 
