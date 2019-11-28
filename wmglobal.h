@@ -106,6 +106,8 @@
 //                  neue kommandos für first asdu und last asdu
 // v2.33 05.11.2019 bugfix : der automatismus aus dem bildschirmdialog  wurde übernommen dass wenn die anzahl
 //                  der samples gesetzt wird ... dann ebenfalls die asdu's mit gesetzt werden
+//                  *tst? antwortet jetzt richtig mit +0 oder +1
+//                  *opc? snchronisiert auf fertig werden der konfiguration
 
 
 #define WMVersion "V2.33"
