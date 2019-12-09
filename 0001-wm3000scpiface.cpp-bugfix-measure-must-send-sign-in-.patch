@@ -1,0 +1,68 @@
+From dc7e568bbe130d5c0ab2fb6d9d929a092e00f7e7 Mon Sep 17 00:00:00 2001
+From: Peter Lohmer <peterlohmer01@gmail.com>
+Date: Wed, 5 Sep 2018 16:37:21 +0200
+Subject: [PATCH 1/7] wm3000scpiface.cpp: bugfix measure must send sign in
+ case of dc
+
+Signed-off-by: Peter Lohmer <peterlohmer01@gmail.com>
+---
+ wm3000scpiface.cpp |   43 ++++++++++++++++++++++++++++---------------
+ 1 Datei geändert, 28 Zeilen hinzugefügt(+), 15 Zeilen entfernt(-)
+
+diff --git a/wm3000scpiface.cpp b/wm3000scpiface.cpp
+index 0982b05..6b538bb 100644
+--- a/wm3000scpiface.cpp
++++ b/wm3000scpiface.cpp
+@@ -1665,21 +1665,34 @@ void cWM3000SCPIFace::ExecuteCommand(int entryState) // ausführen eines common
+ 	
+     case MeasFetch:
+     case FetchStart:	
+-	s = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
+-	    .arg(mActValues.Frequenz)
+-	    .arg(fabs(mActValues.VekN))
+-	    .arg(mActValues.PHIN)
+-	    .arg(fabs(mActValues.VekX))	 
+-	    .arg(mActValues.PHIX)
+-        .arg(mActValues.LoadPointX)
+-        .arg(mActValues.LoadPoint1X)
+-	    .arg(mActValues.AmplErrorIEC)
+-	    .arg(mActValues.AmplErrorANSI);
+-    s += QString(";%1;%2").arg(mActValues.AngleError).arg(mActValues.RCF);
+-	answ = sAlloc(s);
+-	m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
+-	break;	 
+-	
++    {
++        double ampln, amplx;
++
++        if (m_ConfDataActual.m_bDCmeasurement)
++        {
++            ampln = mActValues.VekN.re();
++            amplx = mActValues.VekX.re();
++        }
++        else
++        {
++            ampln = fabs(mActValues.VekN);
++            amplx = fabs(mActValues.VekX);
++        }
++        s = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
++            .arg(mActValues.Frequenz)
++            .arg(ampln)
++            .arg(mActValues.PHIN)
++            .arg(amplx)
++            .arg(mActValues.PHIX)
++            .arg(mActValues.LoadPointX)
++            .arg(mActValues.LoadPoint1X)
++            .arg(mActValues.AmplErrorIEC)
++            .arg(mActValues.AmplErrorANSI);
++        s += QString(";%1;%2").arg(mActValues.AngleError).arg(mActValues.RCF);
++        answ = sAlloc(s);
++        m_pSMachineTimer->start(0, ExecCmdPartFinished); // teil kommando fertig
++        break;
++    }
+ 	
+     case ReadLPStart:
+ 	EXS++;
+-- 
+1.7.10.4
+

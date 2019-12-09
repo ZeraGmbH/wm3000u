@@ -109,9 +109,9 @@
 //                  *tst? antwortet jetzt richtig mit +0 oder +1
 //                  *opc? snchronisiert auf fertig werden der konfiguration
 // v2.34 29.11.2019 Versionsnummer geändert, um den Update-Prozess nicht zu gefährden
+// v2.35 09.12.2019 bugfix : rücksetzen noOperationCompleteFlag wenn conf. ready
 
-
-#define WMVersion "V2.34"
+#define WMVersion "V2.35"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"

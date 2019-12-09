@@ -1,0 +1,29 @@
+From 5cb12482235119b4ff7076454fcbeaaaf8586cce Mon Sep 17 00:00:00 2001
+From: Peter Lohmer <peterlohmer01@gmail.com>
+Date: Thu, 15 Nov 2018 14:53:42 +0100
+Subject: [PATCH 2/7] confdialogbase.cpp: bugfix ac button must be not enabled
+ if wm3000 is not dc
+
+Signed-off-by: Peter Lohmer <peterlohmer01@gmail.com>
+---
+ confdialogbase.cpp |    3 +++
+ 1 Datei geändert, 3 Zeilen hinzugefügt(+)
+
+diff --git a/confdialogbase.cpp b/confdialogbase.cpp
+index 2a7b0bd..9565920 100644
+--- a/confdialogbase.cpp
++++ b/confdialogbase.cpp
+@@ -123,7 +123,10 @@ void ConfDialogBase::init()
+     }
+ 
+     if (!g_WMDevice->isDC())
++    {
+         ui->ConfTabWidget->removeChild(ui->DCRadioButton);
++        ui->ACRadioButton->setEnabled(false);
++    }
+ }
+ 
+ 
+-- 
+1.7.10.4
+
