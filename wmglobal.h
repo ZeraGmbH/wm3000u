@@ -18,14 +18,22 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.7.223"
+#define TheDevice "192.168.6.121"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
-// V1.03 wm3000u schrittkette umgebaut, so dass sk messperiode selbst verwaltet und im dsp messperiode = signalperiode ist -> befehle werden schneller bearbeitet. das bedeutet aber mehr speicherbedarf im userworkspace deshalb muss die anzahl der messperioden auf 18 begrenzt werden wenn 256samples/per.
-// V1.04 arbeitet mit der neuen version des leiterkartenservers V1.02 zusammen. Das justage handling wurde hier grundlegend geändert. bei der abfrage des korrekturwerte wird der hierzu erforderliche parameter mitgesendet, vorher wurde der parameter mit einem separaten befehl gesetzt. Die berechnung der justage koeffizienten erfolgt jetzt direkt im server und nicht mehr im device. das heisst dass auch im justageteil des devices einiges geändert werden musste. 
+// V1.03 wm3000u schrittkette umgebaut, so dass sk messperiode selbst verwaltet und
+//       im dsp messperiode = signalperiode ist -> befehle werden schneller bearbeitet.
+//       das bedeutet aber mehr speicherbedarf im userworkspace deshalb muss die anzahl
+//       der messperioden auf 18 begrenzt werden wenn 256samples/per.
+// V1.04 arbeitet mit der neuen version des leiterkartenservers V1.02 zusammen.
+//       Das justage handling wurde hier grundlegend geändert. bei der abfrage des korrekturwerte
+//       wird der hierzu erforderliche parameter mitgesendet, vorher wurde der parameter mit einem
+//       separaten befehl gesetzt. Die berechnung der justage koeffizienten erfolgt jetzt direkt im
+//       server und nicht mehr im device. das heisst dass auch im justageteil des devices einiges
+//       geändert werden musste.
 // V1.05 cethadress operator != verbessert,  
 //            zusätzliche anzeige lastpunkt relativ zu X kanal eingebaut
 //            andere kette an dsp übertragen um die benötigten werte zu erhalten
@@ -142,7 +150,7 @@ enum VekWinkelModes {mathpos, techpos}; // winkel anzeige math. pos. bzw. techn.
 enum SyncSources {Intern,Extern,MaxSSource}; // sync sources
 enum SignalFreqs {F16,F50,F60,MaxFreq}; // -> feste abtastfrequenzen
 enum SampleRates {S80,S256,MaxSRate}; // abtastraten
-enum JustMode {sensNadcXPhase, sensXadcNPhase, sensEVTadcNPhase, sensNsensXOffset, sensNOffset, sensXOffset, sensEVTOffset}; // justage modes
+enum JustMode {sensNadcXPhase, sensXadcNPhase, sensEVTadcNPhase, sensNsensXOffset, sensNOffset, sensXOffset, sensEVTOffset, adcNPhase, adcXPhase}; // justage modes
 enum SenseMode {sensNsensX, adcNadcX, sensNadcX, sensXadcN, sensNsensX0V, anzSenseMode}; // sense modes innerhalb der hardware
 enum MeasMode {Un_UxAbs,Un_EVT,Un_nConvent,maxMMode}; // messmodi der wm3000u
 enum SignalModes {AC, DC, maxSMode}; // signal modi
@@ -230,10 +238,11 @@ public:
 class cJustMeasInfo
 {
 public:
-    cJustMeasInfo(const QString rngN, const QString rngX, SenseMode sm, MeasMode mm, JustMode jm, int nS, int nIgn, int nMeas )
-        :m_srngN(rngN), m_srngX(rngX), m_nSMode(sm), m_nMMode(mm), m_nJMode(jm), m_nnS(nS), m_nIgnore(nIgn), m_nnMeas(nMeas){}
-    QString m_srngN; // bereich kanal n
-    QString m_srngX; // bereich kanal x
+    cJustMeasInfo(const QString rngN, const QString rngX, const QString rngStore, SenseMode sm, MeasMode mm, JustMode jm, int nS, int nIgn, int nMeas )
+        :m_srngN(rngN), m_srngX(rngX), m_srngStore(rngStore), m_nSMode(sm), m_nMMode(mm), m_nJMode(jm), m_nnS(nS), m_nIgnore(nIgn), m_nnMeas(nMeas){}
+    QString m_srngN; // bereich kanal n der angewählt wird
+    QString m_srngX; // bereich kanal x ......
+    QString m_srngStore; // der bereich auf dem die justage daten gespeichert werden
     SenseMode m_nSMode; // sense mode (was zu testen bzw. justieren ist)
     MeasMode m_nMMode; // in welchem messmodus
     JustMode m_nJMode; // welcher justage modues
