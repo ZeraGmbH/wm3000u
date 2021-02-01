@@ -118,8 +118,11 @@
 //                  *opc? snchronisiert auf fertig werden der konfiguration
 // v2.34 29.11.2019 Versionsnummer geändert, um den Update-Prozess nicht zu gefährden
 // v2.35 09.12.2019 bugfix : rücksetzen noOperationCompleteFlag wenn conf. ready
+// v2.36 01.02.2021 phasenjustage adc's wieder eingebaut und status gain, phase, offset vereinzelt.
+//                  die "alten" justagedaten und die zeiger darauf an den bereichen entfernt.
+//
 
-#define WMVersion "V2.35"
+#define WMVersion "V2.36"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
