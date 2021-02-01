@@ -54,12 +54,18 @@ enum pcbIFaceActionHandlerState {
         
     setPhaseNodeInfoStart,
     setPhaseNodeInfoFinished,
+
+    setPhaseStatusStart,
+    setPhaseStatusFinished,
     
     cmpPhaseCoefficientStart,
     cmpPhaseCoefficientFinished,
 
     setOffsetNodeInfoStart,
     setOffsetNodeInfoFinished,
+
+    setOffsetStatusStart,
+    setOffsetStatusFinished,
 
     cmpOffsetCoefficientStart,
     cmpOffsetCoefficientFinished,
@@ -120,8 +126,10 @@ public:
     void readOffsetCorrection(int, QString, float);
     void GetAdjustmentStatus();
     void setPhaseNodeInfo(QString, QString, int, float, float);
+    void setPhaseStatus(QString, QString, int);
     void cmpPhaseCoefficient(QString);
     void setOffsetNodeInfo(QString, QString, int, float, float);
+    void setOffsetStatus(QString, QString, int);
     void cmpOffsetCoefficient(QString);
     void SetSenseProtection(int);
        
@@ -156,8 +164,10 @@ private:
     void SendReadPhaseCorrectionCommand();
     void SendReadOffsetCorrectionCommand();
     void SendsetPhaseNInfoCommand();
+    void SendsetPhaseStatusCommand();
     void SendcmpPhaseCoefficientCommand();
     void SendsetOffsetNInfoCommand();
+    void SendsetOffsetStatusCommand();
     void SendcmpOffsetCoefficientCommand();
     void SendSetSenseProtectionCommand();
     
