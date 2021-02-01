@@ -190,12 +190,16 @@ enum wm3000ActionHandlerState {
     CmpPhaseCoeffCh0,
     CmpPhaseCoeffCh1,
     CmpPhaseCoeffCh2,
+    CmpPhaseSetStatus,
+    CmpPhaseSetStatus2,
     CmpPhaseCoeffFinished,
 
     CmpOffsetCoeffStart,
     CmpOffsetCoeffCh0,
     CmpOffsetCoeffCh1,
     CmpOffsetCoeffCh2, // 140
+    CmpOffsetSetStatus,
+    CmpOffsetSetStatus2,
     CmpOffsetCoeffFinished,
    
     PhaseNodeMeasStart,
