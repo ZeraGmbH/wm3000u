@@ -27,6 +27,7 @@
 #include "en61850.h"
 #include "devserver.h"
 #include "wm3000scpiface.h"
+#include "movingwindowfilter.h"
 
 class cRSelectString: public QString {
 public:    
@@ -447,6 +448,7 @@ private:
     void SetSelfTestInfo(bool); // manuell oder remote
     int signum(double value);
     
+    cMovingWindowFilter m_MovingWindowFilter;
     QTimer *MeasureTimer;
     QTimer *MeasureLPTimer; 
     QTimer *RangeTimer;
@@ -455,9 +457,11 @@ private:
 
     void SimulatedMeasurement();
     void CmpActFrequency();
-    void CmpActValues(bool);
+    void CmpActValues();
+    void CmpRMSValues();
     void CorrActValues();
-    
+    void CorrRMSValues();
+
     bool m_bJust;
     bool m_bStopped;
     bool m_bDspMeasureTriggerActive;
