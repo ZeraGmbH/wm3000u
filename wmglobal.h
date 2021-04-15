@@ -13,6 +13,7 @@
 #include "confdata.h"
 #include "complex.h"
 #include "range.h"
+#include "dspactvalues.h"
 
 
 
@@ -20,7 +21,7 @@
 
 #define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.121"
+//#define TheDevice "192.168.6.162"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -120,9 +121,15 @@
 // v2.35 09.12.2019 bugfix : rücksetzen noOperationCompleteFlag wenn conf. ready
 // v2.36 01.02.2021 phasenjustage adc's wieder eingebaut und status gain, phase, offset vereinzelt.
 //                  die "alten" justagedaten und die zeiger darauf an den bereichen entfernt.
-//
+// v2.37 15.04.2021 es wird nach pps nur noch 1x über die eingestellte perioden anzahl gemessen.
+//                  hintergrund : es lässt sich so das rauschen des eingangssignals beurteilen.
+//                  die minimale anzahl perioden ist jetzt 1 anstatt 4.
+//                  die integrationszeit (sek.) ist jetzt als movingwindow filter ausgeführt.
+//                  das interface läuft jetzt stabil bei voller geschwindigkeit.
+//                  opc? liefert fertig erst nachdem alle conf. kommandos abgearbeitet wurden.
 
-#define WMVersion "V2.36"
+
+#define WMVersion "V2.37"
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
@@ -177,16 +184,6 @@ typedef Q3MemArray<float> cDspVarMemArray;
 typedef Q3PtrList<cDspVar> cDspVarPtrList;
 
 
-struct cDspActValues { // raw data, wie vom dsp geliefert
-    float kfkorrf; // kreisfrequenz  korrektur koeffizient
-    float rmsnf, ampl1nf;
-    float rmsxf, ampl1xf;
-    float dphif; // phix-phin gefiltert im bogenmaß -pi....+pi
-    float tdsync; // zeit zwischen pps und 1'st sample auflösung 10nS 
-    float phin, phix; // bogenmaß
-};
-
-
 struct cDspMaxValues { // raw data, die maxima
     float maxn, maxx, maxRdy;
 };
@@ -194,6 +191,7 @@ struct cDspMaxValues { // raw data, die maxima
 
 struct cwmActValues {  // wird an andere objekte gesendet
     cDspActValues dspActValues;
+    cDspFastRMSValues dspRMSValues;
     double TDSync;
     double Frequenz;
     double RMSN, RMSNSek;  // hier die je nach mode berechneten werte in SI einheiten primär, sekundär
