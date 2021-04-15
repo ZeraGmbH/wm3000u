@@ -223,6 +223,7 @@ void cSCPIFace::AffectSCPIStatus(uchar action, ushort stat)
 	m_pOperationStat->ResetConditionBit(stat);
     if (stat == OperConfiguring)
     {
+        SetnoOperFlag(true);
         if (m_nOPCQState == OQAS)
         // wenn wir in opc query active state sind und die Configuration fertig war
         {
@@ -233,8 +234,8 @@ void cSCPIFace::AffectSCPIStatus(uchar action, ushort stat)
                 setOPCQState(OQIS); // und wechseln wieder in den operation query idle state
             }
         }
-        else
-            SetnoOperFlag(true);
+        //else
+            //SetnoOperFlag(true);
     }
 	break;
 	
@@ -296,7 +297,7 @@ char* cSCPIFace::OPCQuery()
     }
     else
     {
-        m_bnoOperationPendingFlag = true;
+        //m_bnoOperationPendingFlag = true;
         setOPCQState(OQAS); // ansonsten merken wir uns daß eine *opc? anfrage war
     }
 
@@ -366,9 +367,10 @@ void cSCPIFace::SetIEEE488Register(char* s, uchar& reg)
 void cSCPIFace::SetnoOperFlag(bool b)
 {
     m_bnoOperationPendingFlag = b;
-    if ( (b) && (m_nOPCState == OCAS)) { // wenn operation complete active state
-	m_nOPCState = OCIS; // dann simmer widder idle
-	SetESR(SESROperationComplete);
+    if ( (b) && (m_nOPCState == OCAS))
+    { // wenn operation complete active state
+        m_nOPCState = OCIS; // dann simmer widder idle
+        SetESR(SESROperationComplete);
     }
 }	
 	
