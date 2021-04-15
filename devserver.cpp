@@ -34,10 +34,12 @@ void cClientSocketDevice::ReadCommand()
 {
     m_sInput = "";
     while ( m_pSock->canReadLine() )
-	m_sInput += m_pSock->readLine();
-    m_sInput.remove('\r');
-    m_sInput.remove('\n');
-    emit SendCommand( m_sInput);
+    {
+        m_sInput = m_pSock->readLine();
+        m_sInput.remove('\r');
+        m_sInput.remove('\n');
+        emit SendCommand( m_sInput);
+    }
 }
 
 
