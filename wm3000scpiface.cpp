@@ -836,6 +836,30 @@ void cWM3000SCPIFace::mSetConfRatioChn(char* s)
 }
 
 
+char *cWM3000SCPIFace::mGetConfSyncStrong()
+{
+    QString rs;
+
+    if (m_ConfDataActual.m_bStrongEthSynchronisation)
+        rs = "1";
+    else
+        rs = "0";
+
+    return sAlloc(rs);
+}
+
+
+void cWM3000SCPIFace::mSetConfSyncStrong(char *s)
+{
+    ushort us;
+
+    if ( GetParameter(&s, us, 0, 1, 10, true) )
+    {
+        m_ConfDataTarget.m_bStrongEthSynchronisation = ( us ==1 );
+    }
+}
+
+
 char* cWM3000SCPIFace::mGetConfSyncPeriod()
 {
     QString rs;
@@ -1824,6 +1848,7 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 		  case SetConfRatioEvt: mSetConfRatioEvt(s);break;
 		  case SetConfRatioChx: mSetConfRatioChx(s);break;
 		  case SetConfRatioChn: mSetConfRatioChn(s);break;
+          case SetConfSyncStrong: mSetConfSyncStrong(s);break;
 		  case SetConfSyncPeriod: mSetConfSyncPeriod(s);break;
 		  case SetConfSyncSource: mSetConfSyncSource(s);break;
 		  case SetConfMeasTInt: mSetConfMeasTInt(s);break;
@@ -1879,6 +1904,7 @@ void cWM3000SCPIFace::SCPICmd( int cmd,char* s) {
 	case SetConfRatioEvt: 
 	case SetConfRatioChx:
 	case SetConfRatioChn: 
+    case SetConfSyncStrong:
 	case SetConfSyncPeriod: 
 	case SetConfSyncSource:
 	case SetConfMeasTInt: 
@@ -1959,6 +1985,7 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfRatioEvt: an = mGetConfRatioEvt();break;
 	case GetConfRatioChx: an = mGetConfRatioChx();break;
 	case GetConfRatioChn: an = mGetConfRatioChn();break;
+    case GetConfSyncStrong: an = mGetConfSyncStrong();break;
 	case GetConfSyncPeriod: an = mGetConfSyncPeriod();break;
 	case GetConfSyncSource: an = mGetConfSyncSource();break;
     case GetConfMeasTInt: an = mGetConfMeasTInt();break;
@@ -2023,9 +2050,10 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 	case GetConfRatioEvt:
 	case GetConfRatioChx:
 	case GetConfRatioChn:
+    case GetConfSyncStrong:
 	case GetConfSyncPeriod:
 	case GetConfSyncSource:
-    	case GetConfMeasTInt:
+    case GetConfMeasTInt:
 	case GetConfMeasMPeriod:
 	case GetConfMeasSRate:
 	case GetConfMeasSFreq:
@@ -2060,100 +2088,102 @@ char* cWM3000SCPIFace::SCPIQuery( int cmd, char* s) {
 // die vollständige scpi kommando liste
 
 cNodeSCPI* Configuration;
-                    cNodeSCPI* ConfigurationOperation;
-                                              cNodeSCPI* ConfigurationOperationMode;
-                                              cNodeSCPI* ConfigurationOperationModeCatalog;
-                                              cNodeSCPI* ConfigurationOperationSignal;
-                                              cNodeSCPI* ConfigurationOperationSignalCatalog;
-	      cNodeSCPI* ConfigurationComputation;
-	                                cNodeSCPI* ConfigurationComputationMode;
-				          cNodeSCPI* ConfigurationComputationModeCatalog;	
-			    cNodeSCPI* ConfigurationComputationOECorrection;
-			                        cNodeSCPI* ConfigurationComputationOECorrectionOn;
-                                    cNodeSCPI* ConfigurationComputationXOffset;
-                                    cNodeSCPI* ConfigurationComputationNOffset;
- 				          cNodeSCPI* ConfigurationComputationOECorrectionFile;
-	                                cNodeSCPI* ConfigurationComputationPHCorrection;
-				          cNodeSCPI* ConfigurationComputationPHCorrectionPhase;	
-				          cNodeSCPI* ConfigurationComputationPHCorrectionTime;	  
-	      cNodeSCPI* ConfigurationMeasure;
-	                                cNodeSCPI* ConfigurationMeasureSigFrequency;
-			    cNodeSCPI* ConfigurationMeasureSRate;		
-			    cNodeSCPI* ConfigurationMeasureMPeriod; 
-                                              cNodeSCPI* ConfigurationMeasureIntegrationTime;
-                    cNodeSCPI* ConfigurationSynchronization; 					      	                                			    cNodeSCPI* ConfigurationSynchronizationSource;
-		                  cNodeSCPI* ConfigurationSynchronizationPeriod;
-	      cNodeSCPI* ConfigurationRatio; 					      
-	                                cNodeSCPI* ConfigurationRatioN;					                                cNodeSCPI* ConfigurationRatioX;
-			    cNodeSCPI* ConfigurationRatioEVT;
-			    
-                    cNodeSCPI* ConfigurationEN61850; 					   		                                                      cNodeSCPI* ConfigurationEN61850MacAdress;
-			                        cNodeSCPI* ConfigurationEN61850MacAdressMergingUnit;
-				          cNodeSCPI* ConfigurationEN61850MacAdressWM3000;	
-			    cNodeSCPI* ConfigurationEN61850DataSet;
-                cNodeSCPI* ConfigurationEN61850LAsdu;
-                cNodeSCPI* ConfigurationEN61850FAsdu;
-			    cNodeSCPI* ConfigurationEN61850UserPriority;	  
-			    cNodeSCPI* ConfigurationEN61850Cfi;	  
-			    cNodeSCPI* ConfigurationEN61850Vid;
-			    cNodeSCPI* ConfigurationEN61850Appid;
+    cNodeSCPI* ConfigurationOperation;
+        cNodeSCPI* ConfigurationOperationMode;
+            cNodeSCPI* ConfigurationOperationModeCatalog;
+        cNodeSCPI* ConfigurationOperationSignal;
+            cNodeSCPI* ConfigurationOperationSignalCatalog;
+    cNodeSCPI* ConfigurationComputation;
+        cNodeSCPI* ConfigurationComputationMode;
+            cNodeSCPI* ConfigurationComputationModeCatalog;
+        cNodeSCPI* ConfigurationComputationOECorrection;
+            cNodeSCPI* ConfigurationComputationOECorrectionOn;
+        cNodeSCPI* ConfigurationComputationXOffset;
+        cNodeSCPI* ConfigurationComputationNOffset;
+        cNodeSCPI* ConfigurationComputationOECorrectionFile;
+        cNodeSCPI* ConfigurationComputationPHCorrection;
+            cNodeSCPI* ConfigurationComputationPHCorrectionPhase;
+            cNodeSCPI* ConfigurationComputationPHCorrectionTime;
+    cNodeSCPI* ConfigurationMeasure;
+        cNodeSCPI* ConfigurationMeasureSigFrequency;
+        cNodeSCPI* ConfigurationMeasureSRate;
+        cNodeSCPI* ConfigurationMeasureMPeriod;
+        cNodeSCPI* ConfigurationMeasureIntegrationTime;
+    cNodeSCPI* ConfigurationSynchronization;
+        cNodeSCPI* ConfigurationSynchronizationSource;
+        cNodeSCPI* ConfigurationSynchronizationPeriod;
+        cNodeSCPI* ConfigurationSynchronizationStrong;
+    cNodeSCPI* ConfigurationRatio;
+        cNodeSCPI* ConfigurationRatioN;
+        cNodeSCPI* ConfigurationRatioX;
+        cNodeSCPI* ConfigurationRatioEVT;
+    cNodeSCPI* ConfigurationEN61850; 					   		                                                      cNodeSCPI* ConfigurationEN61850MacAdress;
+        cNodeSCPI* ConfigurationEN61850MacAdressMergingUnit;
+        cNodeSCPI* ConfigurationEN61850MacAdressWM3000;
+        cNodeSCPI* ConfigurationEN61850DataSet;
+        cNodeSCPI* ConfigurationEN61850LAsdu;
+        cNodeSCPI* ConfigurationEN61850FAsdu;
+        cNodeSCPI* ConfigurationEN61850UserPriority;
+        cNodeSCPI* ConfigurationEN61850Cfi;
+        cNodeSCPI* ConfigurationEN61850Vid;
+        cNodeSCPI* ConfigurationEN61850Appid;
 			    			    
 //	      cNodeSCPI* ConfigurationLogFile;				  
 //			    cNodeSCPI* ConfigurationLogFileSize;	
 			 
-	      cNodeSCPI* ConfigurationApply;
+        cNodeSCPI* ConfigurationApply;
 			    
 		    
 cNodeSCPI* Measure;
 cNodeSCPI* Initiate;
 cNodeSCPI* Fetch;
 cNodeSCPI* Read;
-                   cNodeSCPI* ReadLoadpoint;
+cNodeSCPI* ReadLoadpoint;
 	      
 	     
 cNodeSCPI* Sense;
-                   cNodeSCPI* SenseChannel;
-                                      cNodeSCPI* SenseChannelCatalog;
-                   cNodeSCPIVar* SenseCName;
-	                        cNodeSCPI* SenseCNameRange;
-			               cNodeSCPI* SenseCNameRangeCatalog;
+    cNodeSCPI* SenseChannel;
+        cNodeSCPI* SenseChannelCatalog;
+    cNodeSCPIVar* SenseCName;
+        cNodeSCPI* SenseCNameRange;
+            cNodeSCPI* SenseCNameRangeCatalog;
 	
 cNodeSCPI* Store;
-         cNodeSCPI* StoreChannelNOffset;
-         cNodeSCPI* StoreChannelXOffset;
+    cNodeSCPI* StoreChannelNOffset;
+    cNodeSCPI* StoreChannelXOffset;
 
 				       
 cNodeSCPI* Status;
-                   cNodeSCPI* StatusStandard;
-	     cNodeSCPI* StatusOperation;	 
-	                        cNodeSCPI* StatusOperationEvent;
-		          cNodeSCPI* StatusOperationCondition;		
-		          cNodeSCPI* StatusOperationEnable;	
-		          cNodeSCPI* StatusOperationNTransition;	  
-		          cNodeSCPI* StatusOperationPTransition;	  
-	     cNodeSCPI* StatusQuestionable;	 
-	                        cNodeSCPI* StatusQuestionableEvent;
-		          cNodeSCPI* StatusQuestionableCondition;		
-		          cNodeSCPI* StatusQuestionableEnable;	  
-		          cNodeSCPI* StatusQuestionableNTransition;		  
-		          cNodeSCPI* StatusQuestionablePTransition;	  
+    cNodeSCPI* StatusStandard;
+    cNodeSCPI* StatusOperation;
+        cNodeSCPI* StatusOperationEvent;
+        cNodeSCPI* StatusOperationCondition;
+        cNodeSCPI* StatusOperationEnable;
+        cNodeSCPI* StatusOperationNTransition;
+        cNodeSCPI* StatusOperationPTransition;
+    cNodeSCPI* StatusQuestionable;
+        cNodeSCPI* StatusQuestionableEvent;
+        cNodeSCPI* StatusQuestionableCondition;
+        cNodeSCPI* StatusQuestionableEnable;
+        cNodeSCPI* StatusQuestionableNTransition;
+        cNodeSCPI* StatusQuestionablePTransition;
 			  
-	     cNodeSCPI* StatusEN61850;
-		          cNodeSCPI* StatusEN61850DataCount;
-		          cNodeSCPI* StatusEN61850Error;
-	  	          cNodeSCPI* StatusEN61850SynclostCount;
-		          cNodeSCPI* StatusEN61850Clear;
+        cNodeSCPI* StatusEN61850;
+            cNodeSCPI* StatusEN61850DataCount;
+            cNodeSCPI* StatusEN61850Error;
+            cNodeSCPI* StatusEN61850SynclostCount;
+            cNodeSCPI* StatusEN61850Clear;
 
 			  
 cNodeSCPI* System;
-                   cNodeSCPI* SystemVersion;
-		           cNodeSCPI* SystemVersionDevice;	   
-		           cNodeSCPI* SystemVersionPCB;
-		           cNodeSCPI* SystemVersionDSP;
-	     cNodeSCPI* SystemSerial;
-	     cNodeSCPI* SystemError;
-	                         cNodeSCPI* SystemErrorCount;
-		           cNodeSCPI* SystemErrorAll;
+    cNodeSCPI* SystemVersion;
+        cNodeSCPI* SystemVersionDevice;
+        cNodeSCPI* SystemVersionPCB;
+        cNodeSCPI* SystemVersionDSP;
+    cNodeSCPI* SystemSerial;
+    cNodeSCPI* SystemError;
+        cNodeSCPI* SystemErrorCount;
+        cNodeSCPI* SystemErrorAll;
 		          		   
 // cNodeScpi (QString,tNodeSpec,cNode*,cNode*,SCPICmdType,SCPICmdType); 
 // konstruktor, sNodeName, nNodedef, pNextNode, pNewLevelNode, Cmd, Query				
@@ -2246,7 +2276,8 @@ cNode* cWM3000SCPIFace::InitScpiCmdTree(cNode* cn) {
     ConfigurationRatioX=new cNodeSCPI("X",isQuery | isCommand,ConfigurationRatioEVT,NULL,SetConfRatioChx,GetConfRatioChx);
     ConfigurationRatioN=new cNodeSCPI("N",isQuery | isCommand,ConfigurationRatioX,NULL,SetConfRatioChn,GetConfRatioChn);
     ConfigurationRatio=new cNodeSCPI("RATIO",isNode,ConfigurationEN61850,ConfigurationRatioN,nixCmd,nixCmd);
-    ConfigurationSynchronizationPeriod=new cNodeSCPI("PERIOD",isQuery | isCommand,NULL,NULL,SetConfSyncPeriod,GetConfSyncPeriod);
+    ConfigurationSynchronizationStrong=new cNodeSCPI("STRONG",isQuery | isCommand,NULL,NULL,SetConfSyncStrong,GetConfSyncStrong);
+    ConfigurationSynchronizationPeriod=new cNodeSCPI("PERIOD",isQuery | isCommand,ConfigurationSynchronizationStrong,NULL,SetConfSyncPeriod,GetConfSyncPeriod);
     ConfigurationSynchronizationSource=new cNodeSCPI("SOURCE",isQuery | isCommand,ConfigurationSynchronizationPeriod,NULL,SetConfSyncSource,GetConfSyncSource);
     ConfigurationSynchronization=new cNodeSCPI("SYNCRONISATION",isNode,ConfigurationRatio,ConfigurationSynchronizationSource,nixCmd,nixCmd);
     ConfigurationMeasureIntegrationTime=new cNodeSCPI("INTEGRATIONTIME",isQuery | isCommand,NULL,NULL,SetConfMeasTInt,GetConfMeasTInt);

@@ -105,6 +105,8 @@ enum wm3000SCPICmdType  { nixWCmd = LastCommonCommand, // 13
 			  SetConfRatioChx,
 			  GetConfRatioChn,
 			  SetConfRatioChn,
+              GetConfSyncStrong,
+              SetConfSyncStrong,
 			  GetConfSyncPeriod,
 			  SetConfSyncPeriod,
 			  GetConfSyncSource,
@@ -336,6 +338,8 @@ private:
     void mSetConfRatioChx(char*);
     char* mGetConfRatioChn();
     void mSetConfRatioChn(char*);
+    char* mGetConfSyncStrong();
+    void mSetConfSyncStrong(char*);
     char* mGetConfSyncPeriod();
     void mSetConfSyncPeriod(char*);
     char* mGetConfSyncSource();
