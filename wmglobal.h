@@ -127,6 +127,7 @@
 //                  die integrationszeit (sek.) ist jetzt als movingwindow filter ausgeführt.
 //                  das interface läuft jetzt stabil bei voller geschwindigkeit.
 //                  opc? liefert fertig erst nachdem alle conf. kommandos abgearbeitet wurden.
+//                  eth kommando, query hinzugefügt um en61850:sync:strong setzen und abfragen zu können
 
 
 #define WMVersion "V2.37"
