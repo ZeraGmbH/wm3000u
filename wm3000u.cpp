@@ -161,7 +161,8 @@ cWM3000U::cWM3000U()
 
     // wir starten die timer erst nach erfolgreicher initialisierung ...oder doch nicht ?
 
-    MeasureTimer->start(m_ConfData.m_nIntegrationTime*1000); //  n*1000 msec
+    m_MovingWindowFilter.setFilterLength(m_ConfData.m_nIntegrationTime); // volle sekunden
+    MeasureTimer->start(1*1000); //  ab movingwindowfilter immer 1*1000 msec
     RangeTimer->start(500); // 1000 ms
     MeasureLPTimer->start(500);
 
@@ -1331,6 +1332,9 @@ case ConfigurationTestSenseMode:
         float *dest = (float*) &ActValues.dspActValues;
         for (uint i=0; i< sizeof(ActValues.dspActValues)/sizeof(float);i++) *dest++ = *source++;
 
+        m_MovingWindowFilter.append(ActValues.dspActValues);
+        ActValues.dspActValues = m_MovingWindowFilter.getOutput();
+
         // die hanningfenster korrektur findet hier statt weil bei simulation auch cmpactvalues
         // aufgerufen wird, die simulationsdaten aber ohne hanningfenster sind... weil einfacher
 
@@ -1485,7 +1489,7 @@ case ConfigurationTestSenseMode:
             m_JustValues.OffsetCorrCh1 = ocs.toFloat();
 
             CorrActValues();
-            CmpActValues(false);
+            CmpActValues();
             emit SendActValuesSignal(&ActValues);
             emit MeasureReady();
         }
@@ -1498,7 +1502,8 @@ case ConfigurationTestSenseMode:
     case RestartMeasurementStart:
     if (m_ConfData.m_bSimulation) // im sim. modus wir der meastimer direkt gestartet
     {
-        MeasureTimer->start(m_ConfData.m_nIntegrationTime*1000);
+        m_MovingWindowFilter.setFilterLength(m_ConfData.m_nIntegrationTime);
+        MeasureTimer->start(1*1000); //  ab movingwindowfilter immer 1*1000 msec
         MeasureLPTimer->start(500);
         RangeTimer->start(500);
         m_bDspMeasureTriggerActive = false;
@@ -1571,80 +1576,19 @@ case ConfigurationTestSenseMode:
     }
     else
     {
-        QString key;
-        int sign;
-        double offsetCorr;
-        float tmpFloat[4];
-                  float *source = DspIFace->data(RMSValData);
-        float *dest = (float*) tmpFloat;
-        for (uint i=0; i < 4; i++) *dest++ = *source++;
+        float *source = DspIFace->data(RMSValData);
+        float *dest = (float*) &ActValues.dspRMSValues;
+        for (uint i=0; i< sizeof(ActValues.dspRMSValues)/sizeof(float);i++) *dest++ = *source++;
 
-        tmpFloat[0] *= 1.63299; // hanning fenster korrektur
-        tmpFloat[0] *= m_JustValues.GainCorrCh0;
+        ActValues.dspRMSValues.fastRMSN *= 1.63299; // hanning fenster korrektur
+        ActValues.dspRMSValues.fastRMSN1 = ActValues.dspRMSValues.fastRMSN1 * 2.0 / 1.41421356; // korrektur einheitswurzeln, ammplitude->rms
+        ActValues.dspRMSValues.fastRMSX *= 1.63299; // hanning fenster korrektur
+        ActValues.dspRMSValues.fastRMSX1 = ActValues.dspRMSValues.fastRMSX1 * 2.0 / 1.41421356; // korrektur einheitswurzeln, ammplitude->rms
 
-        tmpFloat[1] *= 2.0; // hanning fenster korrektur
-        tmpFloat[1] *= m_JustValues.GainCorrCh0;
-        tmpFloat[1] /= 1.41421356; // rms der grundwelle
-
-        if (m_ConfData.m_bDCmeasurement)
-        {
-            // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-            sign = signum(tmpFloat[1]);
-            tmpFloat[0] = sign * tmpFloat[0] + m_JustValues.OffsetCorrCh0;
-            tmpFloat[1] = sign * tmpFloat[1] + m_JustValues.OffsetCorrCh0;
-
-            // wir korrigieren die offsetwerte aus der temp. offset korrektur
-            CWMRange* r = Range(m_ConfData.m_sRangeN, m_sNRangeList);
-            if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
-                offsetCorr = measOffsetCorrectionHash[key];
-            else
-                offsetCorr = 0.0;
-
-            tmpFloat[0] = fabs(tmpFloat[0] + offsetCorr);
-            tmpFloat[1] = fabs(tmpFloat[1] + offsetCorr);
-        }
-
-        ActValues.dspActValues.rmsnf = tmpFloat[0];
-        ActValues.RMSN1Sek = tmpFloat[1]; // der rms wert der grundwelle
-
-        tmpFloat[2] *= 1.63299; // hanning fenster korrektur
-        tmpFloat[3] *= 2.0; // hanning fenster korrektur
-        tmpFloat[3] /= 1.41421356; // rms der grundwelle
-
-        if (m_ConfData.m_nMeasMode != Un_nConvent) // für nconvent die korrektur nicht berücksichtigen
-        {
-            tmpFloat[2] *= m_JustValues.GainCorrCh1;
-            tmpFloat[3] *= m_JustValues.GainCorrCh1;
-
-            if (m_ConfData.m_bDCmeasurement)
-            {
-                CWMRange* r;
-                sign = signum(tmpFloat[3]);
-                // wir korrigieren die offsetwerte aus der permanenten offset korrektur
-                tmpFloat[2] = sign * tmpFloat[2] + m_JustValues.OffsetCorrCh1;
-                tmpFloat[3] = sign * tmpFloat[3] + m_JustValues.OffsetCorrCh1;
-
-                // wir korrigieren die offsetwerte aus der temp. offset korrektur
-                if (m_ConfData.m_nMeasMode == Un_UxAbs)
-                    r = Range(m_ConfData.m_sRangeX, m_sXRangeList);
-                else
-                    r = Range(m_ConfData.m_sRangeEVT, m_sEVTRangeList);
-
-                if (measOffsetCorrectionHash.contains(key = r->getOffsKorrKey()))
-                    offsetCorr = measOffsetCorrectionHash[key];
-                else
-                    offsetCorr = 0.0;
-
-                tmpFloat[2] = fabs(tmpFloat[2] + offsetCorr);
-                tmpFloat[3] = fabs(tmpFloat[3] + offsetCorr);
-            }
-        }
-
-        ActValues.dspActValues.rmsxf = tmpFloat[2];
-        ActValues.RMSX1Sek = tmpFloat[3]; // der rms wert der grundwelle
-
-        CmpActValues(true); //  wir berechnen einfach alles, werte kommen ja nicht zur anzeige außer LP
+        CorrRMSValues();
+        CmpRMSValues();
         emit SendLPSignal(&ActValues);
+
         AHS = wm3000Idle; // fertig
     }
 
@@ -3624,9 +3568,12 @@ void cWM3000U::DspIFaceAsyncDataSlot(const QString& s) // für asynchrone meldun
     int service = sintnr.toInt();
     switch (service)
     {
-    case 1:  m_AsyncTimer->start(0,MeasureStart); // starten der statemachine für messwert aufnahme
+    case 1:
+      m_AsyncTimer->start(0,MeasureStart); // starten der statemachine für messwert aufnahme
       break;
-    case 3: MeasureTimer->start(m_ConfData.m_nIntegrationTime*1000); //  n*1000 msec
+    case 3:
+      m_MovingWindowFilter.setFilterLength(m_ConfData.m_nIntegrationTime);
+      MeasureTimer->start(1*1000); //  ab movingwindowfilter immer 1*1000 msec
       MeasureLPTimer->start(500);
       RangeTimer->start(500);
       m_bStopped = false;
@@ -3914,66 +3861,6 @@ CWMRange* cWM3000U::Range(float mw,cWMRangeList& rlist)
     return range;
 }
 
-/*
-void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
-{
-    if (!m_ConfData.m_bSimulation) {
-    int nSp = (m_ConfData.m_nSRate == S80) ? 80 :256;
-    int nS = nSp * m_ConfData.m_nMeasPeriod;
-
-    DspIFace->ClearVarLists();
-    ActValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für die istwerte daten
-
-//	nur dsp intern verwendete messdaten
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",nS,vDspIntern)); // sinus, cosinus, hanning abwechselnd
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("SINDEX",1,vDspIntern)); // index zur speicherung der sampledaten für die fehlermessung (variables messintervall);
-    DspIFace->addVarItem(ActValData, new cDspVar("SINDEX2",1,vDspIntern)); // index zur speicherung der sampledaten für die schnelle lastpunktmessung (festes messintervall = 4 signalperioden);
-
-    DspIFace->addVarItem(ActValData, new cDspVar("TEMP1",1,vDspIntern)); // werden nur temp. benötigt weil winkel und betrag
-    DspIFace->addVarItem(ActValData, new cDspVar("TEMP2",1,vDspIntern)); // direkt ermittelt werden zwecks filterung
-
-    // diese werte ab hier werden gefiltert
-    DspIFace->addVarItem(ActValData, new cDspVar("KFKORR",1,vDspIntern)); // kreisfrequenz korrektur koeffizient
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSN",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1N",1,vDspIntern));
-    DspIFace->addVarItem(ActValData,new cDspVar("RMSX",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1X",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("DPHI",1,vDspIntern));
-    // dphi=(phix-phin) - tdsync * (10*10^-9) * 2PI / (signalfreq* kfkorr)          							=(phix-phin) -tdsync * (2PI / (signalfreq*10^8)) * (1/kfkorr) -->
-
-    DspIFace->addVarItem(ActValData, new cDspVar("FILTER",10,vDspIntern));
-    // KFKORR wird separat gefiltert
-    DspIFace->addVarItem(ActValData, new cDspVar("N",1,vDspIntern));
-
-    // gefilterte messergebnisse
-    DspIFace->addVarItem(ActValData, new cDspVar("KFKORRF",1,vApplication | vDspIntern)); // kreisfrequenz korrektur koeffizient
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSNF",1,vApplication | vDspIntern)); // rms wert kanal n
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1NF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal n
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSXF",1,vApplication | vDspIntern)); // rms wert kanal x
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1XF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal x
-    DspIFace->addVarItem(ActValData, new cDspVar("DPHIF",1,vApplication | vDspIntern)); // winkel kanal x - winkel kanal n
-    // nicht gefilterte messergebnisse
-    DspIFace->addVarItem(ActValData, new cDspVar("TDSYNC",1,vApplication | vDspIntern)); // delay time pps -> 1. sample
-    DspIFace->addVarItem(ActValData, new cDspVar("PHIN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("PHIX",1,vApplication | vDspIntern));
-
-    // maxima
-    MaxValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für den maximumsucher
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXX",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXRDY",1,vApplication | vDspIntern));
-
-    // schnelle rms messung zur lastpunkt bestimmung 1x rms gesamtsignal 1x ampl 1. grundwelle
-    RMSValData = DspIFace->GetMVHandle("");
-    DspIFace->addVarItem(RMSValData, new cDspVar("FRMSN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1N",1,vApplication | vDspIntern));    }
-}
-*/
-
-
 
 // habe die reihenfolge der variablen so geändert, dass wenn sich das samplingsystem ändert
 // die indices und ergebnisse an den gleichen stellen bleiben
@@ -3983,6 +3870,8 @@ void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
     if (!m_ConfData.m_bSimulation) {
     int nSp = (m_ConfData.m_nSRate == S80) ? 80 :256;
     int nS = nSp * m_ConfData.m_nMeasPeriod;
+    int schanLen = (m_ConfData.m_nMeasPeriod < 4)? 4:m_ConfData.m_nMeasPeriod;
+    schanLen *= nSp;
 
     DspIFace->ClearVarLists();
 
@@ -4036,7 +3925,7 @@ void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
 
     DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
     DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",nS,vDspIntern)); // sinus, cosinus, hanning abwechselnd
+    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",schanLen,vDspIntern)); // sinus, cosinus, hanning abwechselnd
     DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
     DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL3",4*nSp,vDspIntern));
 
@@ -4053,297 +3942,251 @@ void cWM3000U::SetDspWMCmdList()
     QString s;
     DspIFace->ClearCmdList();
 
-    DspIFace->addCycListItem( s = "STARTCHAIN(1,1,0x0100)"); // aktiv, prozessnr. (dummy),hauptkette 1 subkette 1 start
-    DspIFace->addCycListItem( s = QString("CLEARN(%1,MESSSIGNAL0)").arg(3*nSMeas+8*nSPer+37) ); // alle variable löschen
-//	DspIFace->addCycListItem( s = QString("CLEARN(%1,MAXN)").arg(3*nSMeas+8*nSPer+37) ); // alle variable löschen
-    DspIFace->addCycListItem( s = "RESETSYNCPPS()"); // pps sync flagge rückstellen
-    DspIFace->addCycListItem( s = "SETVAL(KFKORRF,1.0)"); // vorbesetzen filterausgang
+    DspIFace->addCycListItem( s = "STARTCHAIN(1,1,0x0100)"); // aktiv, prozessnr. (dummy),hauptkette 1 subkette 0 start
+        DspIFace->addCycListItem( s = QString("CLEARN(%1,MAXN)").arg(3*nSMeas+8*nSPer+37) ); // alle variable löschen
+        DspIFace->addCycListItem( s = "SETVAL(SINDEX,0)"); // index zum speichern der samples auf anfang der puffer setzen
+        DspIFace->addCycListItem( s = "SETVAL(SINDEX2,0)"); // index zum speichern der samples auf anfang der puffer setzen
+        DspIFace->addCycListItem( s = "RESETSYNCPPS()"); // pps sync flagge rückstellen
+        DspIFace->addCycListItem( s = "SETVAL(KFKORRF,1.0)"); // vorbesetzen filterausgang
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0100)"); // ende prozessnr., hauptkette 1 subkette 0
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0100)"); // ende prozessnr., hauptkette 1 subkette 0
 
-    DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0100)"); // ende prozessnr., hauptkette 0 subkette 1
-    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0100)"); // ende prozessnr., hauptkette 0 subkette 1
-
-    DspIFace->addCycListItem( s = "TESTSYNCPPSSKIPEQ()"); // falls syncimpuls pps war  aktivieren wir hauptkette 1 subkette 2
+    DspIFace->addCycListItem( s = "TESTSYNCPPSSKIPEQ()"); // falls syncimpuls pps war  aktivieren wir hauptkette 2 subkette 0
     DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0200)"); // aktivieren dieser kette
 
     // hier setzen wir nur das sampling system zurück
-    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0200)"); // nicht aktiv, prozessnr. (dummy),hauptkette 0 subkette 2 start
-    DspIFace->addCycListItem( s = "SETVAL(SINDEX,0)"); // index zum speichern der samples auf anfang der puffer setzen
-    DspIFace->addCycListItem( s = "SETVAL(SINDEX2,0)"); // index zum speichern der samples auf anfang der puffer setzen
-    DspIFace->addCycListItem( s = "RESETSYNCPPS()"); // pps sync flagge rückstellen
-    DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0200)"); // deaktivieren dieser kette
-    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0200)"); // ende prozessnr., hauptkette 0 subkette 2
-
+    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0200)"); // nicht aktiv, prozessnr. (dummy),hauptkette 2 subkette 0 start
+        DspIFace->addCycListItem( s = "SETVAL(SINDEX,0)"); // index zum speichern der samples auf anfang der puffer setzen
+        DspIFace->addCycListItem( s = "RESETSYNCPPS()"); // pps sync flagge rückstellen
+        DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0300)"); // aktivieren der daten aufnahme
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0200)"); // deaktivieren dieser kette
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0200)"); // ende prozessnr., hauptkette 2 subkette 0
 
     // kopieren der maxima aus dsp workspace
     DspIFace->addCycListItem( s = "COPYDU(2,MAXIMUMSAMPLE,MAXN)");
     DspIFace->addCycListItem( s = "SETVAL(MAXRDY,1.0)"); // sync maxrdy setzen
 
-    // kanal 0 (n)  samples über sindex kopieren
-    DspIFace->addCycListItem( s = "COPYINDDATA(CH0,SINDEX,MESSSIGNAL0)");
-    // kanal 1 (x)  samples über sindex kopieren
-    DspIFace->addCycListItem( s = "COPYINDDATA(CH1,SINDEX,MESSSIGNAL1)");
-    // sindex inkrementieren
-    DspIFace->addCycListItem( s = "INC(SINDEX)");
-    DspIFace->addCycListItem( s = QString("TESTVCSKIPLT(SINDEX,%1)").arg(nMP)); // test ob die messperiode vollständig ist
-    DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0300)"); // aktivieren der berechnung
-
-    // hier setzen wir nur das sampling system zurück
-    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0300)"); // nicht aktiv, prozessnr. (dummy),hauptkette 1 subkette 3 start
-    // kanal 0 (n) bearbeiten
-    DspIFace->addCycListItem( s = "BREAK(0)"); // breakpoint wenn /taster
-//	DspIFace->addCycListItem( s = QString("AUTOKORRELATION(%1,MESSSIGNAL0,KFKORR)").arg(nSAK));
-    DspIFace->addCycListItem( s = "SETVAL(SINDEX,0)"); // index zum speichern der samples auf anfang der puffer setzen denn wir haben eine volle messperiode
-    // alternativ zur autokorrelation verwenden wir die hardware frequenzmessung
-    DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(m_ConfData.m_fSFreq,0,'E'));
-    DspIFace->addCycListItem( s = "COPYDU(1,TMCH0,TEMP2)"); // perioden dauer messsignal in sec.
-//	DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn /taster
-    DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP2)");
-    DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(1.0,0,'E'));
-    DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORR)");
-    DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORRF)");  // keine filterung
-
-    /*
-    // filterung kfkorr
-    float fRueckkopplung = 0.0; //  0 bedeutet filter aus !!
-    DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(fRueckkopplung,0,'E'));
-    DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(fRueckkopplung+1.0,0,'E'));
-    DspIFace->addCycListItem( s = "MULVVV(KFKORRF,TEMP1,TEMP1)"); // (rekursives tiefpassfilter für kfkorrf
-    DspIFace->addCycListItem( s = "ADDVVV(KFKORR,TEMP1,TEMP1)");
-    DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORRF)");
-    */
-
-    DspIFace->addCycListItem( s = "COPYUD(1,KFKORRF,KREISFREQKOEFF)");
-    // wir nehmen den gefilterten wert
-
-//	DspIFace->addCycListItem( s = QString("FLATTOP(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
-    DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
-//	DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn taster
+    // ab hier nehmen wir die daten für die nächste messperiode auf
+    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0300)"); // nicht aktiv, prozessnr. (dummy),hauptkette 3 subkette 0 start
+        // kanal 0 (n)  samples über sindex kopieren
+        DspIFace->addCycListItem( s = "COPYINDDATA(CH0,SINDEX,MESSSIGNAL0)");
+        // kanal 1 (x)  samples über sindex kopieren
+        DspIFace->addCycListItem( s = "COPYINDDATA(CH1,SINDEX,MESSSIGNAL1)");
+        // sindex inkrementieren
+        DspIFace->addCycListItem( s = "INC(SINDEX)");
+        DspIFace->addCycListItem( s = QString("TESTVCSKIPLT(SINDEX,%1)").arg(nMP)); // test ob die messperiode vollständig ist
+        DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0400)"); // aktivieren der berechnung
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0300)"); // ende prozessnr., hauptkette 3 subkette 0
 
 
-    // korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen
-    if (m_ConfData.m_bDCmeasurement)
-    {
+    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0400)"); // nicht aktiv, prozessnr. (dummy),hauptkette 4 subkette 0 start
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0300)"); // deaktivieren der daten aufnahme
+        // kanal 0 (n) bearbeiten
+        //DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn /taster
+        //DspIFace->addCycListItem( s = QString("AUTOKORRELATION(%1,MESSSIGNAL0,KFKORR)").arg(nSAK));
+        DspIFace->addCycListItem( s = "SETVAL(SINDEX,0)"); // index zum speichern der samples auf anfang der puffer setzen denn wir haben eine volle messperiode
+        // alternativ zur autokorrelation verwenden wir die hardware frequenzmessung
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(m_ConfData.m_fSFreq,0,'E'));
+        DspIFace->addCycListItem( s = "COPYDU(1,TMCH0,TEMP2)"); // perioden dauer messsignal in sec.
+        //DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(0.02,0,'E')); // für test
+        //DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn /taster
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP2)");
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(1.0,0,'E'));
+        DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORR)");
+        DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORRF)");  // keine filterung
+
+        /*
+        // filterung kfkorr
+        float fRueckkopplung = 0.0; //  0 bedeutet filter aus !!
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(fRueckkopplung,0,'E'));
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(fRueckkopplung+1.0,0,'E'));
+        DspIFace->addCycListItem( s = "MULVVV(KFKORRF,TEMP1,TEMP1)"); // (rekursives tiefpassfilter für kfkorrf
+        DspIFace->addCycListItem( s = "ADDVVV(KFKORR,TEMP1,TEMP1)");
+        DspIFace->addCycListItem( s = "DIVVVV(TEMP1,TEMP2,KFKORRF)");
+        */
+
+        DspIFace->addCycListItem( s = "COPYUD(1,KFKORRF,KREISFREQKOEFF)");
+        // wir nehmen den gefilterten wert
+
+        //DspIFace->addCycListItem( s = QString("FLATTOP(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
+        DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
+        //DspIFace->addCycListItem( s = "BREAK(1)"); // breakpoint wenn taster
         DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
-        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
-    }
-    else
-    {
-        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL0,TEMP1)").arg(nSMeas)); // dc auf TEMP1
-        //DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        //DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
-        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL0)").arg(nSMeas)); // dc von allen samples abziehen
-        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL0)").arg(nSMeas)); // fenster funktion anwenden
-        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
-    }
+        // korrigierte einheitswurzel berechnen und im bzw. re von kanal 0 bestimmen
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+        else
+            DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+        else
+            DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
 
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
-    else
-        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL0,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
+        // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
+        if (m_ConfData.m_bDCmeasurement)
+        {   // bei dc interessiert uns eingentlich nur der realteil (temp2);
+            DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1N)");
+            DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIN)");
+        }
+        else
+        {
+            DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1N)");
+            // DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)");
+            DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIN)");
+        }
 
-    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
-    if (m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1N)");
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIN)");
-    }
-    else
-    {
-        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1N)");
-        // DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)");
-        DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIN)");
-    }
+        // rms wert berechnung
+        DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,RMSN)").arg(nSMeas));
+        //DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,FRMSN)").arg(nSMeas));
+        // kanal 1 (x) bearbeiten
 
-    // rms wert berechnung
-    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,RMSN)").arg(nSMeas));
-//	DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL0,FRMSN)").arg(nSMeas));
-    // kanal 1 (x) bearbeiten
-
-    DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
-
-    // korrigierte einheitswurzel berechnen und im bzw. re von kanal 1 bestimmen
-    if (m_ConfData.m_bDCmeasurement)
-    {
+        DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(nSMeas)); // fensterfunktion generieren
         DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
-        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
-    }
-    else
-    {
-        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL1,TEMP1)").arg(nSMeas)); // dc auf TEMP1
-        //DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        //DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
-        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL1)").arg(nSMeas)); // dc von allen samples abziehen
-        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL1)").arg(nSMeas)); // fenster funktion anwenden
-        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
-    }
+        // korrigierte einheitswurzel berechnen und im bzw. re von kanal 1 bestimmen
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+        else
+            DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (sinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
 
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(nSMeas)); // im = integral
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+        else
+            DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
 
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
-    else
-        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(nSMeas)); // einheitswurzeln (cosinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL1,SCHAN)").arg(nSMeas)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(nSMeas)); // re = integral
+        // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
+        if (m_ConfData.m_bDCmeasurement)
+        {   // bei dc interessiert uns eingentlich nur der realteil (temp2);
+            DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1X)");
+            DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIX)");
+        }
+        else
+        {
+            DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1X)");
+            DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIX)");
+        }
 
+        // rms wert berechnung
+        DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL1,RMSX)").arg(nSMeas)); // rmswert berechnen
+        // ermitteln der zeit zwischen pps und 1. samplewert
+        DspIFace->addCycListItem( s = "COPYDATA(CH2,0,MESSSIGNAL0)"); // auf  kanal 2 PPS2SampleTime ... kopiert nur die ersten 80 oder 256 samples
 
-    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
-    if (m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,AMPL1X)");
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP1,PHIX)");
-    }
-    else
-    {
-        DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,AMPL1X)");
-        DspIFace->addCycListItem( s = "ARCTAN(TEMP1,TEMP2,PHIX)");
-    }
+        // kleiner kunstgriff um das 2. datum aus den sampledaten zu bekommen
+        // 2.  datum wegen phasenkorrektur puffer
+        DspIFace->addCycListItem( s = "SETVAL(TEMP1,0.0)");
+        DspIFace->addCycListItem( s = "ADDVVV(TEMP1,MESSSIGNAL0+2,TDSYNC)");
 
-    // rms wert berechnung
-    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL1,RMSX)").arg(nSMeas)); // rmswert berechnen
-    // ermitteln der zeit zwischen pps und 1. samplewert
-    DspIFace->addCycListItem( s = "COPYDATA(CH2,0,MESSSIGNAL0)"); // auf  kanal 2 PPS2SampleTime ... kopiert nur die ersten 80 oder 256 samples
+        // falsch falsch falsch
+        // dphi=(phin-phix)+ tdsync * (10*10^-9) * 2PI / (signalfreq* kfkorr)
+        // richtig
+        // dphi=(phin-phix)+ tdsync * (10*10^-9) * 2PI * (signalfreq* kfkorr)          			            =(phin-phix)+ tdsync * (2PI*10^8 *  signalfreq * kfkorr)
 
-    // kleiner kunstgriff um das 2. datum aus den sampledaten zu bekommen
-    // 2.  datum wegen phasenkorrektur puffer
-    DspIFace->addCycListItem( s = "SETVAL(TEMP1,0.0)");
-    DspIFace->addCycListItem( s = "ADDVVV(TEMP1,MESSSIGNAL0+2,TDSYNC)");
+        // die phasenkorrektur ist erforderlich weil von pps bis zum 1. sample eine totzeit liegt
 
-    // falsch falsch falsch
-    // dphi=(phin-phix)+ tdsync * (10*10^-9) * 2PI / (signalfreq* kfkorr)
-    // richtig
-    // dphi=(phin-phix)+ tdsync * (10*10^-9) * 2PI * (signalfreq* kfkorr)          			            =(phin-phix)+ tdsync * (2PI*10^8 *  signalfreq * kfkorr)
+        float fp = 6.283185307e-8 * m_ConfData.m_fSFreq;
 
-    // die phasenkorrektur ist erforderlich weil von pps bis zum 1. sample eine totzeit liegt
+        DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(fp));
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,KFKORRF,TEMP1)"); // (2PI * (signalfreq*10^-8) * kfkorr)
 
-    float fp = 6.283185307e-8 * m_ConfData.m_fSFreq;
+        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TDSYNC,TEMP2)"); // tdsync * (2PI * (signalfreq*10^-8)) * kfkorr
+        DspIFace->addCycListItem( s = "ADDVVV(PHIN,TEMP2,PHIN)");
+        if (m_ConfData.m_nMeasMode != Un_nConvent)   // wenn conventional
+            DspIFace->addCycListItem( s = "ADDVVV(PHIX,TEMP2,PHIX)"); // auch kanal x
 
-    DspIFace->addCycListItem( s = QString("SETVAL(TEMP1,%1)").arg(fp));
-    DspIFace->addCycListItem( s = "MULVVV(TEMP1,KFKORRF,TEMP1)"); // (2PI * (signalfreq*10^-8) * kfkorr)
+        DspIFace->addCycListItem( s = "SUBVVV(PHIN,PHIX,DPHI)"); // dphi=(phin-phix)  !!! vorzeichen gedreht
+        DspIFace->addCycListItem( s = "NORMVC(DPHI,6.283185307)"); // auf 2PI normieren
+        DspIFace->addCycListItem( s = "SYMPHI(DPHI,DPHI)"); // symmetiert den winkel auf  -pi...+pi -> zwecks filterung
+        // alle messwerte noch filtern
 
-    DspIFace->addCycListItem( s = "MULVVV(TEMP1,TDSYNC,TEMP2)"); // tdsync * (2PI * (signalfreq*10^-8)) * kfkorr
-    DspIFace->addCycListItem( s = "ADDVVV(PHIN,TEMP2,PHIN)");
-    if (m_ConfData.m_nMeasMode != Un_nConvent)   // wenn conventional
-        DspIFace->addCycListItem( s = "ADDVVV(PHIX,TEMP2,PHIX)"); // auch kanal x
+        DspIFace->addCycListItem( s = "AVERAGE1(5,RMSN,FILTER)");
 
-    DspIFace->addCycListItem( s = "SUBVVV(PHIN,PHIX,DPHI)"); // dphi=(phin-phix)  !!! vorzeichen gedreht
-    DspIFace->addCycListItem( s = "NORMVC(DPHI,6.283185307)"); // auf 2PI normieren
-    DspIFace->addCycListItem( s = "SYMPHI(DPHI,DPHI)"); // symmetiert den winkel auf  -pi...+pi -> zwecks filterung
-    // alle messwerte noch filtern
+        // wir haben nach pps nur über die eingestellte anzahl signalperioden gemessen und die werte
+        // ins filter übertragen.
+        DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0500)"); // kette 0x0500 dient zum synchronisieren mit dem ctrl programm
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0400)"); // deaktivieren der berechnung
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0400)"); // ende prozessnr., hauptkette 4 subkette 0
 
-    DspIFace->addCycListItem( s = "AVERAGE1(5,RMSN,FILTER)");
+    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0500)"); // aktiv, prozessnr. (dummy), hauptkette 5 subkette 0 start
+        DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0501)"); // aktiv, prozessnr. (dummy), hauptkette 5 subkette 1 start
+        DspIFace->addCycListItem( s = "CMPAVERAGE1(5,FILTER,RMSNF)");
+        DspIFace->addCycListItem( s = "CLEARN(11,FILTER)");
+        DspIFace->addCycListItem( s = "DSPINTTRIGGER(0x0,0x0001)"); // gibt interrupt an controler
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0501)"); // deaktivieren der berechnung
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0500)"); // deaktivieren der synch
+        DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0501)"); // ende prozessnr., hauptkette 5 subkette 1
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0500)"); // ende prozessnr., hauptkette 5 subkette 0
 
-
-    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0301)"); // aktiv, prozessnr. (dummy), hauptkette 3 subkette 1 start
-    DspIFace->addCycListItem( s = "CMPAVERAGE1(5,FILTER,RMSNF)");
-    DspIFace->addCycListItem( s = "CLEARN(11,FILTER)");
-    DspIFace->addCycListItem( s = "DSPINTTRIGGER(0x0,0x0001)"); // gibt interrupt an controler
-    DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0301)"); // deaktivieren der berechnung
-    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0301)"); // ende prozessnr., hauptkette 3 subkette 1
-
-    DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0300)"); // deaktivieren der berechnung
-    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0300)"); // ende prozessnr., hauptkette 0 subkette 3
-
-    // kanal 0 (n)  , kanal1(x) samples über sindex2 kopieren
+    // kanal 0 (n)  samples über sindex2 kopieren
     DspIFace->addCycListItem( s = "COPYINDDATA(CH0,SINDEX2,MESSSIGNAL2)");
+    // kanal 1 (x)  samples über sindex2 kopieren
     DspIFace->addCycListItem( s = "COPYINDDATA(CH1,SINDEX2,MESSSIGNAL3)");
 
     // sindex2 inkrementieren
     DspIFace->addCycListItem( s = "INC(SINDEX2)");
     DspIFace->addCycListItem( s = QString("TESTVCSKIPLT(SINDEX2,%1)").arg(4)); // test ob die messperiode vollständig ist
-    DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0400)"); // aktivieren der berechnung
-    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0400)"); // nicht aktiv, prozessnr. (dummy),hauptkette 1 subkette 4 start
-    DspIFace->addCycListItem( s = "SETVAL(SINDEX2,0)"); // index 0 setzen
-    DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(4*nSPer)); // fensterfunktion über 4 signalperioden generieren
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL2)").arg(4*nSPer)); // fenster funktion anwenden
+    DspIFace->addCycListItem( s = "ACTIVATECHAIN(1,0x0600)"); // aktivieren der berechnung
 
-    if (!m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL2,TEMP1)").arg(4*nSPer)); // dc auf TEMP1
-        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
-        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL2)").arg(4*nSPer)); // dc von allen samples abziehen
-    }
+    DspIFace->addCycListItem( s = "STARTCHAIN(0,1,0x0600)"); // nicht aktiv, prozessnr. (dummy),hauptkette 6 subkette 0 start
+        DspIFace->addCycListItem( s = "SETVAL(SINDEX2,0)"); // index 0 setzen
+        DspIFace->addCycListItem( s = QString("HANNING(%1,SCHAN)").arg(4*nSPer)); // fensterfunktion über 4 signalperioden generieren
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL2)").arg(4*nSPer)); // fenster funktion anwenden
+        DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL2,FRMSN)").arg(4*nSPer)); // die schnelle rms messung für kanal n
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL3)").arg(4*nSPer)); // fenster funktion anwenden
+        DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL3,FRMSX)").arg(4*nSPer)); // die schnelle rms messung für kanal x
 
-    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL2,FRMSN)").arg(4*nSPer)); // die schnelle rms messung
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,SCHAN,MESSSIGNAL3)").arg(4*nSPer)); // fenster funktion anwenden
-
-    if (!m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,MESSSIGNAL3,TEMP1)").arg(4*nSPer)); // dc auf TEMP1
-        DspIFace->addCycListItem( s = QString("SETVAL(TEMP2,%1)").arg(1.63299,0,'E')); // hanning fenster korrektur
-        DspIFace->addCycListItem( s = "MULVVV(TEMP1,TEMP2,TEMP1)"); // korrigierter dc auf TEMP1
-        DspIFace->addCycListItem(s = QString("SUBNVC(%1,TEMP1,MESSSIGNAL3)").arg(4*nSPer)); // dc von allen samples abziehen
-    }
-
-    DspIFace->addCycListItem( s = QString("RMSN(%1,MESSSIGNAL3,FRMSX)").arg(4*nSPer)); // die schnelle rms messung für kanal x
-
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
-    else
-        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
-
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
-    else
-        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
-
-    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
-    if (m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,FAMPL1N)");
-    }
-    else
-    {
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+        else
+            DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+        else
+            DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL2,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
+        // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
         DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1N)"); // für schnelle lp anzeige
-    }
 
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
-    else
-        DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
-
-    if (m_ConfData.m_bDCmeasurement)
-        DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
-    else
-        DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
-    DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
-    DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
-
-    // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
-    if (m_ConfData.m_bDCmeasurement)
-    {
-        DspIFace->addCycListItem( s = "COPYVAL(TEMP2,FAMPL1X)");
-    }
-    else
-    {
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("SINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+        else
+            DspIFace->addCycListItem( s = QString("SINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (sinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP1)").arg(4*nSPer)); // im = integral
+        if (m_ConfData.m_bDCmeasurement)
+            DspIFace->addCycListItem( s = QString("COSINUS(0,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+        else
+            DspIFace->addCycListItem( s = QString("COSINUS(1,%1,SCHAN)").arg(4*nSPer)); // einheitswurzeln (cosinus)
+        DspIFace->addCycListItem( s = QString("MULNCC(%1,MESSSIGNAL3,SCHAN)").arg(4*nSPer)); // mit signal multiplizieren
+        DspIFace->addCycListItem( s = QString("INTEGRAL(%1,SCHAN,TEMP2)").arg(4*nSPer)); // re = integral
+        // amplitude grundwelle = sqr(im^2 + re^2) bzw. geometrische summe und phasenlage
         DspIFace->addCycListItem( s = "ADDVVG(TEMP1,TEMP2,FAMPL1X)"); // für schnelle lp anzeige
-    }
 
-    DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0400)"); // deaktivieren der berechnung
-    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0400)"); // ende prozessnr., hauptkette 0 subkette 3
+        DspIFace->addCycListItem( s = "DEACTIVATECHAIN(1,0x0600)"); // deaktivieren der berechnung
+    DspIFace->addCycListItem( s = "STOPCHAIN(1,0x0600)"); // ende prozessnr., hauptkette 4 subkette 0
+
+    // ab hier interrupt befehlskette
+    // ------------------------------
 
     // die ergebnisse werden aus der appl. heraus mittels kommando (bearbeiten int cmd list) generiert
     DspIFace->addIntListItem( s = "STARTCHAIN(1,1,0x0001)"); // aktiv, prozessnr. (dummy), hauptkette 0 subkette 1 start
-    DspIFace->addIntListItem( s = "ACTIVATECHAIN(1,0x0301)"); // deaktivieren der berechnung des filters
+    DspIFace->addIntListItem( s = "ACTIVATECHAIN(1,0x0501)"); // aktivieren der berechnung des filters
     DspIFace->addIntListItem( s = "STOPCHAIN(1,0x0001)"); // ende prozessnr., hauptkette 0 subkette 1
 
     // rücksetzen der maxima wie oben per int cmd list mit angabe der subketten nr.
     DspIFace->addIntListItem( s = "STARTCHAIN(1,1,0x0002)"); // aktiv, prozessnr.(dummy), hauptkette 0 subkette 2 start
-        DspIFace->addIntListItem( s = "SETVAL(MAXN,0.0)");
-        DspIFace->addIntListItem( s = "SETVAL(MAXX,0.0)");
+    DspIFace->addIntListItem( s = "SETVAL(MAXX,0.0)");
+    DspIFace->addIntListItem( s = "SETVAL(MAXN,0.0)");
     DspIFace->addIntListItem( s = "SETVAL(MAXRDY,0.0)");
     //    DspIFace->addIntListItem( s = "DSPINTTRIGGER(0x0,0x0002)"); // gibt interrupt an controler
     DspIFace->addIntListItem( s = "STOPCHAIN(1,0x0002)"); // ende prozessnr., hauptkette 0 subkette 2
@@ -4428,7 +4271,8 @@ void cWM3000U::SimulatedMeasurement()
     MaxValues.maxx = ActValues.dspActValues.ampl1xf;
     MaxValues.maxRdy = 1.0; // maxima sind verfügbar
 
-    CmpActValues(true);
+    CmpActValues();
+    CmpRMSValues();
     emit SendActValuesSignal(&ActValues);
     emit SendLPSignal(&ActValues);
 }
@@ -4467,7 +4311,7 @@ void cWM3000U::CmpActFrequency()
 }
 
 
-void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary computations
+void cWM3000U::CmpActValues() {  // here we will do all the necessary computations
     // korrektur der rohwinkel weil fft phi = 0 für cosinus
 
     ActValues.PHIN = normWinkelrad02PI(ActValues.dspActValues.phin - PI/2);  // winkel zwischen 0 und 2PI
@@ -4484,7 +4328,7 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     val = r->Value();
     rej = r->Rejection();
 
-        // setzen der übersetzungsverhältnisse
+    // setzen der übersetzungsverhältnisse
 
     eParameter PrimN, PrimX;
     eParameter SekN, SekX;
@@ -4511,19 +4355,14 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     // berechnen der sekundär grössen
     // amplitude n,x sind gefilterte messwerte, die winkel nicht da feste abtastfrequenz
 
-    ActValues.RMSN1Sek = ( val * ActValues.RMSN1Sek ) / rej; // der rohe messwert RMSN1Sek wurde schon  in statemachine gesetzt bzw. in simulation und wird hier skaliert!!!
-    ActValues.RMSNSek = ( val * ActValues.dspActValues.rmsnf ) / rej;
     re = ( val * ActValues.dspActValues.ampl1nf ) / rej;
     ActValues.VekNSek = complex (re,0.0); // der winkel für vekn ist 0 .... definition !!!
 
     // wir haben u.u. eine offsetkorrektur für kanal n in "V" die wir nach der skalierung berücksichtigen müssen
 
     if (m_ConfData.m_bOffsetCorrectionN && m_ConfData.m_bDCmeasurement)
-    {
-        //ActValues.RMSNSek = sqrt( fabs(ActValues.RMSNSek * ActValues.RMSNSek - m_JustValues.OffsetCorrDevN * m_JustValues.OffsetCorrDevN));
-        ActValues.RMSNSek -= fabs(m_JustValues.OffsetCorrDevN);
         ActValues.VekNSek -= m_JustValues.OffsetCorrDevN;
-    }
+
 
     switch (m_ConfData.m_nMeasMode) // für dut messart abhängig
     {
@@ -4543,22 +4382,16 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
         rej = kx; // wir wollen die sekundär grösse des nConvent haben ... neue forderung dies anzuzeigen
     }
 
-    ActValues.RMSX1Sek = ( val * ActValues.RMSX1Sek ) / rej; // der rohe messwert RMSX1Sek wurde schon  in statemachine gesetzt bzw. in simulation und wird hier skaliert!!!
-    ActValues.RMSXSek = ( val * ActValues.dspActValues.rmsxf ) / rej;
     re = im = ( val * ActValues.dspActValues.ampl1xf ) / rej;
     im *= sin(ActValues.dspActValues.dphif);
     re *= cos(ActValues.dspActValues.dphif);
     ActValues.VekXSek = complex(re,im);
 
     if (m_ConfData.m_bOffsetCorrectionX && m_ConfData.m_bDCmeasurement)
-    {
-        //ActValues.RMSXSek = sqrt(fabs(ActValues.RMSXSek * ActValues.RMSXSek - m_JustValues.OffsetCorrDevX * m_JustValues.OffsetCorrDevX));
-        ActValues.RMSXSek -= fabs(m_JustValues.OffsetCorrDevX);
         ActValues.VekXSek -= m_JustValues.OffsetCorrDevX;
-    }
 
     // alle winkel werden vom dsp ermittelt und  dphi ist schon mit tdsync frequenzabhängig korrigiert
-    //  die vektoren n und x würden normalerweise mit der differenzfrequenz aus abtast- und signalfrequenz
+    // die vektoren n und x würden normalerweise mit der differenzfrequenz aus abtast- und signalfrequenz
     // rotieren, wir legen vekn auf die ordinate und vekx hat den winkel dphif = konstant
     // winkel korrekturen aus abtastverzögerungen und phasenkorrekturwerten
 
@@ -4570,33 +4403,17 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     // eigenfehler korrektur des normwandlers
 
     ActValues.UInCorr = m_pOwnError->GetOECorrVector(); // achtung complex !!!!!
-    ActValues.RMSNSek *= fabs(ActValues.UInCorr);
-    ActValues.RMSN1Sek *= fabs(ActValues.UInCorr);
     ActValues.VekNSek *= ActValues.UInCorr;
 
     // umrechnen auf primärgrößen
 
-    ActValues.RMSX = ActValues.RMSXSek * kx;
-    ActValues.RMSX1 = ActValues.RMSX1Sek * kx;
     ActValues.VekX = ActValues.VekXSek * kx;
-
-    ActValues.RMSN = ActValues.RMSNSek * kn;
-    ActValues.RMSN1 = ActValues.RMSN1Sek * kn;
     ActValues.VekN = ActValues.VekNSek * kn;
 
-    //  fehler und lastpunkt berechnung
-
-    if (withLP)
-    {
-    ActValues.LoadPoint = 100.0 * ActValues.RMSN/PrimN.toDouble();
-    ActValues.LoadPoint1 = 100.0 * ActValues.RMSN1/PrimN.toDouble();
-    ActValues.LoadPointX = 100.0 * ActValues.RMSN/PrimX.toDouble();
-    ActValues.LoadPoint1X = 100.0 * ActValues.RMSN1/PrimX.toDouble();
-    }
+    //  fehler berechnung
 
     ActValues.AngleError = UserAtan(ActValues.VekX) - UserAtan(ActValues.VekN);
     ActValues.AngleError = normWinkelrad_PIPI(ActValues.AngleError);
-//    if (fabs(ActValues.AngleError) > PI ) ActValues.AngleError -= sign(ActValues.AngleError) * 2 * PI;
 
     double err;
 
@@ -4614,6 +4431,96 @@ void cWM3000U::CmpActValues(bool withLP) {  // here we will do all the necessary
     ActValues.AmplErrorANSI = (ActValues.AmplErrorIEC/100.0 - ( (1.0+ActValues.AmplErrorIEC/100.0) * (4.0 / 3.0) * ActValues.AngleError ))*100.0;
 
     ActValues.bvalid = true; // aktivieren der fehleranzeige
+}
+
+
+void cWM3000U::CmpRMSValues()
+{
+    CWMRange* range;
+    double val,rej;
+    double kn,kx;
+
+    // setzen der übersetzungsverhältnisse
+
+    eParameter PrimN, PrimX;
+    eParameter SekN, SekX;
+
+    PrimN = m_ConfData.m_NPrimary;
+    SekN = m_ConfData.m_NSecondary;
+    kn = PrimN.toDouble() / SekN.toDouble();
+
+    switch (m_ConfData.m_nMeasMode) // für dut messart abhängig
+    {
+    case Un_UxAbs:
+    case Un_nConvent: // wir brauchen jetzt das ü-verhältnis um die sekundär grösse zu ermitteln
+        PrimX = m_ConfData.m_XPrimary;
+        SekX = m_ConfData.m_XSecondary;
+    break;
+    case Un_EVT:
+        PrimX = m_ConfData.m_EVTPrimary;
+        SekX = m_ConfData.m_EVTSecondary;
+    break;
+    }
+
+    kx = PrimX.toDouble() / SekX.toDouble();
+
+    range = Range(m_ConfData.m_sRangeN,m_sNRangeList);
+    val = range->Value();
+    rej = range->Rejection();
+
+    ActValues.RMSNSek = ( val * ActValues.dspRMSValues.fastRMSN ) / rej;
+    ActValues.RMSN1Sek = ( val * ActValues.dspRMSValues.fastRMSN1 ) / rej;
+
+    // wir haben u.u. eine offsetkorrektur für kanal n in "V" die wir nach der skalierung berücksichtigen müssen
+
+    if (m_ConfData.m_bOffsetCorrectionN && m_ConfData.m_bDCmeasurement)
+        ActValues.RMSNSek -= fabs(m_JustValues.OffsetCorrDevN);
+
+    switch (m_ConfData.m_nMeasMode) // für dut messart abhängig
+    {
+    case Un_UxAbs:
+        range = Range(m_ConfData.m_sRangeX,m_sNRangeList);
+        val = range->Value();
+        rej = range->Rejection();
+    break;
+    case Un_EVT:
+        range = Range(m_ConfData.m_sRangeEVT,m_sEVTRangeList);
+        val = range->Value();
+        rej = range->Rejection();
+    break;
+    case Un_nConvent:
+        val = 10e-3; // 1lsb -> 10mV
+        rej = kx; // wir wollen die sekundär grösse des nConvent haben ... neue forderung dies anzuzeigen
+    break;
+    }
+
+    ActValues.RMSXSek = ( val * ActValues.dspRMSValues.fastRMSX ) / rej;
+    ActValues.RMSX1Sek = ( val * ActValues.dspRMSValues.fastRMSX1 ) / rej;
+
+    // wir haben u.u. eine offsetkorrektur für kanal x in "V" die wir nach der skalierung berücksichtigen müssen
+    if (m_ConfData.m_bOffsetCorrectionX && m_ConfData.m_bDCmeasurement)
+        ActValues.RMSXSek -= fabs(m_JustValues.OffsetCorrDevX);
+
+    // eigenfehler korrektur des normwandlers
+
+    ActValues.UInCorr = m_pOwnError->GetOECorrVector(); // achtung complex !!!!!
+    ActValues.RMSNSek *= fabs(ActValues.UInCorr);
+    ActValues.RMSN1Sek *= fabs(ActValues.UInCorr);
+
+    // umrechnen auf primärgrößen
+
+    ActValues.RMSN = ActValues.RMSNSek * kn;
+    ActValues.RMSN1 = ActValues.RMSN1Sek * kn;
+
+    ActValues.RMSX = ActValues.RMSXSek * kx;
+    ActValues.RMSX1 = ActValues.RMSX1Sek * kx;
+
+    //  lastpunkt berechnung
+
+    ActValues.LoadPoint = 100.0 * ActValues.RMSN/PrimN.toDouble();
+    ActValues.LoadPoint1 = 100.0 * ActValues.RMSN1/PrimN.toDouble();
+    ActValues.LoadPointX = 100.0 * ActValues.RMSN/PrimX.toDouble();
+    ActValues.LoadPoint1X = 100.0 * ActValues.RMSN1/PrimX.toDouble();
 }
 
 
@@ -4679,6 +4586,64 @@ void cWM3000U::CorrActValues()
 
             ActValues.dspActValues.rmsxf = fabs(ActValues.dspActValues.rmsxf + offsetCorr);
             ActValues.dspActValues.ampl1xf += offsetCorr;
+        }
+    }
+}
+
+
+void cWM3000U::CorrRMSValues()
+{
+    int sign;
+    double offsetCorr;
+    QString key;
+    CWMRange* range;
+
+    ActValues.dspRMSValues.fastRMSN *= m_JustValues.GainCorrCh0;
+    ActValues.dspRMSValues.fastRMSN1 *= m_JustValues.GainCorrCh0;
+
+    if (m_ConfData.m_bDCmeasurement)
+    {
+        // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+        sign = signum(ActValues.dspRMSValues.fastRMSN1);
+        ActValues.dspRMSValues.fastRMSN = sign * ActValues.dspRMSValues.fastRMSN + m_JustValues.OffsetCorrCh0;
+        ActValues.dspRMSValues.fastRMSN1 = sign * ActValues.dspRMSValues.fastRMSN1 + m_JustValues.OffsetCorrCh0;
+
+        // wir korrigieren die offsetwerte aus der temp. offset korrektur
+        range = Range(m_ConfData.m_sRangeN, m_sNRangeList);
+        if (measOffsetCorrectionHash.contains(key = range->getOffsKorrKey()))
+            offsetCorr = measOffsetCorrectionHash[key];
+        else
+            offsetCorr = 0.0;
+
+        ActValues.dspRMSValues.fastRMSN = fabs(ActValues.dspRMSValues.fastRMSN + offsetCorr);
+        ActValues.dspRMSValues.fastRMSN1 = fabs(ActValues.dspRMSValues.fastRMSN1 + offsetCorr);
+    }
+
+    if (m_ConfData.m_nMeasMode != Un_nConvent) // für nconvent die korrektur nicht berücksichtigen
+    {
+        ActValues.dspRMSValues.fastRMSX *= m_JustValues.GainCorrCh1;
+        ActValues.dspRMSValues.fastRMSX1 *= m_JustValues.GainCorrCh1;
+
+        if (m_ConfData.m_bDCmeasurement)
+        {
+            // wir korrigieren die offsetwerte aus der permanenten offset korrektur
+            sign = signum(ActValues.dspRMSValues.fastRMSX1);
+            ActValues.dspRMSValues.fastRMSX = sign * ActValues.dspRMSValues.fastRMSX + m_JustValues.OffsetCorrCh1;
+            ActValues.dspRMSValues.fastRMSX1 = sign * ActValues.dspRMSValues.fastRMSX1 + m_JustValues.OffsetCorrCh1;
+
+            // wir korrigieren die offsetwerte aus der temp. offset korrektur
+            if (m_ConfData.m_nMeasMode == Un_UxAbs)
+                range = Range(m_ConfData.m_sRangeX, m_sXRangeList);
+            else
+                range = Range(m_ConfData.m_sRangeEVT, m_sEVTRangeList);
+
+            if (measOffsetCorrectionHash.contains(key = range->getOffsKorrKey()))
+                offsetCorr = measOffsetCorrectionHash[key];
+            else
+                offsetCorr = 0.0;
+
+            ActValues.dspRMSValues.fastRMSX = fabs(ActValues.dspRMSValues.fastRMSX + offsetCorr);
+            ActValues.dspRMSValues.fastRMSX1 = fabs(ActValues.dspRMSValues.fastRMSX1 + offsetCorr);
         }
     }
 }
