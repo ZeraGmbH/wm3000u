@@ -19,9 +19,9 @@
 
 //#define FVWM 1
 
-#define TheDevice "127.0.0.1"
+//#define TheDevice "127.0.0.1"
 //#define TheDevice "10.0.2.16"
-//#define TheDevice "192.168.6.162"
+#define TheDevice "192.168.6.159"
 
 // V1.01 erste lauffähige version
 // V1.02 wm3000scpiface geändert -> konfiguration abfrage, setzen besser synchronisiert
@@ -128,9 +128,16 @@
 //                  das interface läuft jetzt stabil bei voller geschwindigkeit.
 //                  opc? liefert fertig erst nachdem alle conf. kommandos abgearbeitet wurden.
 //                  eth kommando, query hinzugefügt um en61850:sync:strong setzen und abfragen zu können
+// v2.38 19.05.2021 es sollen die neuen sample rate für die non conventional wandler integriert werden
+//                  im groben: das konfigurations menu muss angepasst werden. es gibt verriegelungen
+//                  zwischen samplerate und signalfrequenz. die anzahl der signalperioden ist samplerate
+//                  abhängig. die anzahl der asdu's in einer apdu ist ebenfalls davon abhängig. das scpi
+//                  interface musste angepasst werden. der automatische phasenabgleich war entsprechend
+//                  zu erweitern. die neue version läuft nur mit dem leiterkarten server ab v2.09.
 
 
-#define WMVersion "V2.37"
+#define WMVersion "V2.38"
+
 
 #define wm3000uHome QDir::homePath()
 // #define ServerCommLogFilePath "/usr/share/wm3000u/log/ServerComm.log"
@@ -148,8 +155,12 @@
 const int nmaxRecentOEFiles = 5;
 const int nmaxRecentMVFiles = 5;
 const int nmaxRecentSESFiles = 5;
-const int nmaxS80MeasPeriod = 40;
-const int nmaxS256MeasPeriod = 14;
+const int nmaxS80MeasPeriod = 49;
+const int nmaxS96MeasPeriod = 41;
+const int nmaxS240MeasPeriod = 16;
+const int nmaxS256MeasPeriod = 15;
+const int nmaxS288MeasPeriod = 13;
+
 
 const float TDBase = 100.0e6; // 100 mhz auflösung für td messung (pps->1. sample)
 
@@ -160,7 +171,7 @@ enum VekPrimSekModes {prim, sek};
 enum VekWinkelModes {mathpos, techpos}; // winkel anzeige math. pos. bzw. techn. pos.
 enum SyncSources {Intern,Extern,MaxSSource}; // sync sources
 enum SignalFreqs {F16,F50,F60,MaxFreq}; // -> feste abtastfrequenzen
-enum SampleRates {S80,S256,MaxSRate}; // abtastraten
+enum SampleRates {S80,S96,S240,S256,S288,MaxSRate}; // abtastraten
 enum JustMode {sensNadcXPhase, sensXadcNPhase, sensEVTadcNPhase, sensNsensXOffset, sensNOffset, sensXOffset, sensEVTOffset, adcNPhase, adcXPhase}; // justage modes
 enum SenseMode {sensNsensX, adcNadcX, sensNadcX, sensXadcN, sensNsensX0V, anzSenseMode}; // sense modes innerhalb der hardware
 enum MeasMode {Un_UxAbs,Un_EVT,Un_nConvent,maxMMode}; // messmodi der wm3000u

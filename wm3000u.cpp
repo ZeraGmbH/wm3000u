@@ -574,13 +574,10 @@ void cWM3000U::ActionHandler(int entryAHS)
         }
         else
         {
-        switch (m_ConfData.m_nSRate) {
-        case S80: nSPSP = 80;break;
-        case S256: nSPSP = 256;
-        }
-        nSPMP = nSPSP /* * m_ConfData.m_nMeasPeriod */;
-        DspIFace->SetSamplingSystem(3, nSPSP, nSPMP); // messperiode = signalperiode
-        AHS++;
+            nSPSP = getSampleRate(m_ConfData.m_nSRate);
+            nSPMP = nSPSP /* * m_ConfData.m_nMeasPeriod */;
+            DspIFace->SetSamplingSystem(3, nSPSP, nSPMP); // messperiode = signalperiode ... dsp handelt die messperiode
+            AHS++;
         }
         break; // InitializationSetSamplingSystem
     }
@@ -626,13 +623,14 @@ void cWM3000U::ActionHandler(int entryAHS)
     case ConfigurationSetSamplingFrequency:
     case InitializationSetSamplingFrequency:
     {
-        if (m_ConfData.m_bSimulation) {
-        AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
         }
         else
         {
-        PCBIFace->setSamplingFrequency(m_ConfData.m_fSFreq);
-        AHS++;
+            PCBIFace->setSamplingFrequency(m_ConfData.m_fSFreq);
+            AHS++;
         }
         break; // InitializationSetSamplingFrequency
     }
@@ -641,17 +639,15 @@ void cWM3000U::ActionHandler(int entryAHS)
     case InitializationSetSamplingPSamples:
     {
         int ps;
-        if (m_ConfData.m_bSimulation) {
-        AHS = wm3000Idle;
+        if (m_ConfData.m_bSimulation)
+        {
+            AHS = wm3000Idle;
         }
         else
         {
-        switch (m_ConfData.m_nSRate) {
-        case S80: ps = 80;break;
-        case S256: ps = 256;
-        }
-        PCBIFace->setSamplingPSamples(ps);
-        AHS++;
+            ps = getSampleRate(m_ConfData.m_nSRate);
+            PCBIFace->setSamplingPSamples(ps);
+            AHS++;
         }
         break; // InitializationSetSamplingPSamples
     }
@@ -3012,6 +3008,18 @@ bool cWM3000U::isDC()
     return m_bDC;
 }
 
+
+void cWM3000U::setNewSamplerates(bool b)
+{
+    m_bNewSamplerates = b;
+}
+
+
+bool cWM3000U::isNewSamplerates()
+{
+    return m_bNewSamplerates;
+}
+
 //------------------------------------------- ab hier stehen alle SLOTs--------------------------------------------------------
 
 void cWM3000U::GetOETAnalizeDone(void)
@@ -3286,6 +3294,11 @@ void cWM3000U::SetPhaseCalcInfo() // wir init. die liste damit die statemachine 
     m_CalcInfoList.append(new cCalcInfo(chn,"ADW256.16"));
     m_CalcInfoList.append(new cCalcInfo(chn,"ADW256.50"));
     m_CalcInfoList.append(new cCalcInfo(chn,"ADW256.60"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"ADW96.50"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"ADW96.60"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"ADW288.50"));
+    m_CalcInfoList.append(new cCalcInfo(chn,"ADW240.60"));
+
 
     for (uint i = 0; i < m_sNRangeList.count()-1; i++)
     m_CalcInfoList.append(new cCalcInfo(chn, m_sNRangeList.at(i)->Selector()));
@@ -3319,6 +3332,9 @@ void cWM3000U::SetPhaseNodeMeasInfo() // wir init. die liste damit die statemach
     // aber nur für kanal ch0 bzw. N
     m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( "3.75V", "3.75V", "ADW80.50", adcNadcX, Un_UxAbs, adcNPhase, S80, 4, 20)); // bereiche optimal für hw freq messung, modus adc/adc, für 80 samples/periode und 4 messungen einschwingzeit, 10 messungen für stützstellenermittlung
     m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( "3.75V", "3.75V", "ADW256.50", adcNadcX, Un_UxAbs, adcNPhase, S256, 4, 20));
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( "3.75V", "3.75V", "ADW96.50", adcNadcX, Un_UxAbs, adcNPhase, S96, 4, 20));
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( "3.75V", "3.75V", "ADW288.50", adcNadcX, Un_UxAbs, adcNPhase, S288, 4, 20));
+    m_PhaseNodeMeasInfoList.append(new cJustMeasInfo( "3.75V", "3.75V", "ADW240.60", adcNadcX, Un_UxAbs, adcNPhase, S240, 4, 20));
 
     // die liste für alle konv. bereiche in kanal n
     for (uint i = 0; i < m_sNRangeList.count()-1; i++)
@@ -3862,80 +3878,87 @@ CWMRange* cWM3000U::Range(float mw,cWMRangeList& rlist)
 }
 
 
+int cWM3000U::getSampleRate(int sr)
+{
+    int SRates[5]={80,96,240,256,288};
+    return SRates[sr];
+}
+
+
 // habe die reihenfolge der variablen so geändert, dass wenn sich das samplingsystem ändert
 // die indices und ergebnisse an den gleichen stellen bleiben
 // alternative wäre gewesen generell das programm
 void cWM3000U::SetDspWMVarList() // variablen des dsp zusammenbauen
 {
-    if (!m_ConfData.m_bSimulation) {
-    int nSp = (m_ConfData.m_nSRate == S80) ? 80 :256;
-    int nS = nSp * m_ConfData.m_nMeasPeriod;
-    int schanLen = (m_ConfData.m_nMeasPeriod < 4)? 4:m_ConfData.m_nMeasPeriod;
-    schanLen *= nSp;
+    if (!m_ConfData.m_bSimulation)
+    {
+        int nSp = getSampleRate(m_ConfData.m_nSRate);
+        int nS = nSp * m_ConfData.m_nMeasPeriod;
+        int schanLen = (m_ConfData.m_nMeasPeriod < 4)? 4:m_ConfData.m_nMeasPeriod;
+        schanLen *= nSp;
 
-    DspIFace->ClearVarLists();
+        DspIFace->ClearVarLists();
 
-    // maxima
-    MaxValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für den maximumsucher
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXX",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(MaxValData, new cDspVar("MAXRDY",1,vApplication | vDspIntern));
+        // maxima
+        MaxValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für den maximumsucher
+        DspIFace->addVarItem(MaxValData, new cDspVar("MAXN",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(MaxValData, new cDspVar("MAXX",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(MaxValData, new cDspVar("MAXRDY",1,vApplication | vDspIntern));
 
-    // schnelle rms messung zur lastpunkt bestimmung 1x rms gesamtsignal 1x ampl 1. grundwelle
-    RMSValData = DspIFace->GetMVHandle("");
-    DspIFace->addVarItem(RMSValData, new cDspVar("FRMSN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1N",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(RMSValData, new cDspVar("FRMSX",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1X",1,vApplication | vDspIntern));
+        // schnelle rms messung zur lastpunkt bestimmung 1x rms gesamtsignal 1x ampl 1. grundwelle
+        // erweitert jetzt auch für kanal x
+        RMSValData = DspIFace->GetMVHandle("");
+        DspIFace->addVarItem(RMSValData, new cDspVar("FRMSN",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1N",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(RMSValData, new cDspVar("FRMSX",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(RMSValData, new cDspVar("FAMPL1X",1,vApplication | vDspIntern));
 
-    ActValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für die istwerte daten
+        ActValData = DspIFace->GetMVHandle(""); // wir holen uns ein handle für die istwerte daten
+    //	nur dsp intern verwendete messdaten
+        DspIFace->addVarItem(ActValData, new cDspVar("SINDEX",1,vDspIntern)); // index zur speicherung der sampledaten für die fehlermessung (variables messintervall);
+        DspIFace->addVarItem(ActValData, new cDspVar("SINDEX2",1,vDspIntern)); // index zur speicherung der sampledaten für die schnelle lastpunktmessung (festes messintervall = 4 signalperioden);
 
-//	nur dsp intern verwendete messdaten
-    DspIFace->addVarItem(ActValData, new cDspVar("SINDEX",1,vDspIntern)); // index zur speicherung der sampledaten für die fehlermessung (variables messintervall);
-    DspIFace->addVarItem(ActValData, new cDspVar("SINDEX2",1,vDspIntern)); // index zur speicherung der sampledaten für die schnelle lastpunktmessung (festes messintervall = 4 signalperioden);
+        DspIFace->addVarItem(ActValData, new cDspVar("TEMP1",1,vDspIntern)); // werden nur temp. benötigt weil winkel und betrag
+        DspIFace->addVarItem(ActValData, new cDspVar("TEMP2",1,vDspIntern)); // direkt ermittelt werden zwecks filterung
 
-    DspIFace->addVarItem(ActValData, new cDspVar("TEMP1",1,vDspIntern)); // werden nur temp. benötigt weil winkel und betrag
-    DspIFace->addVarItem(ActValData, new cDspVar("TEMP2",1,vDspIntern)); // direkt ermittelt werden zwecks filterung
+        // diese werte ab hier werden gefiltert
+        DspIFace->addVarItem(ActValData, new cDspVar("KFKORR",1,vDspIntern)); // kreisfrequenz korrektur koeffizient
+        DspIFace->addVarItem(ActValData, new cDspVar("RMSN",1,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("AMPL1N",1,vDspIntern));
+        DspIFace->addVarItem(ActValData,new cDspVar("RMSX",1,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("AMPL1X",1,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("DPHI",1,vDspIntern));
+        // dphi=(phix-phin) - tdsync * (10*10^-9) * 2PI / (signalfreq* kfkorr)          							=(phix-phin) -tdsync * (2PI / (signalfreq*10^8)) * (1/kfkorr) -->
 
-    // diese werte ab hier werden gefiltert
-    DspIFace->addVarItem(ActValData, new cDspVar("KFKORR",1,vDspIntern)); // kreisfrequenz korrektur koeffizient
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSN",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1N",1,vDspIntern));
-    DspIFace->addVarItem(ActValData,new cDspVar("RMSX",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1X",1,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("DPHI",1,vDspIntern));
-    // dphi=(phix-phin) - tdsync * (10*10^-9) * 2PI / (signalfreq* kfkorr)          							=(phix-phin) -tdsync * (2PI / (signalfreq*10^8)) * (1/kfkorr) -->
+        DspIFace->addVarItem(ActValData, new cDspVar("FILTER",10,vDspIntern));
+        // KFKORR wird separat gefiltert
+        DspIFace->addVarItem(ActValData, new cDspVar("N",1,vDspIntern));
 
-    DspIFace->addVarItem(ActValData, new cDspVar("FILTER",10,vDspIntern));
-    // KFKORR wird separat gefiltert
-    DspIFace->addVarItem(ActValData, new cDspVar("N",1,vDspIntern));
+        // gefilterte messergebnisse
+        DspIFace->addVarItem(ActValData, new cDspVar("KFKORRF",1,vApplication | vDspIntern)); // kreisfrequenz korrektur koeffizient
+        DspIFace->addVarItem(ActValData, new cDspVar("RMSNF",1,vApplication | vDspIntern)); // rms wert kanal n
+        DspIFace->addVarItem(ActValData, new cDspVar("AMPL1NF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal n
+        DspIFace->addVarItem(ActValData, new cDspVar("RMSXF",1,vApplication | vDspIntern)); // rms wert kanal x
+        DspIFace->addVarItem(ActValData, new cDspVar("AMPL1XF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal x
+        DspIFace->addVarItem(ActValData, new cDspVar("DPHIF",1,vApplication | vDspIntern)); // winkel kanal x - winkel kanal n
 
-    // gefilterte messergebnisse
-    DspIFace->addVarItem(ActValData, new cDspVar("KFKORRF",1,vApplication | vDspIntern)); // kreisfrequenz korrektur koeffizient
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSNF",1,vApplication | vDspIntern)); // rms wert kanal n
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1NF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal n
-    DspIFace->addVarItem(ActValData, new cDspVar("RMSXF",1,vApplication | vDspIntern)); // rms wert kanal x
-    DspIFace->addVarItem(ActValData, new cDspVar("AMPL1XF",1,vApplication | vDspIntern)); // amplitude 1. oberwelle kanal x
-    DspIFace->addVarItem(ActValData, new cDspVar("DPHIF",1,vApplication | vDspIntern)); // winkel kanal x - winkel kanal n
-    // nicht gefilterte messergebnisse
-    DspIFace->addVarItem(ActValData, new cDspVar("TDSYNC",1,vApplication | vDspIntern)); // delay time pps -> 1. sample
-    DspIFace->addVarItem(ActValData, new cDspVar("PHIN",1,vApplication | vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("PHIX",1,vApplication | vDspIntern));
+        // nicht gefilterte messergebnisse
+        DspIFace->addVarItem(ActValData, new cDspVar("TDSYNC",1,vApplication | vDspIntern)); // delay time pps -> 1. sample
+        DspIFace->addVarItem(ActValData, new cDspVar("PHIN",1,vApplication | vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("PHIX",1,vApplication | vDspIntern));
 
-
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",schanLen,vDspIntern)); // sinus, cosinus, hanning abwechselnd
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
-    DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL3",4*nSp,vDspIntern));
-
+        DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL0",nS,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL1",nS,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("SCHAN",schanLen,vDspIntern)); // sinus, cosinus, hanning abwechselnd
+        DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL2",4*nSp,vDspIntern));
+        DspIFace->addVarItem(ActValData, new cDspVar("MESSSIGNAL3",4*nSp,vDspIntern));
     }
 }
 
 void cWM3000U::SetDspWMCmdList()
 {
     if (!m_ConfData.m_bSimulation) {
-    int nSPer = (m_ConfData.m_nSRate == S80) ? 80 :256;
+    int nSPer = getSampleRate(m_ConfData.m_nSRate);
     int nMP = m_ConfData.m_nMeasPeriod;
     int nSMeas = nSPer * nMP; // anzahl samples messperiode
     // int nSAK = nSPer * ((m_ConfData.m_nMeasPeriod - 1) >> 1); // messperiode für kreuzkorrelationsintegral

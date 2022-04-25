@@ -382,107 +382,20 @@
       <attribute name="title">
        <string>Messung</string>
       </attribute>
-      <layout class="QGridLayout">
-       <item row="0" column="2">
-        <spacer name="spacer58">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="2">
-        <spacer name="spacer59">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="1">
-        <widget class="Q3GroupBox" name="TIntegrationGroupBox">
-         <property name="title">
-          <string>Integrationszeit</string>
-         </property>
-         <layout class="QHBoxLayout">
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>10</y>
+         <width>444</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_23">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_22">
           <item>
-           <widget class="QLabel" name="TIntegrationLabel">
-            <property name="text">
-             <string>&amp;Zeit[sec]:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-            <property name="buddy">
-             <cstring>TIntegrationSpinBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="TIntegrationSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>20</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="spacer57">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="Q3ButtonGroup" name="FreqButtonGroup">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font/>
-         </property>
-         <property name="title">
-          <string>Signalfrequenz</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="QRadioButton" name="F16RadioButton">
+           <widget class="Q3ButtonGroup" name="FreqButtonGroup">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -492,13 +405,124 @@
             <property name="font">
              <font/>
             </property>
-            <property name="text">
-             <string>16.66 Hz</string>
+            <property name="title">
+             <string>Signalfrequenz</string>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QRadioButton" name="F16RadioButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font/>
+               </property>
+               <property name="text">
+                <string>16.66 Hz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="F50RadioButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font/>
+               </property>
+               <property name="text">
+                <string>50 Hz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="F60RadioButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font/>
+               </property>
+               <property name="text">
+                <string>60 Hz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>43</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="F50RadioButton">
+           <widget class="Q3ButtonGroup" name="SPeriodeButtonGroup">
+            <property name="title">
+             <string>Abtastungen</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QRadioButton" name="S80RadioButton">
+               <property name="text">
+                <string>  80 / Periode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="S96RadioButton">
+               <property name="text">
+                <string>  96 / Periode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="S240RadioButton">
+               <property name="text">
+                <string>240 / Periode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="S256RadioButton">
+               <property name="text">
+                <string>256 / Periode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="S288RadioButton">
+               <property name="text">
+                <string>288 / Periode</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="Q3GroupBox" name="CmpIntervallGroupBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -508,145 +532,125 @@
             <property name="font">
              <font/>
             </property>
-            <property name="text">
-             <string>50 Hz</string>
+            <property name="title">
+             <string>Messintervall</string>
             </property>
+            <layout class="QHBoxLayout">
+             <item>
+              <widget class="QLabel" name="CmpIntervallLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font/>
+               </property>
+               <property name="text">
+                <string>&amp;Perioden:</string>
+               </property>
+               <property name="wordWrap">
+                <bool>false</bool>
+               </property>
+               <property name="buddy">
+                <cstring>CmpIntervallSpinBox</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="CmpIntervallSpinBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>14</number>
+               </property>
+               <property name="value">
+                <number>14</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="spacer9_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Preferred</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="F60RadioButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+           <widget class="Q3GroupBox" name="TIntegrationGroupBox">
+            <property name="title">
+             <string>Integrationszeit</string>
             </property>
-            <property name="font">
-             <font/>
-            </property>
-            <property name="text">
-             <string>60 Hz</string>
-            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QLabel" name="TIntegrationLabel">
+               <property name="text">
+                <string>&amp;Zeit[sec]:</string>
+               </property>
+               <property name="wordWrap">
+                <bool>false</bool>
+               </property>
+               <property name="buddy">
+                <cstring>TIntegrationSpinBox</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="TIntegrationSpinBox">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>20</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="spacer57">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>37</width>
+                 <height>17</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="Q3ButtonGroup" name="SPeriodeButtonGroup">
-         <property name="title">
-          <string>Abtastungen</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="QRadioButton" name="S80RadioButton">
-            <property name="text">
-             <string>  80 / Periode</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="S256RadioButton">
-            <property name="text">
-             <string>256 / Periode</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="spacer27">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>16</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="Q3GroupBox" name="CmpIntervallGroupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font/>
-         </property>
-         <property name="title">
-          <string>Messintervall</string>
-         </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <widget class="QLabel" name="CmpIntervallLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font/>
-            </property>
-            <property name="text">
-             <string>&amp;Perioden:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-            <property name="buddy">
-             <cstring>CmpIntervallSpinBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="CmpIntervallSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>14</number>
-            </property>
-            <property name="value">
-             <number>14</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="spacer9_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="SyncTabPage">
       <attribute name="title">

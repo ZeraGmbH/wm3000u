@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
   bool bJustage = false;
   bool bconvent = false;
   bool bdc = false;
+  bool newsamplerates = false;
 
   nrOptions = g_app->argc();
   if ( nrOptions > 1 )
@@ -93,6 +94,9 @@ int main(int argc, char *argv[])
               bconvent = true;
           if (option == "-dc")
               bdc = true;
+          if (option == "-newsamplerates")
+              newsamplerates = true;
+
       }
   }
 
@@ -107,6 +111,7 @@ int main(int argc, char *argv[])
   if (!bdc)
       g_WMView->configureWMwoDC();
 
+  g_WMDevice->setNewSamplerates(newsamplerates);
 
   cReleaseInfo *g_ReleaseView = new cReleaseInfo(g_app);
   QObject::connect(g_WMView, SIGNAL(UIhilfeReleaseInfoActionActivated()),g_ReleaseView,SLOT(show()));

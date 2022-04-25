@@ -108,8 +108,14 @@ void ConfDialogBase::init()
     connect(ui->xPrim_3radioButton,SIGNAL(clicked()),this,SLOT(xPrim_3radioButtonChecked()));
     connect(ui->xSek_w3radioButton,SIGNAL(clicked()),this,SLOT(xSek_w3radioButtonChecked()));
     connect(ui->xSek_3radioButton,SIGNAL(clicked()),this,SLOT(xSek_3radioButtonChecked()));
-    connect(ui->S80RadioButton,SIGNAL(clicked()),this,SLOT(S80RadioButtonChecked()));
-    connect(ui->S256RadioButton,SIGNAL(clicked()),this,SLOT(S256RadioButtonChecked()));
+    connect(ui->S80RadioButton,SIGNAL(clicked()),this,SLOT(SxRadioButtonChecked()));
+    connect(ui->S96RadioButton,SIGNAL(clicked()),this,SLOT(SxRadioButtonChecked()));
+    connect(ui->S240RadioButton,SIGNAL(clicked()),this,SLOT(SxRadioButtonChecked()));
+    connect(ui->S256RadioButton,SIGNAL(clicked()),this,SLOT(SxRadioButtonChecked()));
+    connect(ui->S288RadioButton,SIGNAL(clicked()),this,SLOT(SxRadioButtonChecked()));
+    connect(ui->F16RadioButton,SIGNAL(clicked()),this,SLOT(FxRadioButtonChecked()));
+    connect(ui->F50RadioButton,SIGNAL(clicked()),this,SLOT(FxRadioButtonChecked()));
+    connect(ui->F60RadioButton,SIGNAL(clicked()),this,SLOT(FxRadioButtonChecked()));
 
     m_bRemoteCtrl = false;
 
@@ -127,6 +133,14 @@ void ConfDialogBase::init()
         ui->ConfTabWidget->removeChild(ui->DCRadioButton);
         ui->ACRadioButton->setEnabled(false);
     }
+
+    if (!g_WMDevice->isNewSamplerates())
+    {
+        ui->SPeriodeButtonGroup->removeChild(ui->S96RadioButton);
+        ui->SPeriodeButtonGroup->removeChild(ui->S240RadioButton);
+        ui->SPeriodeButtonGroup->removeChild(ui->S288RadioButton);
+    }
+
 }
 
 
@@ -303,9 +317,54 @@ void ConfDialogBase::SetLogMenu()
 }
 
 
+void ConfDialogBase::SuggestASDUs()
+{
+    m_ConfDataTemp.FirstASDU = 1;
+    m_ConfDataTemp.LastASDU = 1;
+    switch (m_ConfDataTemp.m_nSFreq)
+    {
+    case F16: // 16.67 hz sind bei nconventional nicht unterstützt
+        break;
+
+    case F50:
+        switch (m_ConfDataTemp.m_nSRate)
+        {
+        case S80:
+            break;
+        case S96:
+            m_ConfDataTemp.LastASDU = 2;
+            break;
+        case S256:
+            m_ConfDataTemp.LastASDU = 8;
+            break;
+        case S288:
+            m_ConfDataTemp.LastASDU = 6;
+            break;
+        }
+        break;
+
+    case F60:
+        switch (m_ConfDataTemp.m_nSRate)
+        {
+        case S80:
+        case S96:
+            break;
+        case S240:
+            m_ConfDataTemp.LastASDU = 6;
+            break;
+        case S256:
+            m_ConfDataTemp.LastASDU = 8;
+            break;
+        }
+        break;
+    }
+}
+
+
 void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen, die menus aktualisiert
 {
-    switch (m_ConfDataTemp.m_nMeasMode) {
+    switch (m_ConfDataTemp.m_nMeasMode)
+    {
 	case Un_UxAbs:
 	case Un_nConvent:
             m_ConfDataTemp.m_XPrimary = genRatioText( ui->RatioPrimXLineEdit->text(), ui->xPrim_3radioButton, ui->xPrim_w3radioButton);
@@ -394,27 +453,48 @@ void ConfDialogBase::ApplyDataSlot() // einstellungen werden intern übernommen,
     
     m_ConfDataTemp.m_fSFreq = f;
     
-    m_ConfDataTemp.m_nMeasPeriod=ui->CmpIntervallSpinBox->value();
-    
     if (ui->S80RadioButton->isChecked())
     {
         m_ConfDataTemp.m_nSRate=S80;
         ui->CmpIntervallSpinBox->setMaxValue(nmaxS80MeasPeriod);
+        if (ui->CmpIntervallSpinBox->value() > nmaxS80MeasPeriod)
+            ui->CmpIntervallSpinBox->setValue(nmaxS80MeasPeriod);
     }
-	    
+
+    if (ui->S96RadioButton->isChecked())
+    {
+        m_ConfDataTemp.m_nSRate=S96;
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS96MeasPeriod);
+        if (ui->CmpIntervallSpinBox->value() > nmaxS96MeasPeriod)
+            ui->CmpIntervallSpinBox->setValue(nmaxS96MeasPeriod);
+    }
+
+    if (ui->S240RadioButton->isChecked())
+    {
+        m_ConfDataTemp.m_nSRate=S240;
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS240MeasPeriod);
+        if (ui->CmpIntervallSpinBox->value() > nmaxS240MeasPeriod)
+            ui->CmpIntervallSpinBox->setValue(nmaxS240MeasPeriod);
+    }
+
     if (ui->S256RadioButton->isChecked())
     {
         m_ConfDataTemp.m_nSRate=S256;
         ui->CmpIntervallSpinBox->setMaxValue(nmaxS256MeasPeriod);
-        /*
-        if (m_ConfDataTemp.m_nMeasPeriod > 14)
-        {
-            m_ConfDataTemp.m_nMeasPeriod = 14;
-                ui->CmpIntervallSpinBox->setValue(14);
-        }
-        */
+        if (ui->CmpIntervallSpinBox->value() > nmaxS256MeasPeriod)
+            ui->CmpIntervallSpinBox->setValue(nmaxS256MeasPeriod);
     }
 
+    if (ui->S288RadioButton->isChecked())
+    {
+        m_ConfDataTemp.m_nSRate=S288;
+        ui->CmpIntervallSpinBox->setMaxValue(nmaxS288MeasPeriod);
+        if (ui->CmpIntervallSpinBox->value() > nmaxS288MeasPeriod)
+            ui->CmpIntervallSpinBox->setValue(nmaxS288MeasPeriod);
+    }
+
+    m_ConfDataTemp.m_nMeasPeriod=ui->CmpIntervallSpinBox->value();
+    
     m_ConfDataTemp.m_nIntegrationTime=ui->TIntegrationSpinBox->value();
     //  MessungMenu gescannt
     
@@ -454,30 +534,93 @@ void ConfDialogBase::SetnConventMenu()
 
 void ConfDialogBase::SetMessungMenu()
 {
+    bool buttonOK;
+    QList<QRadioButton*> buttonList;
+    QList<int> measperiodList;
+
+    buttonList << ui->S80RadioButton << ui->S96RadioButton
+               << ui->S240RadioButton << ui->S256RadioButton
+               << ui->S288RadioButton;
+    measperiodList << nmaxS80MeasPeriod << nmaxS96MeasPeriod
+                   << nmaxS240MeasPeriod << nmaxS256MeasPeriod
+                   << nmaxS288MeasPeriod;
+
+
+    // in abhängigkeit der gewählten frequenz enablen bzw. disablen wir die sample rate radiobuttons
     switch (m_ConfDataTemp.m_nSFreq) {
     case F16:
         ui->F16RadioButton->setChecked(true);
-	break;
+
+        ui->S80RadioButton->setEnabled(true);
+        ui->S96RadioButton->setEnabled(false);
+        ui->S240RadioButton->setEnabled(false);
+        ui->S256RadioButton->setEnabled(true);
+        ui->S288RadioButton->setEnabled(false);
+        break;
     case F50:
         ui->F50RadioButton->setChecked(true);
-	break;
+
+        ui->S80RadioButton->setEnabled(true);
+        ui->S96RadioButton->setEnabled(true);
+        ui->S240RadioButton->setEnabled(false);
+        ui->S256RadioButton->setEnabled(true);
+        ui->S288RadioButton->setEnabled(true);
+        break;
     case F60:
         ui->F60RadioButton->setChecked(true);
-	break;
+
+        ui->S80RadioButton->setEnabled(true);
+        ui->S96RadioButton->setEnabled(true);
+        ui->S240RadioButton->setEnabled(true);
+        ui->S256RadioButton->setEnabled(true);
+        ui->S288RadioButton->setEnabled(false);
+        break;
     }
-    
-    switch (m_ConfDataTemp.m_nSRate) {
-    case S80:
-        ui->S80RadioButton->setChecked(true);
-        ui->CmpIntervallSpinBox->setMaxValue(nmaxS80MeasPeriod);
-	break;
-    case S256:
-        ui->S256RadioButton->setChecked(true);
-        ui->CmpIntervallSpinBox->setMaxValue(nmaxS256MeasPeriod);
-	break;
+
+    buttonOK = false;
+    // wir schauen nach ob die derzeit gesetzte samplerate bei der aktuell gewählten frequenz erlaubt ist
+    for (int Sx = S80; Sx < MaxSRate; Sx++)
+    {
+        if (m_ConfDataTemp.m_nSRate == Sx)
+        {
+            if (buttonList.at(Sx)->isEnabled())
+            {
+                buttonList.at(Sx)->setChecked(true);
+                buttonOK = true;
+                break;
+            }
+        }
     }
-    
-    ui->CmpIntervallSpinBox->setValue(m_ConfDataTemp.m_nMeasPeriod);
+
+    // wenn die aktuell gesetzte samplerate nicht erlaubt ist, setzten wir die 1. aus der liste die erlaubt ist
+    if (!buttonOK)
+    {
+        for (int Sx = S80; Sx < MaxSRate; Sx++)
+            if (buttonList.at(Sx)->isEnabled())
+            {
+                buttonList.at(Sx)->setChecked(true);
+                break;
+            }
+    }
+
+    // bei 16.67 hz max. 16 perioden .... 1sec
+    if (m_ConfDataTemp.m_nSFreq == F16)
+    {
+        ui->CmpIntervallSpinBox->setMaxValue(16);
+        ui->CmpIntervallSpinBox->setValue(m_ConfDataTemp.m_nMeasPeriod > 16 ? 16 : m_ConfDataTemp.m_nMeasPeriod);
+    }
+    else
+    // ansonsten -> in abhängigkeit der samplerate setzen wir das maximum und ev. den wert messperioden anzahl
+    for (int Sx = S80; Sx < MaxSRate; Sx++)
+    {
+        if (buttonList.at(Sx)->isChecked())
+        {
+            ui->CmpIntervallSpinBox->setMaxValue(measperiodList.at(Sx));
+            ui->CmpIntervallSpinBox->setValue(m_ConfDataTemp.m_nMeasPeriod > measperiodList.at(Sx) ? measperiodList.at(Sx) : m_ConfDataTemp.m_nMeasPeriod);
+            break;
+        }
+    }
+
     ui->TIntegrationSpinBox->setValue(m_ConfDataTemp.m_nIntegrationTime);
 }
 
@@ -584,27 +727,20 @@ void ConfDialogBase::evtSek_w3radioButtonChecked()
 }
 
 
-void ConfDialogBase::S80RadioButtonChecked()
+void ConfDialogBase::FxRadioButtonChecked()
 {
-    if (ui->S80RadioButton->isChecked())
-    {
-        m_ConfDataTemp.FirstASDU = 1;
-        m_ConfDataTemp.LastASDU = 1;
-        SetnConventMenu();
-        ApplyDataSlot();
-    }
+    ApplyDataSlot(); // wir übernehmen die neue frequenz
+    SetMessungMenu(); // und wir passen das messung menü an für den fall dass sich die frequenz geändert hat
+    SuggestASDUs();
+    SetnConventMenu();
 }
 
 
-void ConfDialogBase::S256RadioButtonChecked()
+void ConfDialogBase::SxRadioButtonChecked()
 {
-    if (ui->S256RadioButton->isChecked())
-    {
-        m_ConfDataTemp.FirstASDU = 1;
-        m_ConfDataTemp.LastASDU = 8;
-        SetnConventMenu();
-        ApplyDataSlot();
-    }
+    ApplyDataSlot(); // wir übernehmen die neue sample raten
+    SuggestASDUs();
+    SetnConventMenu();
 }
 
 
