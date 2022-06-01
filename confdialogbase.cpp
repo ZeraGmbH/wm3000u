@@ -610,13 +610,13 @@ void ConfDialogBase::S256RadioButtonChecked()
 
 bool ConfDialogBase::is_3( const QString &s )
 {
-    return (s.contains("/3") > 0);
+    return (s.contains("/3"));
 }
 
 
 bool ConfDialogBase::is_w3( const QString &s )
 {
-    return (s.contains("/w3") > 0);
+    return (s.contains("/w3"));
 }
 
 
